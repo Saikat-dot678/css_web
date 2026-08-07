@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.qa/
+out/
+.env
+.env.local
+.env.*.local
+*.log
+*.tsbuildinfo
+public/uploads/*
+!public/uploads/.gitkeep
+data/*.tmp

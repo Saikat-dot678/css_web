@@ -1,0 +1,10 @@
+CSS NIT Durgapur — Department Dispatch v3
+
+1. Open index.html, OR
+2. On Windows run SERVE_PROTOTYPE.bat and open http://localhost:8080
+3. Go to #/events to see poster-first upcoming/past events.
+4. Go to #/team to see Office Bearers, Third Year, Second Year, M.Tech and PhD member-card sections.
+5. Go to #/admin/events to replace generated event posters with real artwork.
+6. Go to #/admin/team to add members with photo + LinkedIn + Instagram + Facebook.
+
+Important: member names, faculty details, photographs and social URLs are placeholder content until verified CSS data is supplied.

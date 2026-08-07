@@ -1,0 +1,359 @@
+{
+  "routes": [
+    {
+      "viewport": "desktop",
+      "route": "home",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 8493,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 57,
+        "buttons": 1
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "events",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 2811,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 37,
+        "buttons": 9
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "events/resume-rewired",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 1902,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 26,
+        "buttons": 2
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "projects",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 2864,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 26,
+        "buttons": 1
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "team",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 5820,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 70,
+        "buttons": 8
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "team?year=2025%E2%80%9326",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 5468,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 66,
+        "buttons": 8
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "resources",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 2938,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 34,
+        "buttons": 10
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "achievements",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 2403,
+        "text": "CSE STUDENTS\u2019 SOCIETY\nNATIONAL INSTITUTE OF TECHNOLOGY DURGAPUR\nEST. 2023\nCSS\nDE",
+        "links": 25,
+        "buttons": 1
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 1061,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 18,
+        "buttons": 0
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/events",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 900,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 24,
+        "buttons": 6
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/form-builder",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 900,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 33
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/responses",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 900,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 4
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/projects",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 900,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 9
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/resources",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 1143,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 9
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/achievements",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 943,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 7
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/team",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 1269,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 37
+      }
+    },
+    {
+      "viewport": "desktop",
+      "route": "admin/content",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 1440,
+        "cw": 1440,
+        "h": 900,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 9
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "home",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 14700,
+        "text": "CSS\nMENU\nNOTICEBOARD\nPINNED Registration open for Resume Rewired \u2022Build Night pr",
+        "links": 57,
+        "buttons": 1
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "events",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 4219,
+        "text": "CSS\nMENU\nNOTICEBOARD\nPINNED Registration open for Resume Rewired \u2022Build Night pr",
+        "links": 37,
+        "buttons": 9
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "projects",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 4595,
+        "text": "CSS\nMENU\nNOTICEBOARD\nPINNED Registration open for Resume Rewired \u2022Build Night pr",
+        "links": 26,
+        "buttons": 1
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "team",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 8043,
+        "text": "CSS\nMENU\n\nCURRENT COMMITTEE / 2026\u201327\n\nPEOPLE FIRST. TITLES SECOND.\n\n36 members ",
+        "links": 70,
+        "buttons": 8
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "resources",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 5347,
+        "text": "CSS\nMENU\nNOTICEBOARD\nPINNED Registration open for Resume Rewired \u2022Build Night pr",
+        "links": 34,
+        "buttons": 10
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "achievements",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 3881,
+        "text": "CSS\nMENU\n\nDEPARTMENT RECORD / SINCE 2023\n\nKEEP THE RECORD SPECIFIC.\n\nAchievement",
+        "links": 25,
+        "buttons": 1
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "admin",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 1923,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 18,
+        "buttons": 0
+      }
+    },
+    {
+      "viewport": "mobile",
+      "route": "admin/form-builder",
+      "overflow": false,
+      "errors": [],
+      "metrics": {
+        "sw": 390,
+        "cw": 390,
+        "h": 2971,
+        "text": "CSS\nADMIN\nDASHBOARD\nEVENTS\nFORM BUILDER\nRESPONSES\nPROJECTS\nRESOURCES\nACHIEVEMENT",
+        "links": 11,
+        "buttons": 33
+      }
+    }
+  ],
+  "interactions": {
+    "registration": true,
+    "builder": true,
+    "mobileMenu": true
+  }
+}

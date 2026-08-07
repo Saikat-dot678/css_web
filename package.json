@@ -1,0 +1,31 @@
+{
+  "name": "css-nitdgp-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "seed": "tsx scripts/seed.ts",
+    "test:db": "tsx scripts/test-json-db.ts"
+  },
+  "dependencies": {
+    "lucide-react": "latest",
+    "mongodb": "latest",
+    "next": "^16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "16.3.0",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}
