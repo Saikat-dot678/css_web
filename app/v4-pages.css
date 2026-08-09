@@ -16,7 +16,8 @@ body:has(.v4-page) {
 .v4-page {
   position: relative;
   z-index: 1;
-  overflow: clip;
+  overflow-x: clip;
+  overflow-y: visible;
   min-height: 100vh;
   background:
     radial-gradient(circle at 90% 10%, rgba(232,74,39,.07), transparent 28%),
@@ -27,7 +28,7 @@ body:has(.v4-page) {
 .v4-page .wrap { width: min(calc(100% - 72px), var(--v4-max)); margin-inline: auto; }
 .v4-page ::selection { background: var(--v4-accent); color: #fff; }
 .v4-page a { text-underline-offset: 4px; }
-.v4-page [data-parallax] { --parallax-y: 0px; transform: translate3d(0,var(--parallax-y),0); will-change: transform; }
+.v4-page [data-parallax] { --parallax-y: 0px; transform: translate3d(0,var(--parallax-y),0); }
 
 /* top ticker — make old ticker fit the V4 system */
 .v4-public-shell .ticker,
@@ -290,7 +291,7 @@ body:has(.v4-page) {
 /* Cleaner motion-friendly hero clipping. */
 .v4-page-hero { overflow: hidden; }
 .v4-page-hero-copy,
-.v4-page-hero-visual { will-change: transform, opacity; }
+.v4-page-hero-visual { transform: translateZ(0); }
 
 /* ----------------------------------------------------------------------
    POSTER PANELS INSIDE DARK ROUTES
@@ -858,4 +859,58 @@ body:has(.v4-page) {
 
 @media (prefers-reduced-motion: reduce){
   .v4-page-hero::after,.route-glyph::after{animation:none!important}
+}
+
+/* ======================================================================
+   Scroll performance — native document scroll, no smooth-scroll lag
+   ====================================================================== */
+html:has(.v4-public-shell),
+html:has(.v4-page) {
+  scroll-behavior: auto;
+}
+
+.v4-page [data-parallax] {
+  will-change: auto;
+}
+
+.v4-page .poster-card,
+.v4-page .member-card,
+.v4-page .resource-card,
+.v4-page .project-row,
+.v4-archive-event,
+.v4-page .timeline-year article,
+.v4-page-hero-copy,
+.v4-page-hero-visual,
+.v4-event-poster-stack,
+.v4-project-cube,
+.v4-resource-terminal,
+.v4-record-orbit,
+.v4-archive-hero-artifact,
+.v4-team-collage,
+.route-artifact {
+  will-change: auto;
+}
+
+.v4-page .poster-card:hover,
+.v4-page .member-card:hover,
+.v4-page .resource-card:hover {
+  will-change: transform;
+}
+
+.v4-archive-event,
+.v4-page .timeline-year article,
+.v4-page .project-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+.v4-event-controls,
+.v4-page .resource-controls,
+.v4-page .team-year-bar,
+.v4-archive-year-label,
+.v4-page .featured-poster,
+.v4-page .project-blueprint,
+.v4-page .timeline-year > header {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }

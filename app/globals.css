@@ -8,6 +8,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Public routes scroll on the document, not inside clipped wrappers. */
+.v4-public-shell.site-page {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -313,4 +319,8 @@ summary:focus-visible {
     grid-template-columns: minmax(0, 1fr) auto;
   }
   .builder-save-state { grid-column: 1 / -1; }
+}
+
+html {
+  scroll-behavior: auto;
 }

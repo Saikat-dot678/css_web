@@ -18,15 +18,52 @@ export function MotionEngine() {
         return;
       }
 
-      const [gsapModule, scrollModule] = await Promise.all([
+      const [gsapModule, scrollModule, lenisModule] = await Promise.all([
         import("gsap"),
         import("gsap/ScrollTrigger"),
+        import("lenis"),
       ]);
       if (cancelled) return;
 
       const gsap = gsapModule.gsap;
       const ScrollTrigger = scrollModule.ScrollTrigger;
+      const Lenis = lenisModule.default;
       gsap.registerPlugin(ScrollTrigger);
+
+      // Lenis smooth scroll engine synchronized with GSAP ScrollTrigger
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        touchMultiplier: 1.5,
+      });
+
+      lenis.on("scroll", () => {
+        ScrollTrigger.update();
+      });
+
+      const tickerCallback = (time: number) => {
+        lenis.raf(time * 1000);
+      };
+      gsap.ticker.add(tickerCallback);
+      gsap.ticker.lagSmoothing(0);
+
+      // Smooth scroll for anchor links
+      const handleAnchorClick = (e: MouseEvent) => {
+        const anchor = (e.target as HTMLElement)?.closest<HTMLAnchorElement>('a[href^="#"]');
+        if (!anchor) return;
+        const href = anchor.getAttribute("href");
+        if (!href || href === "#") return;
+        const targetEl = document.querySelector<HTMLElement>(href);
+        if (targetEl) {
+          e.preventDefault();
+          lenis.scrollTo(targetEl, { offset: -70 });
+        }
+      };
+      document.addEventListener("click", handleAnchorClick);
+
+      // Reset scroll position on route change
+      lenis.scrollTo(0, { immediate: true });
 
       const ctx = gsap.context(() => {
         const story = document.querySelector<HTMLElement>(".campus-story");
@@ -124,12 +161,11 @@ export function MotionEngine() {
           if (stamp) tl.fromTo(stamp, { y: 34, x: 42, rotation: 12, autoAlpha: 0.2 }, { y: 0, x: 0, rotation: -4, autoAlpha: 1, ease: "none" }, 0.06);
         });
 
-        // HOME — section choreography. These are intentionally bolder than a
-        // generic fade-up, but each section uses a different physical idea.
+        // HOME — section choreography. Replacing CPU clipPath with GPU scale/y transitions.
         const about = document.querySelector<HTMLElement>("#about");
         if (about) {
-          gsap.fromTo(about, { clipPath: "inset(9% 4% 9% 4%)", rotation: -0.7, scale: 0.97 }, {
-            clipPath: "inset(0% 0% 0% 0%)", rotation: 0, scale: 1,
+          gsap.fromTo(about, { autoAlpha: 0.85, scale: 0.96, y: 32 }, {
+            autoAlpha: 1, scale: 1, y: 0,
             ease: "none",
             scrollTrigger: { trigger: about, start: "top 94%", end: "top 28%", scrub: true },
           });
@@ -244,6 +280,9 @@ export function MotionEngine() {
 
       requestAnimationFrame(() => ScrollTrigger.refresh());
       cleanup = () => {
+        document.removeEventListener("click", handleAnchorClick);
+        gsap.ticker.remove(tickerCallback);
+        lenis.destroy();
         ctx.revert();
         ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       };
