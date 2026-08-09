@@ -12,6 +12,8 @@
     "test:db": "tsx scripts/test-json-db.ts"
   },
   "dependencies": {
+    "gsap": "latest",
+    "lenis": "latest",
     "lucide-react": "latest",
     "mongodb": "latest",
     "next": "^16.3.0",

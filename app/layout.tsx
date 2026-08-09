@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
+import "./v4-home.css";
+import "./v4-pages.css";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -26,7 +28,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={robotoMono.variable} data-scroll-behavior="smooth">
       <body>
-        <a className="skip-link" href="#main">Skip to content</a>
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
         {children}
       </body>
     </html>
