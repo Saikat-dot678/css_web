@@ -1,9 +1,17 @@
 import Link from "next/link";
 
 import { AchievementTimeline } from "@/components/home/AchievementTimeline";
-import { CampusIntro } from "@/components/home/CampusIntro";
 import { EventsShowcase } from "@/components/home/EventsShowcase";
 import { GallerySection } from "@/components/home/GallerySection";
+import { IntroExperience } from "@/components/home/intro/IntroExperience";
+import { AboutMotion } from "@/components/home/motion/AboutMotion";
+import { AchievementsMotion } from "@/components/home/motion/AchievementsMotion";
+import { EventsMotion } from "@/components/home/motion/EventsMotion";
+import { GalleryMotion } from "@/components/home/motion/GalleryMotion";
+import { JoinMotion } from "@/components/home/motion/JoinMotion";
+import { ProjectsMotion } from "@/components/home/motion/ProjectsMotion";
+import { ResourcesMotion } from "@/components/home/motion/ResourcesMotion";
+import { TeamMotion } from "@/components/home/motion/TeamMotion";
 import { PeopleSection } from "@/components/home/PeopleSection";
 import { ProjectsShowcase } from "@/components/home/ProjectsShowcase";
 import { ResourceRail } from "@/components/home/ResourceRail";
@@ -35,11 +43,16 @@ export default async function HomePage() {
 
   const members = await getMembers(content.currentAcademicYear);
   const upcoming = events.filter((event) => !["past", "archived", "draft"].includes(event.status));
+  const galleryImages = events.flatMap((event) => event.gallery.map((src, index) => ({
+    alt: `${event.title} gallery photograph ${index + 1}`,
+    label: event.title,
+    src,
+  }))).slice(0, 5);
 
   return (
     <PublicShell announcements={announcements}>
       <main id="main" className="v4-home">
-        <CampusIntro
+        <IntroExperience
           academicYear={content.currentAcademicYear}
           memberCount={members.length}
           nextEvent={nextEventLabel(events)}
@@ -47,16 +60,8 @@ export default async function HomePage() {
 
         <SignalStrip announcements={announcements} />
 
-        <div className="home-field-object" aria-hidden="true">
-          <span className="home-field-ring ring-a" />
-          <span className="home-field-ring ring-b" />
-          <span className="home-field-axis axis-a" />
-          <span className="home-field-axis axis-b" />
-          <i />
-          <b>CSS / SIGNAL OBJECT</b>
-        </div>
-
         <section className="v4-section v4-section-paper v4-section-poster v4-wrap" id="about">
+          <AboutMotion />
           <V4SectionHeader
             index="01"
             eyebrow="ABOUT / THE SOCIETY"
@@ -65,7 +70,7 @@ export default async function HomePage() {
           />
 
           <div className="about-v4-layout">
-            <div className="about-v4-statement reveal">
+            <div className="about-v4-statement">
               <p>WE BUILD THE DEPARTMENT’S STUDENT LAYER.</p>
               <h3>
                 Useful things.
@@ -76,17 +81,17 @@ export default async function HomePage() {
               </h3>
             </div>
             <div className="about-v4-principles">
-              <article className="reveal">
+              <article>
                 <span>01</span>
                 <h4>Build before branding.</h4>
                 <p>Projects, tools, notes and systems should continue to be useful after an event ends.</p>
               </article>
-              <article className="reveal">
+              <article>
                 <span>02</span>
                 <h4>Open across batches.</h4>
                 <p>Make it easy for juniors, seniors, researchers and faculty to find each other.</p>
               </article>
-              <article className="reveal">
+              <article>
                 <span>03</span>
                 <h4>Keep the memory.</h4>
                 <p>Events, committees, outcomes and resources should not disappear every academic year.</p>
@@ -96,6 +101,7 @@ export default async function HomePage() {
         </section>
 
         <section className="v4-section v4-section-dark v4-section-night" id="events">
+          <EventsMotion />
           <div className="v4-wrap">
             <V4SectionHeader
               index="02"
@@ -111,6 +117,7 @@ export default async function HomePage() {
         </section>
 
         <section className="v4-section v4-section-paper v4-section-poster v4-wrap" id="projects">
+          <ProjectsMotion />
           <V4SectionHeader
             index="03"
             eyebrow="PROJECTS / WHAT WE BUILD"
@@ -121,6 +128,7 @@ export default async function HomePage() {
         </section>
 
         <section className="v4-section v4-section-grid v4-section-yellow-grid" id="resources">
+          <ResourcesMotion />
           <div className="v4-wrap">
             <V4SectionHeader
               index="04"
@@ -133,6 +141,7 @@ export default async function HomePage() {
         </section>
 
         <section className="v4-section v4-section-people v4-section-night" id="team">
+          <TeamMotion />
           <div className="v4-wrap">
             <V4SectionHeader
               index="05"
@@ -145,6 +154,7 @@ export default async function HomePage() {
         </section>
 
         <section className="v4-section v4-section-paper v4-wrap" id="achievements">
+          <AchievementsMotion />
           <V4SectionHeader
             index="06"
             eyebrow="RECORD / ACHIEVEMENTS"
@@ -155,6 +165,7 @@ export default async function HomePage() {
         </section>
 
         <section className="v4-section v4-section-gallery v4-section-collage" id="gallery">
+          <GalleryMotion />
           <div className="v4-wrap">
             <V4SectionHeader
               index="07"
@@ -162,17 +173,18 @@ export default async function HomePage() {
               title="Make the website impossible to confuse with a template."
               copy="Replace these placeholders with real campus, event, lab and team photography before the final launch."
             />
-            <GallerySection />
+            <GallerySection images={galleryImages} />
           </div>
         </section>
 
         <section className="v4-join" id="contact">
+          <JoinMotion />
           <div className="v4-wrap v4-join-inner">
             <p>CSS / NIT DURGAPUR / {content.currentAcademicYear}</p>
             <h2>
-              BUILD
+              <span>BUILD</span>
               <span>SOMETHING</span>
-              WITH US.
+              <span>WITH US.</span>
             </h2>
             <div className="v4-join-bottom">
               <p>{content.recruitmentText}</p>

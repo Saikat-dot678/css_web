@@ -10,7 +10,7 @@ export function V4SectionHeader({
   copy?: string;
 }) {
   return (
-    <header className="v4-section-heading reveal" data-motion-heading>
+    <header className="v4-section-heading" data-motion-heading>
       <div className="v4-section-index">/{index}</div>
       <div className="v4-section-title">
         <p>{eyebrow}</p>

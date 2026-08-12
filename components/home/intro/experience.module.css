@@ -1,0 +1,87 @@
+.experience {
+  --assembly: 0;
+  --open: 0;
+  --boot: 0;
+  --map: 0;
+  --intro-scroll: 0;
+  position: relative;
+  z-index: 6;
+  height: 520svh;
+  background: #02050a;
+}
+
+.experience[data-bypassed="true"] { height: 100svh; }
+.stickyStage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: #02050a; isolation: isolate; }
+.pointLayer,
+.laptopLayer { position: absolute; inset: 0; }
+.pointLayer { z-index: 1; opacity: calc(1 - var(--assembly) * .82); }
+.laptopLayer { z-index: 2; opacity: clamp(0, calc(var(--assembly) * 6), 1); }
+
+.hud { position: absolute; z-index: 12; inset: 0; pointer-events: none; font-family: var(--font-roboto-mono), Consolas, monospace; }
+.hudStatus {
+  position: absolute;
+  left: 50%;
+  top: clamp(24px, 4vh, 42px);
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  color: rgba(196, 231, 236, .46);
+  opacity: calc(1 - clamp(0, calc((var(--intro-scroll) - .7) * 6), 1));
+  font-size: 7px;
+  letter-spacing: .13em;
+  text-align: center;
+  transform: translateX(-50%);
+}
+.hudStatus strong { color: rgba(235, 249, 250, .76); font-size: 9px; }
+.skipButton {
+  position: absolute;
+  right: clamp(24px, 4vw, 62px);
+  bottom: clamp(24px, 5vh, 52px);
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid rgba(154, 224, 235, .32);
+  background: rgba(3, 10, 14, .72);
+  color: rgba(226, 246, 248, .76);
+  pointer-events: auto;
+  cursor: pointer;
+  font: 800 8px/1 var(--font-roboto-mono), monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.skipButton:hover,
+.skipButton:focus-visible { border-color: #f2c14e; background: #f2c14e; color: #111315; outline: none; }
+.scrollInstruction {
+  position: absolute;
+  left: 50%;
+  bottom: 27px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  color: rgba(205, 236, 240, .54);
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  transform: translateX(-50%);
+}
+.scrollInstruction i { width: 1px; height: 32px; background: linear-gradient(#f2c14e, transparent); animation: scroll-cue 1.5s ease-in-out infinite; }
+
+:global(html.intro-running) { overflow: hidden; }
+:global(html.intro-running) :global(.v4-site-header),
+:global(html.intro-running) :global(.route-atmosphere) { opacity: 0; pointer-events: none; }
+:global(body:has(section[aria-label="CSS laptop campus introduction"][data-phase="PRELOAD"])) :global(.v4-site-header),
+:global(body:has(section[aria-label="CSS laptop campus introduction"][data-phase="PRELOAD"])) :global(.route-atmosphere) { opacity: 0; pointer-events: none; }
+:global(body:has(section[aria-label="CSS laptop campus introduction"]:not([data-phase="COMPLETE"]))) :global(.v4-site-header),
+:global(body:has(section[aria-label="CSS laptop campus introduction"]:not([data-phase="COMPLETE"]))) :global(.route-atmosphere) { opacity: 0; pointer-events: none; }
+
+@keyframes scroll-cue { 50% { transform: translateY(7px); opacity: .36; } }
+
+@media (max-width: 700px) {
+  .experience { height: 430svh; }
+  .scrollInstruction { bottom: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .experience { height: 100svh; }
+  .pointLayer { display: none; }
+  .scrollInstruction i { animation: none; }
+}

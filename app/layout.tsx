@@ -4,6 +4,8 @@ import { CustomCursor } from "@/components/public/CustomCursor";
 import "./globals.css";
 import "./v4-home.css";
 import "./v4-pages.css";
+import "../styles/home/sections.css";
+import "../styles/home/motion.css";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],

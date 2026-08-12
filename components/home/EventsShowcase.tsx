@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { Event } from "@/types/event";
 
@@ -17,7 +17,21 @@ function shortDate(value: string) {
 export function EventsShowcase({ events }: { events: Event[] }) {
   const shown = useMemo(() => events.slice(0, 5), [events]);
   const [activeId, setActiveId] = useState(shown[0]?.id ?? "");
+  const listRef = useRef<HTMLDivElement>(null);
   const active = shown.find((event) => event.id === activeId) ?? shown[0];
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list || !("IntersectionObserver" in window)) return;
+    const rows = Array.from(list.querySelectorAll<HTMLElement>("[data-event-id]"));
+    const observer = new IntersectionObserver((entries) => {
+      const current = entries.find((entry) => entry.isIntersecting);
+      const id = (current?.target as HTMLElement | undefined)?.dataset.eventId;
+      if (id) setActiveId(id);
+    }, { rootMargin: "-42% 0px -42% 0px", threshold: 0 });
+    rows.forEach((row) => observer.observe(row));
+    return () => observer.disconnect();
+  }, [shown]);
 
   if (!active) {
     return <div className="events-empty">Events will appear here when they are published.</div>;
@@ -25,15 +39,17 @@ export function EventsShowcase({ events }: { events: Event[] }) {
 
   return (
     <div className="events-showcase">
-      <div className="events-list" role="list">
+      <div ref={listRef} className="events-list" role="list">
         {shown.map((event, index) => (
           <Link
             href={`/events/${event.slug}`}
             className={`event-line ${active.id === event.id ? "active" : ""}`}
             key={event.id}
+            data-event-id={event.id}
             onMouseEnter={() => setActiveId(event.id)}
             onFocus={() => setActiveId(event.id)}
             role="listitem"
+            aria-current={active.id === event.id ? "true" : undefined}
           >
             <span className="event-line-no">{String(index + 1).padStart(2, "0")}</span>
             <time dateTime={event.date}>{shortDate(event.date)}</time>
@@ -44,7 +60,7 @@ export function EventsShowcase({ events }: { events: Event[] }) {
         ))}
       </div>
 
-      <Link className="event-preview reveal" href={`/events/${active.slug}`} aria-label={`Open ${active.title}`}>
+      <Link className="event-preview" href={`/events/${active.slug}`} aria-label={`Open ${active.title}`}>
         <div className="event-preview-image">
           {active.poster ? (
             <Image src={active.poster} alt="" fill sizes="(max-width: 900px) 100vw, 38vw" unoptimized={active.poster.endsWith(".svg") || active.poster.startsWith("/api/")} />
