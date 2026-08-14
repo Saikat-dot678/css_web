@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
-import { CustomCursor } from "@/components/public/CustomCursor";
 import "./globals.css";
 import "./v4-home.css";
 import "./v4-pages.css";
@@ -31,7 +30,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={robotoMono.variable} data-scroll-behavior="auto">
       <body>
-        <CustomCursor />
         <a className="skip-link" href="#main">
           Skip to content
         </a>
