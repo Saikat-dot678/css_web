@@ -34,15 +34,34 @@ export function SiteHeader() {
     return () => document.body.classList.remove("menu-open");
   }, [open]);
 
+  // Close menu on escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && open) {
+        setOpen(false);
+      }
+    };
+    
+    if (open) {
+      window.addEventListener("keydown", handleEscape);
+    }
+    
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [open]);
+
   const active = (href: string) => {
     if (href.startsWith("/#")) return home;
     return pathname.startsWith(href);
   };
 
+  const handleNavClick = () => {
+    setOpen(false);
+  };
+
   return (
     <header className={`v4-site-header ${home ? "v4-header-home" : ""} ${scrolled ? "scrolled" : ""}`}>
       <div className="v4-nav-shell">
-        <Link className="v4-brand" href="/" aria-label="CSS home" onClick={() => setOpen(false)}>
+        <Link className="v4-brand" href="/" aria-label="CSS home" onClick={handleNavClick}>
           <strong>CSS</strong>
           <span>CSE STUDENTS’ SOCIETY<br />NIT DURGAPUR</span>
         </Link>
@@ -62,7 +81,7 @@ export function SiteHeader() {
             type="button"
             aria-expanded={open}
             aria-controls="v4MobileNav"
-            aria-label={open ? "Close navigation" : "Open navigation"}
+            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             onClick={() => setOpen((value) => !value)}
           >
             <span /><span />
@@ -74,12 +93,16 @@ export function SiteHeader() {
       <nav className={`v4-mobile-nav ${open ? "open" : ""}`} id="v4MobileNav" aria-label="Mobile navigation">
         <div>
           {links.map(([label, href], index) => (
-            <Link href={href} key={href} onClick={() => setOpen(false)}>
-              <span>{String(index + 1).padStart(2, "0")}</span>{label}<b>↗</b>
+            <Link href={href} key={href} onClick={handleNavClick}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <span style={{ flex: 1 }}>{label}</span>
+              <b>↗</b>
             </Link>
           ))}
-          <Link href="/achievements" onClick={() => setOpen(false)}>
-            <span>07</span>Achievements<b>↗</b>
+          <Link href="/achievements" onClick={handleNavClick}>
+            <span>07</span>
+            <span style={{ flex: 1 }}>Achievements</span>
+            <b>↗</b>
           </Link>
         </div>
         <p>CSS / NIT DURGAPUR<br />23.5491° N · 87.2909° E</p>

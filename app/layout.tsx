@@ -4,6 +4,8 @@ import "./globals.css";
 import "./v4-home.css";
 import "./v4-pages.css";
 import "../styles/home/sections.css";
+import "../responsive-enhancements.css";
+import "../responsive-pages.css";
 import "../styles/home/motion.css";
 
 const robotoMono = Roboto_Mono({
@@ -21,8 +23,12 @@ export const metadata: Metadata = {
     title: "CSS — NIT Durgapur",
     description: "Events, projects, resources, people, and the department record.",
     type: "website",
-  },
-};
+  },  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },};
 
 export const dynamic = "force-dynamic";
 
