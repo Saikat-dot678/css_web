@@ -22,7 +22,17 @@ export function IntroHUD({ onSkip, phase, skipVisible }: { onSkip: () => void; p
     <div className={styles.hud} aria-live="polite">
       <div className={styles.hudStatus}><span>{index}</span><strong>{status}</strong></div>
       {skipVisible && automatic && <button type="button" className={styles.skipButton} onClick={onSkip}>Skip intro <span>→</span></button>}
-      {(phase === "MAP_READY" || phase === "ROUTE") && <div className={styles.scrollInstruction} aria-hidden="true"><span>SCROLL TO ENTER CAMPUS</span><i /></div>}
+      {(phase === "MAP_READY" || phase === "ROUTE") && (
+        <div className={styles.scrollInstruction} aria-hidden="true">
+          <span>
+            <svg className={styles.scrollIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+            SCROLL TO ENTER CAMPUS
+          </span>
+          <i />
+        </div>
+      )}
     </div>
   );
 }
