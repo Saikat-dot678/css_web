@@ -53,17 +53,54 @@
 .scrollInstruction {
   position: absolute;
   left: 50%;
-  bottom: 27px;
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  color: rgba(205, 236, 240, .54);
-  font-size: 7px;
-  font-weight: 800;
-  letter-spacing: .13em;
+  bottom: clamp(24px, 4.5vh, 44px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   transform: translateX(-50%);
+  z-index: 15;
+  pointer-events: none;
 }
-.scrollInstruction i { width: 1px; height: 32px; background: linear-gradient(#f2c14e, transparent); animation: scroll-cue 1.5s ease-in-out infinite; }
+
+.scrollInstruction span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 24px;
+  background: rgba(3, 10, 18, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(242, 193, 78, 0.45);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-family: var(--font-roboto-mono), Consolas, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 20px rgba(242, 193, 78, 0.25);
+  text-shadow: 0 0 10px rgba(242, 193, 78, 0.3);
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+.scrollIcon {
+  width: 15px;
+  height: 15px;
+  color: #f2c14e;
+  filter: drop-shadow(0 0 4px rgba(242, 193, 78, 0.6));
+  animation: scroll-arrow-bounce 1.5s ease-in-out infinite;
+}
+
+.scrollInstruction i {
+  width: 2px;
+  height: 38px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #f2c14e 0%, rgba(242, 193, 78, 0.25) 75%, transparent 100%);
+  box-shadow: 0 0 10px rgba(242, 193, 78, 0.6);
+  animation: scroll-cue 1.5s ease-in-out infinite;
+}
 
 :global(html.intro-running) { overflow: hidden; }
 :global(html.intro-running) :global(.v4-site-header),
@@ -73,15 +110,34 @@
 :global(body:has(section[aria-label="CSS laptop campus introduction"]:not([data-phase="COMPLETE"]))) :global(.v4-site-header),
 :global(body:has(section[aria-label="CSS laptop campus introduction"]:not([data-phase="COMPLETE"]))) :global(.route-atmosphere) { opacity: 0; pointer-events: none; }
 
-@keyframes scroll-cue { 50% { transform: translateY(7px); opacity: .36; } }
+@keyframes scroll-arrow-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { border-color: rgba(242, 193, 78, 0.45); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 20px rgba(242, 193, 78, 0.25); }
+  50% { border-color: rgba(242, 193, 78, 0.85); box-shadow: 0 8px 36px rgba(0, 0, 0, 0.75), 0 0 28px rgba(242, 193, 78, 0.45); }
+}
+
+@keyframes scroll-cue {
+  0% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(8px); opacity: 0.4; }
+  100% { transform: translateY(0); opacity: 1; }
+}
 
 @media (max-width: 700px) {
   .experience { height: 430svh; }
-  .scrollInstruction { bottom: 18px; }
+  .scrollInstruction { bottom: 18px; gap: 8px; }
+  .scrollInstruction span { font-size: 11px; padding: 8px 18px; gap: 8px; letter-spacing: 0.12em; }
+  .scrollIcon { width: 13px; height: 13px; }
+  .scrollInstruction i { height: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .experience { height: 100svh; }
   .pointLayer { display: none; }
+  .scrollInstruction span { animation: none; }
+  .scrollIcon { animation: none; }
   .scrollInstruction i { animation: none; }
 }
