@@ -1,0 +1,797 @@
+/*
+  Public-site colour system
+  -------------------------
+  Structure, spacing and motion stay in the existing V4 files. This final
+  layer supplies semantic colours and a small number of deliberate theme
+  exceptions. Legacy V3/admin variables are intentionally not redefined.
+*/
+
+:root,
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --site-bg: #080b0f;
+  --site-surface: #111418;
+  --site-surface-raised: #171b1f;
+  --site-surface-soft: #20252a;
+  --site-text: #f2efe6;
+  --site-text-muted: #a4aab0;
+  --site-text-soft: #858c93;
+  --site-border: rgba(242, 239, 230, 0.16);
+  --site-border-strong: rgba(242, 239, 230, 0.34);
+  --site-paper: #f2efe6;
+  --site-paper-secondary: #e6dfd2;
+  --site-paper-raised: #fffaf0;
+  --site-paper-ink: #111315;
+  --site-orange: #e84a27;
+  --site-orange-hover: #ff5d3b;
+  --site-yellow: #e5c050;
+  --site-violet: #8b78e6;
+  --site-cyan: #86d7dd;
+  --site-tech: #9bd7dd;
+  --site-grid: rgba(134, 215, 221, 0.075);
+  --site-grid-strong: rgba(134, 215, 221, 0.2);
+  --site-shadow: rgba(0, 0, 0, 0.42);
+  --site-offset-shadow: #e84a27;
+  --site-header-bg: rgba(8, 11, 15, 0.94);
+  --site-header-soft: rgba(8, 11, 15, 0.78);
+  --site-header-border: rgba(242, 239, 230, 0.16);
+  --site-code-bg: #0b1117;
+  --site-code-text: #b9e0e4;
+  --site-map-bg: #081019;
+  --site-control-bg: #111418;
+  --site-control-text: #f2efe6;
+  --site-focus: #f2c14e;
+  --site-error-bg: #5e231f;
+  --site-error-text: #fff4ee;
+  --site-success-bg: #163c35;
+  --site-success-text: #ddfff5;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --site-bg: #f2efe6;
+  --site-surface: #fffaf0;
+  --site-surface-raised: #e8e0d2;
+  --site-surface-soft: #ddd4c5;
+  --site-text: #111315;
+  --site-text-muted: #555b60;
+  --site-text-soft: #73787c;
+  --site-border: rgba(17, 19, 21, 0.18);
+  --site-border-strong: rgba(17, 19, 21, 0.46);
+  --site-paper: #f2efe6;
+  --site-paper-secondary: #e7dfd1;
+  --site-paper-raised: #fffaf0;
+  --site-paper-ink: #111315;
+  --site-orange: #e84a27;
+  --site-orange-hover: #c9371b;
+  --site-yellow: #e5c050;
+  --site-violet: #654d91;
+  --site-cyan: #2d7280;
+  --site-tech: #315f69;
+  --site-grid: rgba(45, 114, 128, 0.11);
+  --site-grid-strong: rgba(45, 114, 128, 0.28);
+  --site-shadow: rgba(17, 19, 21, 0.18);
+  --site-offset-shadow: #111315;
+  --site-header-bg: rgba(242, 239, 230, 0.94);
+  --site-header-soft: rgba(242, 239, 230, 0.8);
+  --site-header-border: rgba(17, 19, 21, 0.2);
+  --site-code-bg: #11181d;
+  --site-code-text: #c5e6e8;
+  --site-map-bg: #e7e0d3;
+  --site-control-bg: #fffaf0;
+  --site-control-text: #111315;
+  --site-focus: #bf3219;
+  --site-error-bg: #f1c4b7;
+  --site-error-text: #641c12;
+  --site-success-bg: #cfe5d7;
+  --site-success-text: #173f31;
+}
+
+.v4-public-shell {
+  --v4-bg: var(--site-bg);
+  --v4-bg-2: var(--site-surface);
+  --v4-bg-3: var(--site-surface-raised);
+  --v4-paper: var(--site-text);
+  --v4-paper-2: var(--site-surface-raised);
+  --v4-ink: var(--site-paper-ink);
+  --v4-muted: var(--site-text-muted);
+  --v4-line: var(--site-border);
+  --v4-line-dark: var(--site-border);
+  --v4-accent: var(--site-orange);
+  --v4-accent-soft: color-mix(in srgb, var(--site-orange) 18%, transparent);
+  --v4-cyan: var(--site-cyan);
+  --v4-highlight: var(--site-yellow);
+  --v4-yellow: var(--site-yellow);
+  --v4-violet: var(--site-violet);
+  --v4-old-paper: var(--site-paper);
+  min-height: 100vh;
+  background: var(--site-bg);
+  color: var(--site-text);
+}
+
+body:has(.v4-public-shell),
+body:has(.v4-home),
+body:has(.v4-page) {
+  background: var(--site-bg);
+  color: var(--site-text);
+}
+
+.admin-app,
+.login-shell { color-scheme: light; }
+
+/* Restrained theme transitions are enabled only for an explicit toggle. */
+html.theme-transitioning .v4-public-shell,
+html.theme-transitioning .v4-site-header,
+html.theme-transitioning .v4-mobile-nav,
+html.theme-transitioning .v4-site-footer,
+html.theme-transitioning .v4-home,
+html.theme-transitioning .v4-page,
+html.theme-transitioning .v4-section,
+html.theme-transitioning .v4-join,
+html.theme-transitioning .poster-card,
+html.theme-transitioning .member-card,
+html.theme-transitioning .faculty-card-new,
+html.theme-transitioning .resource-card,
+html.theme-transitioning .project-row,
+html.theme-transitioning .v4-archive-event,
+html.theme-transitioning .timeline-year article {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 220ms;
+  transition-timing-function: ease;
+}
+
+/* ---------------------------------------------------------------------
+   Header, toggle, menu and footer
+   --------------------------------------------------------------------- */
+.v4-public-shell .v4-site-header {
+  background: var(--site-header-bg);
+  border-color: var(--site-header-border);
+  color: var(--site-text);
+}
+
+.v4-public-shell .v4-site-header.v4-header-home {
+  background: linear-gradient(to bottom, var(--site-header-soft), transparent);
+  border-color: transparent;
+}
+
+.v4-public-shell .v4-site-header.v4-header-home.scrolled {
+  background: var(--site-header-soft);
+  border-color: var(--site-header-border);
+}
+
+.v4-public-shell .v4-brand span { border-color: var(--site-header-border); }
+.v4-public-shell .v4-main-nav a,
+.v4-public-shell .v4-nav-join { color: var(--site-text-muted); }
+.v4-public-shell .v4-main-nav a:hover,
+.v4-public-shell .v4-main-nav a.active,
+.v4-public-shell .v4-nav-join:hover { color: var(--site-text); }
+.v4-public-shell .v4-nav-join { border-color: var(--site-border-strong); }
+.v4-public-shell .v4-nav-join:hover {
+  border-color: var(--site-orange);
+  background: var(--site-orange);
+  color: #fffaf0;
+}
+
+.site-theme-toggle {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 38px;
+  min-width: 42px;
+  min-height: 38px;
+  padding: 0;
+  border: 1px solid var(--site-border-strong);
+  border-radius: 0;
+  background: var(--site-control-bg);
+  color: var(--site-control-text);
+  box-shadow: 3px 3px 0 var(--site-orange);
+  cursor: pointer;
+  isolation: isolate;
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+.site-theme-toggle::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -5px;
+  bottom: -5px;
+  width: 9px;
+  height: 9px;
+  border-right: 1px solid var(--site-orange);
+  border-bottom: 1px solid var(--site-orange);
+}
+.site-theme-toggle:hover { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--site-orange); }
+.site-theme-toggle:focus-visible { outline: 3px solid var(--site-focus); outline-offset: 4px; }
+.theme-toggle-icon { position: relative; display: block; width: 18px; height: 18px; }
+.theme-icon { position: absolute; inset: 0; width: 18px; height: 18px; transition: opacity 190ms ease, transform 190ms ease; }
+html[data-theme="dark"] .theme-icon-moon { opacity: 1; transform: scale(1) rotate(-2deg); }
+html[data-theme="dark"] .theme-icon-sun { opacity: 0; transform: scale(.72) rotate(4deg); }
+html[data-theme="light"] .theme-icon-sun { opacity: 1; transform: scale(1) rotate(2deg); }
+html[data-theme="light"] .theme-icon-moon { opacity: 0; transform: scale(.72) rotate(-4deg); }
+
+.v4-public-shell .v4-mobile-nav {
+  background:
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px),
+    var(--site-bg);
+  background-size: 44px 44px;
+  color: var(--site-text);
+}
+.v4-public-shell .v4-mobile-nav::before { background: transparent; }
+.v4-public-shell .v4-mobile-nav.open::before { background: color-mix(in srgb, var(--site-bg) 55%, transparent); }
+.v4-public-shell .v4-mobile-nav > div,
+.v4-public-shell .v4-mobile-nav > p { border-color: var(--site-border); }
+.v4-public-shell .v4-mobile-nav a {
+  border-radius: 0;
+  border-bottom: 1px solid var(--site-border);
+  color: var(--site-text);
+}
+.v4-public-shell .v4-mobile-nav a:hover { background: color-mix(in srgb, var(--site-orange) 9%, transparent); }
+.v4-public-shell .v4-mobile-nav a span {
+  border-radius: 0;
+  background: color-mix(in srgb, var(--site-orange) 10%, transparent);
+  border-color: color-mix(in srgb, var(--site-orange) 32%, transparent);
+}
+.v4-public-shell .v4-mobile-nav a b { color: var(--site-text-muted); }
+
+.v4-public-shell .v4-site-footer {
+  background: var(--site-surface);
+  color: var(--site-text);
+  border-color: var(--site-border);
+}
+.v4-public-shell .v4-footer-brand p,
+.v4-public-shell .v4-footer-links a,
+.v4-public-shell .v4-footer-bottom { color: var(--site-text-muted); }
+.v4-public-shell .v4-footer-links a:hover { color: var(--site-text); }
+.v4-public-shell .v4-footer-brand p,
+.v4-public-shell .v4-footer-system,
+.v4-public-shell .v4-footer-bottom { border-color: var(--site-border); }
+
+/* ---------------------------------------------------------------------
+   Shared public surfaces and controls
+   --------------------------------------------------------------------- */
+.v4-public-shell .ticker,
+.v4-public-shell .announcement-ticker {
+  background: var(--site-surface) !important;
+  color: var(--site-text-muted) !important;
+  border-color: var(--site-border) !important;
+}
+.v4-public-shell .ticker-label { color: var(--site-text); border-color: var(--site-border); }
+
+.v4-public-shell .v4-button-primary,
+.v4-public-shell .solid-link {
+  background: var(--site-orange) !important;
+  border-color: var(--site-orange) !important;
+  color: #fffaf0 !important;
+}
+.v4-public-shell .v4-button-primary:hover,
+.v4-public-shell .solid-link:hover { background: var(--site-orange-hover) !important; border-color: var(--site-orange-hover) !important; }
+.v4-public-shell .v4-button-light {
+  color: var(--site-text);
+  border-color: var(--site-border-strong);
+}
+.v4-public-shell .v4-button-light:hover {
+  background: var(--site-text);
+  color: var(--site-bg);
+  border-color: var(--site-text);
+}
+.v4-public-shell a:focus-visible,
+.v4-public-shell button:focus-visible,
+.v4-public-shell input:focus-visible,
+.v4-public-shell select:focus-visible,
+.v4-public-shell textarea:focus-visible,
+.v4-public-shell summary:focus-visible {
+  outline-color: var(--site-focus);
+}
+
+.v4-public-shell input,
+.v4-public-shell select,
+.v4-public-shell textarea {
+  border-color: var(--site-border-strong);
+  background: var(--site-control-bg);
+  color: var(--site-control-text);
+  caret-color: var(--site-orange);
+}
+.v4-public-shell input::placeholder,
+.v4-public-shell textarea::placeholder { color: var(--site-text-soft); opacity: 1; }
+.v4-public-shell select option { background: var(--site-control-bg); color: var(--site-control-text); }
+.v4-public-shell input[type="checkbox"],
+.v4-public-shell input[type="radio"] { accent-color: var(--site-orange); }
+.v4-public-shell input:disabled,
+.v4-public-shell select:disabled,
+.v4-public-shell textarea:disabled,
+.v4-public-shell button:disabled { opacity: .56; cursor: not-allowed; }
+.v4-public-shell input:-webkit-autofill,
+.v4-public-shell textarea:-webkit-autofill,
+.v4-public-shell select:-webkit-autofill {
+  -webkit-text-fill-color: var(--site-control-text);
+  box-shadow: 0 0 0 1000px var(--site-control-bg) inset;
+}
+.v4-public-shell .form-error {
+  background: var(--site-error-bg);
+  color: var(--site-error-text);
+  border-color: currentColor;
+}
+.v4-public-shell .form-success {
+  padding: 18px;
+  background: var(--site-success-bg);
+  color: var(--site-success-text);
+  border: 1px solid currentColor;
+}
+
+/* ---------------------------------------------------------------------
+   Homepage: shared identity, deliberately different section treatments
+   --------------------------------------------------------------------- */
+.v4-home { background: var(--site-bg); color: var(--site-text); }
+.v4-home > .signal-strip {
+  background: var(--site-yellow);
+  color: var(--site-paper-ink);
+  box-shadow: 0 -8px 0 var(--site-paper-ink);
+  border-color: var(--site-paper-ink);
+}
+.v4-home .signal-label i { background: var(--site-orange); }
+.v4-home .signal-items p { border-color: rgba(17, 19, 21, .3); }
+
+.v4-home .v4-section-paper,
+.v4-home .v4-section-poster {
+  background: var(--site-paper);
+  color: var(--site-paper-ink);
+}
+.v4-home .v4-section-poster { border-color: var(--site-paper-ink); box-shadow: 11px 11px 0 var(--site-offset-shadow); }
+.v4-home .v4-section-poster::before { border-color: var(--site-paper-ink); }
+.v4-home .v4-section-dark,
+.v4-home .v4-section-night,
+.v4-home .v4-section-people {
+  background-color: var(--site-surface);
+  color: var(--site-text);
+}
+.v4-home .v4-section-night::before {
+  background-image:
+    radial-gradient(circle at 12% 25%, var(--site-orange) 0 2px, transparent 2.5px),
+    radial-gradient(circle at 78% 72%, var(--site-cyan) 0 2px, transparent 2.5px);
+}
+.v4-home .v4-section-grid,
+.v4-home .v4-section-yellow-grid {
+  background-color: var(--site-yellow);
+  background-image:
+    linear-gradient(rgba(17,19,21,.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17,19,21,.1) 1px, transparent 1px);
+  color: var(--site-paper-ink);
+}
+.v4-home .v4-section-gallery,
+.v4-home .v4-section-collage { background: var(--site-paper-secondary); color: var(--site-paper-ink); }
+.v4-home .v4-section-heading { border-color: currentColor; }
+.v4-home .v4-section-title > p,
+.v4-home .v4-section-copy { color: currentColor; opacity: .62; }
+.v4-home .v4-section-stamp { background: var(--site-yellow); color: var(--site-paper-ink); border-color: var(--site-paper-ink); }
+.v4-home .v4-section-night .v4-section-stamp { background: var(--site-yellow); color: var(--site-paper-ink); }
+
+.v4-home .event-line { border-color: var(--site-border); color: var(--site-text-muted); }
+.v4-home .event-line:hover,
+.v4-home .event-line:focus-visible,
+.v4-home .event-line.active,
+.v4-home .event-line[aria-current="true"] {
+  background: color-mix(in srgb, var(--site-yellow) 9%, transparent);
+  border-color: color-mix(in srgb, var(--site-yellow) 62%, transparent);
+  color: var(--site-text);
+}
+.v4-home .event-preview-meta p,
+.v4-home .people-number > p,
+.v4-home .faculty-v4-list p { color: var(--site-text-muted); }
+.v4-home .event-preview-image { background: var(--site-surface-raised); border-color: var(--site-border); }
+
+.v4-home .project-copy > p:first-child,
+.v4-home .project-copy h3 + p,
+.v4-home .resource-rail-row em,
+.v4-home .resource-rail-row small,
+.v4-home .resource-rail-footer p,
+.v4-home .achievement-v4-row em { color: #5d6266; }
+.v4-home .project-showcase-row,
+.v4-home .resource-rail-row,
+.v4-home .achievement-v4-row { border-color: rgba(17, 19, 21, .24); }
+.v4-home .resource-rail-row:hover { background: rgba(255, 250, 240, .28); }
+.v4-home .project-code-card { background: linear-gradient(150deg, #15191d, #0b0d0f); color: #f2efe6; }
+.v4-home .project-code-card pre { color: #c3d0d4; }
+.v4-home .project-visual { background: var(--site-code-bg); }
+.v4-home .people-groups,
+.v4-home .people-group-row,
+.v4-home .faculty-v4,
+.v4-home .faculty-v4-list,
+.v4-home .faculty-v4-list article { border-color: var(--site-border); }
+.v4-home .people-group-row { color: var(--site-text-muted); }
+.v4-home .people-group-row:hover { color: var(--site-text); }
+.v4-home .faculty-v4-list a { color: var(--site-text); }
+
+.v4-home .v4-join {
+  background: var(--site-surface);
+  color: var(--site-text);
+}
+.v4-home .v4-join h2 > span:nth-child(2) { color: transparent; -webkit-text-stroke-color: color-mix(in srgb, var(--site-text) 78%, transparent); }
+.v4-home .v4-join h2 > span:not(:nth-child(2)) { color: var(--site-text); }
+.v4-home .v4-join-bottom { border-color: var(--site-border); }
+.v4-home .v4-join-bottom > p { color: var(--site-text-muted); }
+.v4-home .v4-join::before { color: color-mix(in srgb, var(--site-text) 8%, transparent); }
+
+html[data-theme="light"] .v4-home .v4-section-dark,
+html[data-theme="light"] .v4-home .v4-section-night,
+html[data-theme="light"] .v4-home .v4-section-people {
+  background-color: var(--site-surface-raised);
+  background-image:
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px);
+  background-size: 52px 52px;
+  color: var(--site-text);
+}
+html[data-theme="light"] .v4-home .v4-section-night::before { opacity: .32; }
+html[data-theme="light"] .v4-home .event-line { border-color: var(--site-border); color: var(--site-text-muted); }
+html[data-theme="light"] .v4-home .event-line:hover,
+html[data-theme="light"] .v4-home .event-line:focus-visible,
+html[data-theme="light"] .v4-home .event-line.active { color: var(--site-text); background: color-mix(in srgb, var(--site-yellow) 42%, transparent); }
+html[data-theme="light"] .v4-home .event-preview-meta p,
+html[data-theme="light"] .v4-home .people-number > p,
+html[data-theme="light"] .v4-home .faculty-v4-list p { color: var(--site-text-muted); }
+html[data-theme="light"] .v4-home .people-groups,
+html[data-theme="light"] .v4-home .people-group-row,
+html[data-theme="light"] .v4-home .faculty-v4,
+html[data-theme="light"] .v4-home .faculty-v4-list,
+html[data-theme="light"] .v4-home .faculty-v4-list article { border-color: var(--site-border); }
+html[data-theme="light"] .v4-home .people-group-row { color: var(--site-text-muted); }
+html[data-theme="light"] .v4-home .people-group-row:hover,
+html[data-theme="light"] .v4-home .faculty-v4-list a { color: var(--site-text); }
+html[data-theme="light"] .v4-home .v4-button-light { color: var(--site-text); border-color: var(--site-border-strong); }
+html[data-theme="light"] .v4-home .v4-button-light:hover { background: var(--site-text); color: var(--site-bg); }
+html[data-theme="light"] .v4-home .v4-join {
+  background:
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    var(--site-paper-secondary);
+  background-size: 100% 42px;
+  color: var(--site-text);
+}
+html[data-theme="light"] .v4-home .v4-join h2 > span:nth-child(2) { -webkit-text-stroke-color: rgba(17, 19, 21, .72); }
+html[data-theme="light"] .v4-home .v4-join-bottom > p { color: var(--site-text-muted); }
+
+/* Image content is never theme-filtered. */
+.v4-public-shell .poster-card img,
+.v4-public-shell .v4-archive-poster img,
+.v4-public-shell .event-gallery img,
+.v4-public-shell .member-photo img,
+.v4-public-shell .v4-team-face,
+.v4-public-shell .v4-team-face img,
+.v4-public-shell .people-photo-stack img {
+  filter: none !important;
+}
+
+/* ---------------------------------------------------------------------
+   Inner pages: night interface in Dark, printed engineering sheets in Light
+   --------------------------------------------------------------------- */
+.v4-public-shell .v4-page {
+  background:
+    radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--site-orange) 7%, transparent), transparent 28%),
+    var(--site-bg);
+  color: var(--site-text);
+}
+.v4-public-shell .v4-page-hero {
+  border-color: var(--site-border);
+  background-image:
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px);
+}
+.v4-public-shell .v4-page-hero::after { background: linear-gradient(90deg, transparent, var(--site-cyan), var(--site-orange), transparent); }
+.v4-public-shell .v4-page-hero-kicker b,
+.v4-public-shell .v4-page-hero-copy > p,
+.v4-public-shell .v4-page-hero-meta span { color: var(--site-text-muted); }
+.v4-public-shell .v4-page-hero-meta { border-color: var(--site-border); }
+.v4-public-shell .v4-hero-paper-ticket { background: var(--site-paper); color: var(--site-paper-ink); }
+
+.v4-public-shell .v4-page .under-link,
+.v4-public-shell .v4-page .record-link { color: var(--site-text) !important; }
+.v4-public-shell .v4-page-cta { border-color: var(--site-border); }
+.v4-public-shell .v4-page-cta p { color: var(--site-text-muted); }
+.v4-public-shell .v4-page-cta > a { color: var(--site-text); border-color: var(--site-border-strong); }
+.v4-public-shell .v4-page-cta > a:hover { background: var(--site-text); color: var(--site-bg); }
+
+.v4-public-shell .v4-event-controls,
+.v4-public-shell .resource-controls,
+.v4-public-shell .team-year-bar {
+  background: color-mix(in srgb, var(--site-bg) 92%, transparent) !important;
+  border-color: var(--site-border) !important;
+}
+.v4-public-shell .v4-page .filter-button {
+  background: transparent !important;
+  border-color: var(--site-border-strong) !important;
+  color: var(--site-text-muted) !important;
+}
+.v4-public-shell .v4-page .filter-button.active,
+.v4-public-shell .v4-page .filter-button:hover { background: var(--site-orange) !important; border-color: var(--site-orange) !important; color: #fffaf0 !important; }
+.v4-public-shell .v4-page .event-search input {
+  border-bottom-color: var(--site-border-strong) !important;
+  color: var(--site-text) !important;
+}
+.v4-public-shell .v4-page .event-search span { color: var(--site-text-muted) !important; }
+
+.v4-public-shell .v4-page .featured-poster,
+.v4-public-shell .v4-page .event-detail-poster,
+.v4-public-shell .v4-archive-poster { background: var(--site-surface-raised); border-color: var(--site-border); }
+.v4-public-shell .v4-page .featured-event-copy h2,
+.v4-public-shell .v4-page .event-section-head h2,
+.v4-public-shell .v4-page .event-idea-cta h2 { color: var(--site-text) !important; }
+.v4-public-shell .v4-page .featured-event-copy > p,
+.v4-public-shell .v4-page .event-section-head span,
+.v4-public-shell .v4-page .archive-intro { color: var(--site-text-muted) !important; }
+.v4-public-shell .v4-page .featured-event-copy dl,
+.v4-public-shell .v4-page .featured-event-copy dl div,
+.v4-public-shell .v4-page .event-section-head,
+.v4-public-shell .v4-page .event-idea-cta { border-color: var(--site-border) !important; }
+.v4-public-shell .v4-page .featured-event-copy dt { color: var(--site-text-soft) !important; }
+.v4-public-shell .v4-page .featured-event-copy dd { color: var(--site-text) !important; }
+
+.v4-public-shell .v4-page .poster-card-grid { background: var(--site-border) !important; border-color: var(--site-border) !important; }
+.v4-public-shell .v4-page .poster-card {
+  background: var(--site-surface) !important;
+  color: var(--site-text) !important;
+}
+.v4-public-shell .v4-page .poster-card:hover { background: var(--site-surface-raised) !important; }
+.v4-public-shell .v4-page .poster-card-media { background: var(--site-surface-raised); }
+.v4-public-shell .v4-page .poster-card-meta,
+.v4-public-shell .v4-page .poster-card-foot { color: var(--site-text-muted) !important; border-color: var(--site-border) !important; }
+.v4-public-shell .v4-page .poster-card h3,
+.v4-public-shell .v4-page .poster-card a { color: var(--site-text) !important; }
+.v4-public-shell .v4-page .poster-card p { color: var(--site-text-muted) !important; }
+
+.v4-public-shell .v4-archive-year,
+.v4-public-shell .v4-archive-event { border-color: var(--site-border); }
+.v4-public-shell .v4-archive-year-label span,
+.v4-public-shell .v4-archive-year-label b,
+.v4-public-shell .v4-archive-date > span,
+.v4-public-shell .v4-archive-date em,
+.v4-public-shell .v4-archive-meta span { color: var(--site-text-muted); }
+.v4-public-shell .v4-archive-date time,
+.v4-public-shell .v4-archive-copy h2 a { color: var(--site-text); }
+.v4-public-shell .v4-archive-copy > p { color: var(--site-text-muted); }
+
+.v4-public-shell .v4-page .project-blueprint {
+  background: var(--site-code-bg) !important;
+  color: #f2efe6 !important;
+  border-color: rgba(242, 239, 230, .2) !important;
+}
+.v4-public-shell .v4-page .project-blueprint pre { color: var(--site-code-text) !important; }
+.v4-public-shell .v4-projects-page .project-lead > div:first-child,
+.v4-public-shell .v4-projects-page .project-index,
+.v4-public-shell .v4-team-page .archive-context,
+.v4-public-shell .v4-achievements-page .record-summary {
+  background: var(--site-paper) !important;
+  color: var(--site-paper-ink) !important;
+}
+.v4-public-shell .v4-projects-page .project-index-head,
+.v4-public-shell .v4-projects-page .project-row { color: var(--site-paper-ink) !important; border-color: rgba(17,19,21,.28) !important; }
+.v4-public-shell .v4-projects-page .project-row strong,
+.v4-public-shell .v4-projects-page .project-row-actions a { color: var(--site-paper-ink) !important; }
+.v4-public-shell .v4-projects-page .project-row p,
+.v4-public-shell .v4-projects-page .project-row em,
+.v4-public-shell .v4-projects-page .project-row > span { color: rgba(17,19,21,.64) !important; }
+.v4-public-shell .v4-page .project-principles { background: var(--site-border) !important; border-color: var(--site-border) !important; }
+.v4-public-shell .v4-page .project-principles article { background: var(--site-surface) !important; color: var(--site-text) !important; }
+
+.v4-public-shell .v4-page .faculty-card-grid,
+.v4-public-shell .v4-page .member-grid { background: var(--site-border) !important; border-color: var(--site-border) !important; }
+.v4-public-shell .v4-page .faculty-card-new,
+.v4-public-shell .v4-page .member-card {
+  background: var(--site-surface) !important;
+  color: var(--site-text) !important;
+}
+.v4-public-shell .v4-page .faculty-card-new p,
+.v4-public-shell .v4-page .faculty-card-new strong,
+.v4-public-shell .v4-page .member-card strong,
+.v4-public-shell .v4-page .member-card span,
+.v4-public-shell .v4-page .member-group,
+.v4-public-shell .v4-page .member-section-head p,
+.v4-public-shell .v4-page .member-section-head span { color: var(--site-text-muted) !important; }
+.v4-public-shell .v4-page .faculty-card-new a,
+.v4-public-shell .v4-page .member-card h3,
+.v4-public-shell .v4-page .member-socials a { color: var(--site-text) !important; }
+.v4-public-shell .v4-page .member-socials a { border-color: var(--site-border-strong) !important; }
+.v4-public-shell .v4-page .team-year-bar a { color: var(--site-text-muted) !important; border-color: var(--site-border-strong); }
+.v4-public-shell .v4-page .team-year-bar a.active { color: #fffaf0 !important; background: var(--site-orange); border-color: var(--site-orange) !important; }
+.v4-public-shell .v4-page .distribution-grid > div,
+.v4-public-shell .v4-page .cohort-grid article { background: var(--site-surface) !important; color: var(--site-text) !important; border-color: var(--site-border) !important; }
+.v4-public-shell .v4-page .team-distribution-new,
+.v4-public-shell .v4-page .cohort-archive,
+.v4-public-shell .v4-page .join-block { border-color: var(--site-border) !important; }
+
+.v4-public-shell .v4-resources-page .resource-library {
+  background: var(--site-yellow) !important;
+  border-color: var(--site-paper-ink) !important;
+  box-shadow: 10px 10px 0 var(--site-offset-shadow) !important;
+}
+.v4-public-shell .v4-resources-page .resource-card { background: var(--site-paper-raised) !important; color: var(--site-paper-ink) !important; border-color: var(--site-paper-ink) !important; }
+.v4-public-shell .v4-resources-page .resource-card:nth-child(3n+2) { background: var(--site-yellow) !important; }
+.v4-public-shell .v4-resources-page .resource-card:nth-child(3n+3) { background: #d9cfe8 !important; }
+.v4-public-shell .v4-resources-page .resource-card h2,
+.v4-public-shell .v4-resources-page .resource-card p,
+.v4-public-shell .v4-resources-page .resource-card em,
+.v4-public-shell .v4-resources-page .resource-card footer { color: var(--site-paper-ink) !important; }
+.v4-public-shell .v4-resources-page .resource-callout { background: var(--site-paper) !important; color: var(--site-paper-ink) !important; border: 2px solid var(--site-paper-ink) !important; }
+.v4-public-shell .v4-resources-page .resource-callout h2,
+.v4-public-shell .v4-resources-page .resource-callout p { color: var(--site-paper-ink) !important; }
+
+.v4-public-shell .v4-page .timeline-year { border-color: var(--site-border) !important; }
+.v4-public-shell .v4-page .timeline-year > header { color: var(--site-text) !important; }
+.v4-public-shell .v4-page .timeline-year > header b { color: var(--site-text-muted) !important; }
+.v4-public-shell .v4-page .timeline-year article {
+  background: color-mix(in srgb, var(--site-surface) 72%, transparent) !important;
+  color: var(--site-text) !important;
+  border-color: var(--site-border) !important;
+}
+.v4-public-shell .v4-page .timeline-year article h2 { color: var(--site-text) !important; }
+.v4-public-shell .v4-page .timeline-year article p,
+.v4-public-shell .v4-page .timeline-year article em { color: var(--site-text-muted) !important; }
+
+/* Event detail content, schedule and registration. */
+.v4-public-shell .v4-event-detail-page .back-link,
+.v4-public-shell .v4-event-detail-page .event-lead,
+.v4-public-shell .v4-event-detail-page .event-about p,
+.v4-public-shell .v4-event-detail-page .event-recap p,
+.v4-public-shell .v4-event-detail-page .registration-closed p { color: var(--site-text-muted) !important; }
+.v4-public-shell .v4-event-detail-page .event-detail-info h1,
+.v4-public-shell .v4-event-detail-page .event-detail-info dd,
+.v4-public-shell .v4-event-detail-page .event-about h2,
+.v4-public-shell .v4-event-detail-page .event-recap h2,
+.v4-public-shell .v4-event-detail-page .registration-closed h2 { color: var(--site-text) !important; }
+.v4-public-shell .v4-event-detail-page .event-detail-info dl,
+.v4-public-shell .v4-event-detail-page .event-detail-info dl > div,
+.v4-public-shell .v4-event-detail-page .event-about,
+.v4-public-shell .v4-event-detail-page .event-info-block,
+.v4-public-shell .v4-event-detail-page .event-extra,
+.v4-public-shell .v4-event-detail-page .event-recap,
+.v4-public-shell .v4-event-detail-page .registration-panel,
+.v4-public-shell .v4-event-detail-page .related-events { border-color: var(--site-border) !important; color: var(--site-text) !important; }
+.v4-public-shell .v4-event-detail-page .event-detail-info dt,
+.v4-public-shell .v4-event-detail-page .event-info-grid span,
+.v4-public-shell .v4-event-detail-page .speaker-card span,
+.v4-public-shell .v4-event-detail-page .speaker-card em { color: var(--site-text-muted) !important; }
+.v4-public-shell .v4-event-detail-page .event-info-grid > div,
+.v4-public-shell .v4-event-detail-page .speaker-card,
+.v4-public-shell .v4-event-detail-page .schedule-row {
+  background: var(--site-surface) !important;
+  color: var(--site-text) !important;
+  border-color: var(--site-border) !important;
+}
+.v4-public-shell .v4-event-detail-page .speaker-photo { background: var(--site-text); color: var(--site-bg); }
+.v4-public-shell .v4-event-detail-page .speaker-card a,
+.v4-public-shell .v4-event-detail-page .resource-links a { color: var(--site-text) !important; border-color: var(--site-border-strong); background: var(--site-surface); }
+
+/* ---------------------------------------------------------------------
+   Route atmosphere: luminous at night, printed technical annotation by day
+   --------------------------------------------------------------------- */
+.v4-public-shell .route-trace-base,
+.v4-public-shell .route-trace-tick { background: var(--site-border); }
+.v4-public-shell .route-trace-progress { background: linear-gradient(var(--site-orange), var(--site-cyan)); }
+.v4-public-shell .route-index-card {
+  background: color-mix(in srgb, var(--site-surface) 88%, transparent);
+  border-color: var(--site-border);
+  color: var(--site-text);
+}
+.v4-public-shell .route-index-card span,
+.v4-public-shell .route-index-card small,
+.v4-public-shell .route-coordinate { color: var(--site-text-muted); }
+.v4-public-shell .route-index-card strong { color: var(--site-text); }
+.v4-public-shell .route-glyph .glyph-box { border-color: var(--site-grid-strong); }
+.v4-public-shell .route-glyph .box-b { border-color: color-mix(in srgb, var(--site-orange) 54%, transparent); }
+.v4-public-shell .route-glyph .glyph-line { background: var(--site-border-strong); }
+.v4-public-shell .route-glyph b { color: var(--site-text-muted); }
+.v4-public-shell .route-floating-note { background: var(--site-yellow); color: var(--site-paper-ink); border-color: var(--site-paper-ink); }
+
+html[data-theme="light"] .v4-public-shell .v4-page {
+  background:
+    radial-gradient(circle at 92% 8%, rgba(232,74,39,.08), transparent 25%),
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    var(--site-bg);
+  background-size: auto, 100% 58px, auto;
+}
+html[data-theme="light"] .v4-public-shell .route-atmosphere { opacity: .82; }
+html[data-theme="light"] .v4-public-shell .route-index-card {
+  background: var(--site-paper-raised);
+  color: var(--site-paper-ink);
+  border: 2px solid var(--site-paper-ink);
+  box-shadow: 6px 6px 0 var(--site-orange);
+}
+html[data-theme="light"] .v4-public-shell .route-index-card span,
+html[data-theme="light"] .v4-public-shell .route-index-card small,
+html[data-theme="light"] .v4-public-shell .route-index-card strong { color: var(--site-paper-ink); }
+html[data-theme="light"] .v4-public-shell .v4-page .poster-card {
+  background: var(--site-paper-raised) !important;
+  color: var(--site-paper-ink) !important;
+  border: 1px solid var(--site-paper-ink) !important;
+}
+html[data-theme="light"] .v4-public-shell .v4-page .poster-card:hover { background: var(--site-paper) !important; box-shadow: 7px 7px 0 var(--site-yellow) !important; }
+html[data-theme="light"] .v4-public-shell .v4-page .poster-card h3,
+html[data-theme="light"] .v4-public-shell .v4-page .poster-card a { color: var(--site-paper-ink) !important; }
+html[data-theme="light"] .v4-public-shell .v4-page .poster-card p,
+html[data-theme="light"] .v4-public-shell .v4-page .poster-card-meta,
+html[data-theme="light"] .v4-public-shell .v4-page .poster-card-foot { color: #555b60 !important; border-color: rgba(17,19,21,.24) !important; }
+html[data-theme="light"] .v4-public-shell .v4-archive-event {
+  background: color-mix(in srgb, var(--site-paper-raised) 62%, transparent);
+  border-color: var(--site-border);
+}
+html[data-theme="light"] .v4-public-shell .v4-archive-poster { border-color: var(--site-paper-ink); box-shadow: 7px 7px 0 var(--site-orange); }
+html[data-theme="light"] .v4-public-shell .v4-page .faculty-card-new,
+html[data-theme="light"] .v4-public-shell .v4-page .member-card,
+html[data-theme="light"] .v4-public-shell .v4-page .distribution-grid > div,
+html[data-theme="light"] .v4-public-shell .v4-page .cohort-grid article {
+  background: var(--site-paper-raised) !important;
+  color: var(--site-paper-ink) !important;
+  border-color: var(--site-paper-ink) !important;
+}
+html[data-theme="light"] .v4-public-shell .v4-page .member-card h3,
+html[data-theme="light"] .v4-public-shell .v4-page .faculty-card-new a,
+html[data-theme="light"] .v4-public-shell .v4-page .member-socials a { color: var(--site-paper-ink) !important; }
+html[data-theme="light"] .v4-public-shell .v4-page .faculty-card-new p,
+html[data-theme="light"] .v4-public-shell .v4-page .faculty-card-new strong,
+html[data-theme="light"] .v4-public-shell .v4-page .member-card strong,
+html[data-theme="light"] .v4-public-shell .v4-page .member-card span,
+html[data-theme="light"] .v4-public-shell .v4-page .member-group { color: #555b60 !important; }
+html[data-theme="light"] .v4-public-shell .v4-page .timeline-year article {
+  background: var(--site-paper-raised) !important;
+  color: var(--site-paper-ink) !important;
+  border-color: rgba(17,19,21,.24) !important;
+}
+html[data-theme="light"] .v4-public-shell .v4-page .timeline-year article h2 { color: var(--site-paper-ink) !important; }
+html[data-theme="light"] .v4-public-shell .v4-page .timeline-year article p,
+html[data-theme="light"] .v4-public-shell .v4-page .timeline-year article em { color: #555b60 !important; }
+html[data-theme="light"] .v4-public-shell .v4-event-detail-page .event-info-grid > div,
+html[data-theme="light"] .v4-public-shell .v4-event-detail-page .speaker-card,
+html[data-theme="light"] .v4-public-shell .v4-event-detail-page .schedule-row {
+  background: var(--site-paper-raised) !important;
+  color: var(--site-paper-ink) !important;
+  border-color: rgba(17,19,21,.25) !important;
+}
+
+/* Cursor defaults if the optional public cursor is mounted. */
+.v4-cursor-arrow .arrow-outer { fill: var(--site-text); }
+.v4-cursor-arrow .arrow-border { fill: var(--site-bg); }
+.v4-cursor-arrow .arrow-core { fill: var(--site-orange); }
+.v4-cursor-badge span {
+  background: var(--site-surface);
+  color: var(--site-cyan);
+  border-color: var(--site-cyan);
+}
+
+/* Scrollbar and browser-native page chrome. */
+html:has(.v4-public-shell) { scrollbar-color: var(--site-text-soft) var(--site-bg); }
+html:has(.v4-public-shell)::-webkit-scrollbar { width: 11px; }
+html:has(.v4-public-shell)::-webkit-scrollbar-track { background: var(--site-bg); }
+html:has(.v4-public-shell)::-webkit-scrollbar-thumb { background: var(--site-text-soft); border: 3px solid var(--site-bg); }
+
+@media (max-width: 1120px) {
+  .v4-public-shell .v4-nav-actions { margin-left: auto; }
+  .v4-public-shell .v4-brand,
+  .v4-public-shell .v4-nav-actions { position: relative; z-index: 100; }
+}
+
+@media (max-width: 768px) {
+  .v4-public-shell .v4-nav-shell { grid-template-columns: auto 1fr auto; }
+  .v4-public-shell .v4-nav-actions { grid-column: 3; gap: 12px; }
+  .site-theme-toggle { width: 44px; min-width: 44px; height: 44px; min-height: 44px; }
+}
+
+@media (max-width: 360px) {
+  .v4-public-shell .v4-nav-shell { width: calc(100% - 22px); gap: 8px; }
+  .v4-public-shell .v4-nav-actions { gap: 8px; }
+  .v4-public-shell .v4-brand strong { width: 52px; height: 38px; }
+  .site-theme-toggle,
+  .v4-public-shell .v4-menu-toggle { width: 44px; min-width: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transitioning .v4-public-shell,
+  html.theme-transitioning .v4-site-header,
+  html.theme-transitioning .v4-mobile-nav,
+  html.theme-transitioning .v4-site-footer,
+  html.theme-transitioning .v4-home,
+  html.theme-transitioning .v4-page,
+  html.theme-transitioning .v4-section,
+  html.theme-transitioning .v4-join,
+  .site-theme-toggle,
+  .theme-icon { transition-duration: .001ms !important; }
+}

@@ -81,6 +81,7 @@ export function useIntroTimeline(
     laptopRef.current?.setTakeoverProgress(1);
     takeoverRef.current?.setProgress(1);
     rootRef.current?.style.setProperty("--intro-scroll", "1");
+    rootRef.current?.style.setProperty("--intro-arrival", "1");
     rootRef.current?.setAttribute("data-bypassed", "true");
     document.documentElement.classList.remove("intro-running");
     changePhase("COMPLETE");
@@ -113,20 +114,22 @@ export function useIntroTimeline(
       setDeviceState(0, 0, 0, 0);
       skipTimerRef.current = window.setTimeout(() => setSkipVisible(true), 1000);
       const compact = window.innerWidth < 700;
-      const duration = compact ? 3900 : 4700;
+      const timing = compact
+        ? { assemblyStart: 500, assemblyEnd: 1550, openStart: 1750, openEnd: 2750, bootStart: 2600, bootEnd: 3500, mapStart: 3350, mapEnd: 4100, duration: 4200 }
+        : { assemblyStart: 650, assemblyEnd: 1900, openStart: 2150, openEnd: 3400, bootStart: 3200, bootEnd: 4250, mapStart: 4000, mapEnd: 4950, duration: 5100 };
       const started = performance.now();
 
       const animate = (now: number) => {
         const elapsed = now - started;
-        const assembly = easeOut(range(compact ? 500 : 650, compact ? 1550 : 1900, elapsed));
-        const open = smoothstep(compact ? 1450 : 1750, compact ? 2450 : 3000, elapsed);
-        const boot = smoothstep(compact ? 2300 : 2800, compact ? 3200 : 3850, elapsed);
-        const map = smoothstep(compact ? 3050 : 3600, compact ? 3800 : 4550, elapsed);
+        const assembly = easeOut(range(timing.assemblyStart, timing.assemblyEnd, elapsed));
+        const open = smoothstep(timing.openStart, timing.openEnd, elapsed);
+        const boot = smoothstep(timing.bootStart, timing.bootEnd, elapsed);
+        const map = smoothstep(timing.mapStart, timing.mapEnd, elapsed);
         setDeviceState(assembly, open, boot, map);
-        if (elapsed >= (compact ? 500 : 650) && phaseRef.current === "POINT") changePhase("ASSEMBLE");
-        if (elapsed >= (compact ? 1450 : 1750) && phaseRef.current === "ASSEMBLE") changePhase("OPEN");
-        if (elapsed >= (compact ? 2300 : 2800) && phaseRef.current === "OPEN") changePhase("BOOT");
-        if (elapsed < duration) autoFrameRef.current = requestAnimationFrame(animate);
+        if (elapsed >= timing.assemblyStart && phaseRef.current === "POINT") changePhase("ASSEMBLE");
+        if (elapsed >= timing.openStart && phaseRef.current === "ASSEMBLE") changePhase("OPEN");
+        if (elapsed >= timing.bootStart && phaseRef.current === "OPEN") changePhase("BOOT");
+        if (elapsed < timing.duration) autoFrameRef.current = requestAnimationFrame(animate);
         else showMap(false);
       };
       autoFrameRef.current = requestAnimationFrame(animate);
@@ -148,11 +151,17 @@ export function useIntroTimeline(
       frame = 0;
       const bounds = root.getBoundingClientRect();
       const distance = Math.max(1, root.offsetHeight - innerHeight);
-      const progress = clamp(-bounds.top / distance);
+      const holdVh = Number.parseFloat(getComputedStyle(root).getPropertyValue("--arrival-hold-vh")) || 0;
+      const holdDistance = innerHeight * holdVh / 100;
+      const storyDistance = Math.max(1, distance - holdDistance);
+      const scrolled = Math.max(0, -bounds.top);
+      const progress = clamp(scrolled / storyDistance);
+      const arrival = holdDistance > 0 ? clamp((scrolled - storyDistance) / holdDistance) : 1;
       const route = smoothstep(.015, .68, progress);
       const focus = smoothstep(.53, .7, progress);
       const takeover = smoothstep(.7, .985, progress);
       root.style.setProperty("--intro-scroll", String(progress));
+      root.style.setProperty("--intro-arrival", String(arrival));
       mapRef.current?.setRouteProgress(route);
       mapRef.current?.setFocusProgress(focus);
       laptopRef.current?.setTakeoverProgress(takeover);

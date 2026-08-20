@@ -56,13 +56,13 @@ export const LaptopReveal = forwardRef<LaptopRevealHandle, LaptopRevealProps>(fu
       <div className={styles.deviceRig}>
         <svg className={styles.assemblyDrawing} viewBox="0 0 1000 620" aria-hidden="true">
           <g className={styles.assemblyRays}>
-            <path d="M500 325L104 92M500 325L896 92M500 325L75 508M500 325L925 508" />
-            <path d="M500 325L232 325M500 325L768 325" />
+            <path d="M500 380H176" pathLength="1" />
+            <path d="M500 380H824" pathLength="1" />
+            <path d="M500 516H72" pathLength="1" />
+            <path d="M500 516H930" pathLength="1" />
           </g>
           <g className={styles.assemblyOutline}>
             <path d="M176 380L824 380L930 516L72 516Z" pathLength="1" />
-            <path d="M176 380V92H824V380" pathLength="1" />
-            <path d="M199 358V115H801V358Z" pathLength="1" />
             <path d="M72 516H930M416 486H584" pathLength="1" />
           </g>
         </svg>
@@ -78,6 +78,7 @@ export const LaptopReveal = forwardRef<LaptopRevealHandle, LaptopRevealProps>(fu
               </div>
               <i className={styles.cameraDot} aria-hidden="true" />
             </div>
+            <span className={styles.materializationTrace} aria-hidden="true" />
           </div>
 
           <div className={styles.hinge} aria-hidden="true"><i /><i /><i /></div>
@@ -87,6 +88,7 @@ export const LaptopReveal = forwardRef<LaptopRevealHandle, LaptopRevealProps>(fu
             </div>
             <div className={styles.touchpad} />
             <div className={styles.powerLine} />
+            <span className={styles.materializationTrace} aria-hidden="true" />
           </div>
           <div className={styles.baseEdge} aria-hidden="true"><i /></div>
         </div>

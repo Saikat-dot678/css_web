@@ -4,9 +4,11 @@
   --boot: 0;
   --map: 0;
   --intro-scroll: 0;
+  --intro-arrival: 0;
+  --arrival-hold-vh: 60;
   position: relative;
   z-index: 6;
-  height: 520svh;
+  height: 580svh;
   background: #02050a;
 }
 
@@ -127,7 +129,7 @@
 }
 
 @media (max-width: 700px) {
-  .experience { height: 430svh; }
+  .experience { --arrival-hold-vh: 32; height: 462svh; }
   .scrollInstruction { bottom: 18px; gap: 8px; }
   .scrollInstruction span { font-size: 11px; padding: 8px 18px; gap: 8px; letter-spacing: 0.12em; }
   .scrollIcon { width: 13px; height: 13px; }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const links = [
   ["About", "/#about"],
@@ -75,6 +76,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="v4-nav-actions">
+          <ThemeToggle />
           <Link className="v4-nav-join" href="/team#recruitment">JOIN CSS ↗</Link>
           <button
             className="v4-menu-toggle"
