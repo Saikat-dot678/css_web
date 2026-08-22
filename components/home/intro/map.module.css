@@ -1,0 +1,227 @@
+.mapScene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #02080d;
+  color: #dffaff;
+  font-family: var(--font-roboto-mono), monospace;
+  isolation: isolate;
+}
+
+.mapSvg {
+  --map-focus: 0;
+  --map-reveal: 1;
+  --route-progress: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100svh;
+  overflow: visible;
+}
+
+.mapCamera {
+  transform-box: view-box;
+  transform-origin: 739px 448px;
+  transition: filter .18s linear;
+  will-change: transform;
+}
+
+.boundary path:first-child {
+  fill: rgba(7, 23, 32, .82);
+  stroke: rgba(133, 225, 237, .34);
+  stroke-width: 1.4;
+}
+
+.boundary path:last-child {
+  fill: none;
+  stroke: rgba(133, 225, 237, .11);
+  stroke-dasharray: 4 9;
+}
+
+.microGrid { opacity: calc(.14 + var(--map-reveal) * .42); }
+
+.majorRoads path,
+.minorRoads path {
+  fill: none;
+  path-length: 1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--map-reveal));
+  transition: stroke-dashoffset .9s ease-out;
+}
+
+.majorRoads path {
+  stroke: rgba(100, 216, 233, .74);
+  stroke-width: 2;
+}
+
+.minorRoads path {
+  stroke: rgba(104, 193, 209, .2);
+  stroke-width: 1;
+  stroke-dasharray: .025 .018;
+}
+
+.landmarks,
+.buildings,
+.cseBuilding,
+.mainGate,
+.mapLights {
+  opacity: var(--map-reveal);
+  transition: opacity .65s ease-out;
+}
+
+.ground {
+  fill: rgba(23, 48, 47, .38);
+  stroke: rgba(153, 213, 183, .26);
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+.water {
+  fill: none;
+  stroke: rgba(73, 184, 211, .31);
+  stroke-width: 2.3;
+}
+
+.landmarks text,
+.building text,
+.mainGate text {
+  fill: rgba(215, 241, 244, .48);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .11em;
+}
+
+.building > path:first-child {
+  fill: #0b1c25;
+  stroke: rgba(151, 224, 235, .42);
+  stroke-width: 1.2;
+}
+
+.buildingEdge {
+  fill: #06131b;
+  stroke: rgba(91, 186, 202, .24);
+  stroke-width: .8;
+}
+
+.buildingMuted path {
+  fill: rgba(9, 24, 33, .72);
+  stroke: rgba(120, 203, 216, .16);
+}
+
+.cseFootprint {
+  fill: color-mix(in srgb, #0b1c25 calc(100% - var(--map-focus) * 100%), #e84a27);
+  stroke: color-mix(in srgb, rgba(151, 224, 235, .52) calc(100% - var(--map-focus) * 100%), #ffe391);
+  stroke-width: calc(1.5px + var(--map-focus) * 1.5px);
+}
+
+.cseEdge { fill: #09141c; stroke: rgba(255, 215, 125, .48); }
+.cseDetail { fill: none; stroke: rgba(255, 239, 205, calc(.16 + var(--map-focus) * .62)); stroke-width: 1; }
+
+.targetRing {
+  fill: none;
+  stroke: rgba(242, 193, 78, calc(var(--map-focus) * .74));
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.targetRing:nth-of-type(2) { stroke: rgba(139, 120, 230, calc(var(--map-focus) * .54)); }
+
+.cseLabel {
+  fill: color-mix(in srgb, #dffaff calc(100% - var(--map-focus) * 65%), #ffe08a);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.cseSubLabel { fill: rgba(174, 228, 236, .52); font-size: 6px; letter-spacing: .08em; }
+
+.mainGate path { fill: none; stroke: #f2c14e; stroke-width: 1.5; }
+.mainGate circle { fill: #fff8dd; filter: drop-shadow(0 0 5px #f2c14e); }
+
+.mapLights circle {
+  fill: #a9eff6;
+  filter: drop-shadow(0 0 5px rgba(141, 224, 237, .82));
+  animation: map-node-pulse 2.8s ease-in-out infinite alternate;
+}
+.mapLights circle:nth-child(2n) { animation-delay: -1.1s; }
+.mapLights circle:nth-child(3n) { fill: #f2c14e; animation-delay: -2s; }
+
+.externalRoad { fill: none; stroke: rgba(232, 74, 39, .34); stroke-width: 4; }
+.externalRoadLabel { fill: rgba(232, 74, 39, .56); font-size: 8px; font-weight: 800; letter-spacing: .12em; }
+
+.routeLayer { opacity: var(--map-reveal); }
+.routeBase { fill: none; stroke: rgba(98, 196, 214, .2); stroke-width: 3; }
+.routeTravelled {
+  fill: none;
+  stroke: url("#route-signal-fallback");
+  stroke: #f7f2df;
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 5px rgba(113, 225, 240, .75));
+}
+
+.routeCheckpoint { transition: opacity .16s linear; }
+.routeCheckpoint circle { fill: #07151d; stroke: #f2c14e; stroke-width: 1.2; }
+.routeCheckpoint text { fill: rgba(243, 239, 218, .68); font-size: 7px; font-weight: 800; letter-spacing: .1em; }
+
+.routeDot { opacity: 1; }
+.routeHalo { fill: rgba(109, 224, 239, .12); stroke: rgba(139, 225, 238, .3); animation: route-halo 1.55s ease-in-out infinite; }
+.routeLight { fill: #fffbe8; filter: drop-shadow(0 0 5px #91eaf4); }
+
+.focusVeil {
+  opacity: 0;
+  pointer-events: none;
+  fill: rgba(1, 5, 8, .58);
+  mask: radial-gradient(circle at 61.6% 59%, transparent 0 12%, #000 32%);
+}
+
+.mapHud { fill: rgba(174, 226, 234, .46); font-size: 8px; font-weight: 700; letter-spacing: .12em; }
+.mapHud path { fill: none; stroke: rgba(232, 74, 39, .72); stroke-width: 1; }
+
+.scanner {
+  opacity: calc(.08 + var(--map-reveal) * .2);
+  animation: map-scan 8s linear infinite;
+}
+.scanner line { stroke: rgba(111, 222, 238, .4); stroke-width: 1; filter: drop-shadow(0 0 7px rgba(111, 222, 238, .5)); }
+
+.mapReadout {
+  position: absolute;
+  z-index: 4;
+  left: clamp(25px, 4vw, 64px);
+  bottom: clamp(24px, 5vh, 52px);
+  display: grid;
+  gap: 5px;
+  pointer-events: none;
+  color: rgba(192, 232, 237, .48);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+.mapReadout strong { color: rgba(239, 250, 250, .84); font-size: 10px; }
+.mapReadout small { font: inherit; color: rgba(242, 193, 78, .62); }
+
+@keyframes map-node-pulse { to { opacity: .28; transform: scale(.72); } }
+@keyframes route-halo { 50% { opacity: .32; transform: scale(1.22); } }
+@keyframes map-scan { from { transform: translateX(-220px); } to { transform: translateX(1120px); } }
+
+@media (max-width: 760px) {
+  .mapReadout { left: 20px; bottom: 24px; }
+  .mapReadout small { display: none; }
+  .landmarks text,
+  .building text { font-size: 11px; }
+  .buildingMuted { display: none; }
+  .minorRoads { opacity: .55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapLights circle,
+  .routeHalo,
+  .scanner { animation: none; }
+  .mapCamera { transition: none; }
+}

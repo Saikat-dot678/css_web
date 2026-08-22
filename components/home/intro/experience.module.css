@@ -1,0 +1,145 @@
+.experience {
+  --assembly: 0;
+  --open: 0;
+  --boot: 0;
+  --map: 0;
+  --intro-scroll: 0;
+  --intro-arrival: 0;
+  --arrival-hold-vh: 60;
+  position: relative;
+  z-index: 6;
+  height: 580svh;
+  background: #02050a;
+}
+
+.experience[data-bypassed="true"] { height: 100svh; }
+.stickyStage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: #02050a; isolation: isolate; }
+.pointLayer,
+.laptopLayer { position: absolute; inset: 0; }
+.pointLayer { z-index: 1; opacity: calc(1 - var(--assembly) * .82); }
+.laptopLayer { z-index: 2; opacity: clamp(0, calc(var(--assembly) * 6), 1); }
+
+.hud { position: absolute; z-index: 12; inset: 0; pointer-events: none; font-family: var(--font-roboto-mono), Consolas, monospace; }
+.hudStatus {
+  position: absolute;
+  left: 50%;
+  top: clamp(24px, 4vh, 42px);
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  color: rgba(196, 231, 236, .46);
+  opacity: calc(1 - clamp(0, calc((var(--intro-scroll) - .7) * 6), 1));
+  font-size: 7px;
+  letter-spacing: .13em;
+  text-align: center;
+  transform: translateX(-50%);
+}
+.hudStatus strong { color: rgba(235, 249, 250, .76); font-size: 9px; }
+.skipButton {
+  position: absolute;
+  right: clamp(24px, 4vw, 62px);
+  bottom: clamp(24px, 5vh, 52px);
+  min-height: 42px;
+  padding: 0 15px;
+  border: 1px solid rgba(154, 224, 235, .32);
+  background: rgba(3, 10, 14, .72);
+  color: rgba(226, 246, 248, .76);
+  pointer-events: auto;
+  cursor: pointer;
+  font: 800 8px/1 var(--font-roboto-mono), monospace;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.skipButton:hover,
+.skipButton:focus-visible { border-color: #f2c14e; background: #f2c14e; color: #111315; outline: none; }
+.scrollInstruction {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(24px, 4.5vh, 44px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  transform: translateX(-50%);
+  z-index: 15;
+  pointer-events: none;
+}
+
+.scrollInstruction span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 24px;
+  background: rgba(3, 10, 18, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(242, 193, 78, 0.45);
+  border-radius: 9999px;
+  color: #ffffff;
+  font-family: var(--font-roboto-mono), Consolas, monospace;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 20px rgba(242, 193, 78, 0.25);
+  text-shadow: 0 0 10px rgba(242, 193, 78, 0.3);
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+.scrollIcon {
+  width: 15px;
+  height: 15px;
+  color: #f2c14e;
+  filter: drop-shadow(0 0 4px rgba(242, 193, 78, 0.6));
+  animation: scroll-arrow-bounce 1.5s ease-in-out infinite;
+}
+
+.scrollInstruction i {
+  width: 2px;
+  height: 38px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #f2c14e 0%, rgba(242, 193, 78, 0.25) 75%, transparent 100%);
+  box-shadow: 0 0 10px rgba(242, 193, 78, 0.6);
+  animation: scroll-cue 1.5s ease-in-out infinite;
+}
+
+:global(html.intro-running) { overflow: hidden; }
+:global(html.intro-running) :global(.v4-site-header),
+:global(html.intro-running) :global(.route-atmosphere) { opacity: 0; pointer-events: none; }
+:global(body:has(section[aria-label="CSS laptop campus introduction"][data-phase="PRELOAD"])) :global(.v4-site-header),
+:global(body:has(section[aria-label="CSS laptop campus introduction"][data-phase="PRELOAD"])) :global(.route-atmosphere) { opacity: 0; pointer-events: none; }
+:global(body:has(section[aria-label="CSS laptop campus introduction"]:not([data-phase="COMPLETE"]))) :global(.v4-site-header),
+:global(body:has(section[aria-label="CSS laptop campus introduction"]:not([data-phase="COMPLETE"]))) :global(.route-atmosphere) { opacity: 0; pointer-events: none; }
+
+@keyframes scroll-arrow-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { border-color: rgba(242, 193, 78, 0.45); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), 0 0 20px rgba(242, 193, 78, 0.25); }
+  50% { border-color: rgba(242, 193, 78, 0.85); box-shadow: 0 8px 36px rgba(0, 0, 0, 0.75), 0 0 28px rgba(242, 193, 78, 0.45); }
+}
+
+@keyframes scroll-cue {
+  0% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(8px); opacity: 0.4; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 700px) {
+  .experience { --arrival-hold-vh: 32; height: 462svh; }
+  .scrollInstruction { bottom: 18px; gap: 8px; }
+  .scrollInstruction span { font-size: 11px; padding: 8px 18px; gap: 8px; letter-spacing: 0.12em; }
+  .scrollIcon { width: 13px; height: 13px; }
+  .scrollInstruction i { height: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .experience { height: 100svh; }
+  .pointLayer { display: none; }
+  .scrollInstruction span { animation: none; }
+  .scrollIcon { animation: none; }
+  .scrollInstruction i { animation: none; }
+}

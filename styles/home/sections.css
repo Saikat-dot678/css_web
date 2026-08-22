@@ -1,0 +1,202 @@
+/* Production home integration: section-specific composition only.
+   Legacy V4 public-page styles remain untouched for secondary routes. */
+
+.v4-home {
+  position: relative;
+  background: #f0ede4;
+}
+
+.v4-home > .signal-strip {
+  position: relative;
+  z-index: 7;
+  box-shadow: 0 -8px 0 #111315;
+}
+
+#about {
+  isolation: isolate;
+  border: 2px solid #111315;
+  box-shadow: 0 12px 0 #e84a27;
+}
+
+#about::before {
+  content: "ISSUE 04 / DEPARTMENT LAYER";
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  color: rgba(17, 19, 21, .28);
+  font: 800 7px/1 var(--font-roboto-mono), monospace;
+  letter-spacing: .12em;
+  writing-mode: vertical-rl;
+}
+
+.about-v4-statement { position: relative; }
+.about-v4-statement::after {
+  content: "+";
+  position: absolute;
+  left: -30px;
+  top: -34px;
+  color: #e84a27;
+  font: 300 32px/1 var(--font-roboto-mono), monospace;
+  animation: about-register 4.6s steps(2, end) infinite;
+}
+
+#events { overflow: visible; }
+#events .events-showcase { min-height: clamp(680px, 92vh, 940px); }
+#events .events-list { padding-bottom: 28vh; }
+#events .event-line { min-height: clamp(88px, 11vh, 116px); }
+#events .event-line.active,
+#events .event-line[aria-current="true"] {
+  color: #fffdf7;
+  border-color: rgba(242, 193, 78, .68);
+}
+#events .event-line.active::before {
+  content: "LIVE";
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  color: #f2c14e;
+  font: 800 6px/1 var(--font-roboto-mono), monospace;
+  letter-spacing: .12em;
+}
+#events .event-preview {
+  position: sticky;
+  top: 108px;
+  transform-origin: 50% 18%;
+}
+
+.project-showcase-row { position: relative; }
+.project-showcase-row::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 14% 4% 8%;
+  border: 1px dashed rgba(50, 105, 118, .25);
+  background-image:
+    linear-gradient(rgba(65, 126, 140, .08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(65, 126, 140, .08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  transform: translate(14px, 12px);
+}
+.project-visual::after {
+  content: "SCHEMATIC / ASSEMBLY LOCK";
+  position: absolute;
+  z-index: 4;
+  right: 14px;
+  bottom: 12px;
+  padding: 6px 8px;
+  border: 1px solid rgba(231, 246, 248, .2);
+  background: rgba(4, 11, 15, .7);
+  color: rgba(225, 245, 247, .5);
+  font: 800 6px/1 var(--font-roboto-mono), monospace;
+  letter-spacing: .1em;
+}
+
+#resources { position: relative; overflow: hidden; }
+#resources .resource-rail::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  pointer-events: none;
+  background: #e84a27;
+  box-shadow: 0 0 10px rgba(232, 74, 39, .44);
+  animation: resource-scan 6.8s linear infinite;
+}
+
+.people-photo-stack {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-height: 232px;
+  margin-bottom: 42px;
+  padding: 12px 0 18px;
+}
+.people-photo-stack figure {
+  position: relative;
+  min-height: 210px;
+  margin: 0 -18px 0 0;
+  overflow: hidden;
+  border: 2px solid #f0ede4;
+  background: #15212a;
+  box-shadow: 6px 6px 0 rgba(232, 74, 39, .74);
+  transform-origin: 50% 100%;
+}
+.people-photo-stack figure:nth-child(2) { margin-top: 20px; }
+.people-photo-stack figure:nth-child(3) { margin-top: -8px; }
+.people-photo-stack figure:nth-child(4) { margin-top: 14px; }
+.people-photo-stack img { object-fit: cover; filter: saturate(.82) contrast(1.04); }
+.people-photo-stack figcaption {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px 8px 8px;
+  background: linear-gradient(transparent, rgba(4, 8, 11, .9));
+  color: #fffdf7;
+  font: 800 6px/1.25 var(--font-roboto-mono), monospace;
+  text-transform: uppercase;
+}
+.people-photo-stack figcaption span { display: block; margin-top: 4px; color: #f2c14e; }
+
+.achievement-v4-list { position: relative; padding-left: 34px; }
+.achievement-trace {
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(#e84a27, #6c5a8c, #f2c14e);
+  transform-origin: 50% 0;
+}
+.achievement-v4-row time { position: sticky; left: 0; }
+
+.gallery-v4-photo {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border: 2px solid #111315;
+  background: #15191d;
+  box-shadow: 7px 7px 0 #111315;
+}
+.gallery-v4-photo img { object-fit: cover; }
+.gallery-v4-photo > span {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  padding: 6px;
+  background: #f2c14e;
+  color: #111315;
+  font: 900 8px/1 var(--font-roboto-mono), monospace;
+}
+
+.v4-join h2 > span { display: block; }
+.v4-join h2 > span:nth-child(2) { color: transparent; -webkit-text-stroke: 1px rgba(240, 238, 232, .78); }
+.v4-join h2 > span:not(:nth-child(2)) { color: #f0eee8; -webkit-text-stroke: 0; }
+
+@keyframes about-register { 50% { opacity: .26; transform: translate(2px, -2px); } }
+@keyframes resource-scan { from { transform: translateY(0); } to { transform: translateY(420px); } }
+
+@media (max-width: 900px) {
+  #events .events-showcase { min-height: 0; }
+  #events .events-list { padding-bottom: 0; }
+  #events .event-preview { position: relative; top: auto; }
+  .people-photo-stack { min-height: 190px; }
+  .people-photo-stack figure { min-height: 170px; }
+}
+
+@media (max-width: 620px) {
+  #about { border-inline: 0; box-shadow: 0 8px 0 #e84a27; }
+  .people-photo-stack { grid-template-columns: repeat(2, 1fr); min-height: 360px; gap: 8px; }
+  .people-photo-stack figure { min-height: 168px; margin: 0 !important; }
+  .achievement-v4-list { padding-left: 16px; }
+  .achievement-trace { left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-v4-statement::after,
+  #resources .resource-rail::before { animation: none; }
+}
+

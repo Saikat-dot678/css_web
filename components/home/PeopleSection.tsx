@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import type { Faculty, Member } from "@/types/member";
@@ -15,10 +16,21 @@ export function PeopleSection({ members, faculty }: { members: Member[]; faculty
   const groups = groupOrder
     .map((key) => ({ key, label: groupNames[key], count: members.filter((member) => member.academicGroup === key).length }))
     .filter((group) => group.count > 0);
+  const photoMembers = members.filter((member) => member.photo).slice(0, 4);
 
   return (
     <div className="people-v4-grid">
-      <div className="people-number reveal">
+      <div className="people-number">
+        {!!photoMembers.length && (
+          <div className="people-photo-stack" aria-label="CSS member portraits">
+            {photoMembers.map((member) => (
+              <figure key={member.id}>
+                <Image src={member.photo} alt={member.name} fill sizes="(max-width: 760px) 34vw, 160px" unoptimized={member.photo.startsWith("/api/") || member.photo.endsWith(".svg")} />
+                <figcaption>{member.name}<span>{member.role}</span></figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
         <strong>{String(members.length).padStart(2, "0")}</strong>
         <span>CURRENT MEMBERS</span>
         <p>Different batches and working groups, one shared department community.</p>
@@ -27,7 +39,7 @@ export function PeopleSection({ members, faculty }: { members: Member[]; faculty
 
       <div className="people-groups">
         {groups.map((group, index) => (
-          <Link className="people-group-row reveal" href="/team" key={group.key}>
+          <Link className="people-group-row" href="/team" key={group.key}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <strong>{group.label}</strong>
             <em>{group.count} people</em>
@@ -36,7 +48,7 @@ export function PeopleSection({ members, faculty }: { members: Member[]; faculty
         ))}
       </div>
 
-      <div className="faculty-v4 reveal" id="faculty">
+      <div className="faculty-v4" id="faculty">
         <p className="faculty-v4-label">FACULTY / CONTINUITY</p>
         <div className="faculty-v4-list">
           {faculty.slice(0, 3).map((person, index) => (

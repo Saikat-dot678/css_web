@@ -1,0 +1,737 @@
+/* ======================================================================
+   COMPREHENSIVE RESPONSIVE DESIGN ENHANCEMENTS
+   Mobile-first responsive improvements for all screen sizes
+   ====================================================================== */
+
+/* ==================== MOBILE MENU TOGGLE (768px and below) ==================== */
+@media (max-width: 768px) {
+  .v4-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .v4-main-nav {
+    display: none;
+  }
+
+  .v4-nav-actions {
+    gap: 12px;
+  }
+
+  .v4-nav-shell {
+    grid-template-columns: auto 1fr auto;
+    gap: 16px;
+    min-height: 70px;
+  }
+
+  .v4-brand strong {
+    font-size: clamp(20px, 5vw, 27px);
+  }
+
+  .v4-brand span {
+    font-size: 7px;
+    padding-left: 10px;
+  }
+
+  .v4-nav-join {
+    padding: 10px 12px;
+    font-size: 8px;
+  }
+
+  .v4-mobile-nav {
+    padding: 70px 0 0 0;
+  }
+
+  .v4-mobile-nav > div {
+    padding: 16px 0;
+  }
+
+  .v4-mobile-nav a {
+    font-size: clamp(20px, 5.5vw, 32px);
+    padding: 16px 20px;
+    margin: 0 8px;
+    grid-template-columns: 45px 1fr 28px;
+    gap: 12px;
+  }
+
+  .v4-mobile-nav a span {
+    width: 36px;
+    height: 36px;
+    font-size: 9px;
+  }
+
+  .v4-mobile-nav > p {
+    padding: 20px 20px 12px;
+    font-size: 8px;
+  }
+}
+
+/* ==================== TABLET (769px - 1024px) ==================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .v4-nav-shell {
+    gap: 24px;
+  }
+
+  .v4-main-nav {
+    gap: clamp(12px, 1.5vw, 28px);
+  }
+
+  .v4-section-heading {
+    grid-template-columns: 70px 1fr 300px;
+    gap: 24px;
+  }
+
+  .v4-section-title h2 {
+    font-size: clamp(36px, 4vw, 60px);
+  }
+
+  .event-line {
+    grid-template-columns: 35px 70px minmax(150px, 1fr) 90px 80px;
+    gap: 10px;
+    min-height: 75px;
+  }
+
+  .project-showcase-row {
+    grid-template-columns: 50px 1fr;
+    min-height: auto;
+  }
+
+  .project-visual {
+    margin-top: 30px;
+    aspect-ratio: 16/9;
+  }
+
+  .resource-rail-row {
+    grid-template-columns: 40px 120px minmax(150px, 1fr) 150px 20px;
+    gap: 12px;
+    min-height: 70px;
+  }
+
+  .people-v4-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .people-number {
+    position: relative;
+    top: auto;
+  }
+
+  .faculty-v4-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-v4-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+
+  .gallery-v4-shot {
+    aspect-ratio: 4/3;
+  }
+
+  .gallery-v4-shot.shot-1,
+  .gallery-v4-shot.shot-2,
+  .gallery-v4-shot.shot-3,
+  .gallery-v4-shot.shot-4,
+  .gallery-v4-shot.shot-5 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+  }
+
+  .v4-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+/* ==================== MOBILE SMALL (480px and below) ==================== */
+@media (max-width: 480px) {
+  .v4-wrap {
+    width: calc(100% - 32px);
+  }
+
+  .v4-nav-shell {
+    min-height: 64px;
+    gap: 12px;
+  }
+
+  .v4-brand strong {
+    font-size: 18px;
+  }
+
+  .v4-brand span {
+    display: none;
+  }
+
+  .v4-nav-join {
+    display: none;
+  }
+
+  .v4-menu-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .v4-menu-toggle span {
+    width: 20px;
+    height: 1px;
+    margin: 5px auto;
+  }
+
+  .v4-menu-toggle b {
+    font-size: 6px;
+    margin-top: 4px;
+  }
+
+  .v4-mobile-nav {
+    padding: 70px 0 0 0;
+  }
+
+  .v4-mobile-nav > div {
+    padding: 12px 0;
+  }
+
+  .v4-mobile-nav a {
+    font-size: clamp(18px, 5vw, 26px);
+    padding: 14px 16px;
+    margin: 0 6px;
+    grid-template-columns: 40px 1fr 24px;
+    gap: 10px;
+  }
+
+  .v4-mobile-nav a span {
+    width: 32px;
+    height: 32px;
+    font-size: 8px;
+    border-radius: 6px;
+  }
+
+  .v4-mobile-nav a:hover {
+    padding-left: 20px;
+  }
+
+  .v4-mobile-nav > p {
+    padding: 16px 16px 10px;
+    font-size: 7px;
+  }
+
+  .v4-section {
+    padding: clamp(60px, 8vw, 100px) 0;
+  }
+
+  .v4-section-heading {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-bottom: 24px;
+  }
+
+  .v4-section-index {
+    display: none;
+  }
+
+  .v4-section-title h2 {
+    font-size: clamp(28px, 6vw, 42px);
+  }
+
+  .v4-section-copy {
+    margin-top: 12px;
+  }
+
+  .event-line {
+    grid-template-columns: 30px minmax(100px, 1fr) auto;
+    gap: 8px;
+    min-height: 65px;
+    padding: 10px 0;
+  }
+
+  .event-line-no {
+    display: none;
+  }
+
+  .event-line time,
+  .event-line em,
+  .event-line b {
+    font-size: 7px;
+  }
+
+  .event-line strong {
+    font-size: clamp(16px, 4vw, 28px);
+  }
+
+  .event-preview {
+    display: none;
+  }
+
+  .events-showcase {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .events-list {
+    border-top: none;
+  }
+
+  .project-showcase-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    min-height: auto;
+    padding: 30px 0;
+  }
+
+  .project-showcase-row:nth-child(even) .project-copy,
+  .project-showcase-row:nth-child(even) .project-visual {
+    order: initial;
+  }
+
+  .project-index {
+    display: none;
+  }
+
+  .project-visual {
+    aspect-ratio: 4/3;
+    margin: 0;
+  }
+
+  .resource-rail-row {
+    grid-template-columns: minmax(100px, 1fr) auto;
+    gap: 10px;
+    min-height: 60px;
+    padding: 8px 0;
+  }
+
+  .resource-rail-row span {
+    display: none;
+  }
+
+  .resource-rail-row em,
+  .resource-rail-row small,
+  .resource-rail-row b {
+    display: none;
+  }
+
+  .resource-rail-footer {
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 20px;
+  }
+
+  .people-v4-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .people-number > strong {
+    font-size: clamp(60px, 20vw, 140px);
+  }
+
+  .people-group-row {
+    grid-template-columns: minmax(100px, 1fr) auto;
+    gap: 10px;
+    min-height: 60px;
+  }
+
+  .people-group-row span,
+  .people-group-row em,
+  .people-group-row b {
+    display: none;
+  }
+
+  .faculty-v4 {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+
+  .faculty-v4-list {
+    grid-template-columns: 1fr;
+    margin-top: 16px;
+    border-left: none;
+  }
+
+  .faculty-v4-list article {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    padding: 16px 0;
+    gap: 16px;
+  }
+
+  .achievement-v4-row {
+    grid-template-columns: minmax(80px, 1fr) auto;
+    gap: 12px;
+    min-height: 70px;
+  }
+
+  .achievement-v4-row time,
+  .achievement-v4-row span,
+  .achievement-v4-row em,
+  .achievement-v4-row b {
+    display: none;
+  }
+
+  .achievement-v4-row strong {
+    font-size: clamp(16px, 4vw, 28px);
+  }
+
+  .gallery-v4-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+
+  .gallery-v4-shot {
+    aspect-ratio: 4/3 !important;
+  }
+
+  .gallery-v4-shot.shot-1,
+  .gallery-v4-shot.shot-2,
+  .gallery-v4-shot.shot-3,
+  .gallery-v4-shot.shot-4,
+  .gallery-v4-shot.shot-5 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+  }
+
+  .about-v4-layout {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .about-v4-principles {
+    border-top: 1px solid var(--v4-line-dark);
+  }
+
+  .v4-join h2 {
+    font-size: clamp(48px, 10vw, 140px);
+  }
+
+  .v4-join-bottom {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .v4-join-bottom > div {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .v4-page-cta {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 30px 0;
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+
+  .v4-page-cta h2 {
+    font-size: clamp(28px, 6vw, 50px);
+  }
+
+  .v4-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .v4-footer-brand {
+    flex-direction: column;
+  }
+
+  .v4-footer-brand strong {
+    font-size: 48px;
+  }
+
+  .v4-footer-system {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .v4-footer-bottom {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .signal-strip-inner {
+    grid-template-columns: auto 1fr;
+  }
+
+  .signal-items {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .signal-items p {
+    padding: 0;
+    border-left: none;
+    margin: 4px 0;
+  }
+}
+
+/* ==================== MOBILE MEDIUM (481px - 768px) ==================== */
+@media (min-width: 481px) and (max-width: 768px) {
+  .v4-wrap {
+    width: calc(100% - 40px);
+  }
+
+  .v4-section {
+    padding: clamp(80px, 10vw, 120px) 0;
+  }
+
+  .v4-section-heading {
+    grid-template-columns: 80px 1fr;
+    gap: 28px;
+  }
+
+  .v4-section-title h2 {
+    font-size: clamp(36px, 5vw, 64px);
+  }
+
+  .event-line {
+    grid-template-columns: 30px minmax(120px, 1fr) auto;
+    gap: 10px;
+    min-height: 70px;
+  }
+
+  .events-showcase {
+    grid-template-columns: 1fr;
+  }
+
+  .project-showcase-row {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 40px 0;
+  }
+
+  .resource-rail-row {
+    grid-template-columns: 45px minmax(120px, 1fr) auto;
+    gap: 12px;
+    min-height: 65px;
+  }
+
+  .faculty-v4-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-v4-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .gallery-v4-shot {
+    aspect-ratio: 4/3 !important;
+  }
+
+  .gallery-v4-shot.shot-1,
+  .gallery-v4-shot.shot-2,
+  .gallery-v4-shot.shot-3,
+  .gallery-v4-shot.shot-4,
+  .gallery-v4-shot.shot-5 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+  }
+}
+
+/* ==================== TOUCH DEVICE OPTIMIZATIONS ==================== */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase touch target sizes */
+  .v4-button,
+  .event-line,
+  .poster-card,
+  .resource-rail-row,
+  .people-group-row,
+  .achievement-v4-row,
+  a,
+  button {
+    min-height: 44px;
+    padding: 12px 16px;
+  }
+
+  /* Disable hover effects on touch devices */
+  .v4-main-nav a::after {
+    display: none;
+  }
+
+  .event-line:hover,
+  .resource-rail-row:hover,
+  .people-group-row:hover,
+  .achievement-v4-row:hover {
+    padding-left: 0;
+    background: none;
+  }
+
+  /* Remove pointer cursor classes */
+  .v4-button:hover {
+    transform: none;
+  }
+}
+
+/* ==================== HIGH DPI DISPLAY SUPPORT ==================== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .v4-site-header,
+  .v4-site-footer {
+    border-width: 0.5px;
+  }
+
+  .event-line,
+  .resource-rail-row,
+  .people-group-row,
+  .achievement-v4-row {
+    border-width: 0.5px;
+  }
+}
+
+/* ==================== LANDSCAPE MOBILE ORIENTATION ==================== */
+@media (max-height: 600px) and (orientation: landscape) {
+  .v4-site-header {
+    min-height: 50px;
+  }
+
+  .v4-nav-shell {
+    min-height: 50px;
+    gap: 12px;
+  }
+
+  .v4-brand strong {
+    font-size: 18px;
+  }
+
+  .v4-menu-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .v4-section {
+    padding: 40px 0;
+  }
+
+  .v4-section-heading {
+    padding-bottom: 20px;
+  }
+
+  .v4-section-title h2 {
+    font-size: clamp(24px, 3vw, 36px);
+  }
+
+  .campus-story {
+    height: auto;
+  }
+
+  .campus-sticky {
+    min-height: auto;
+  }
+}
+
+/* ==================== EXTRA LARGE SCREENS (1440px+) ==================== */
+@media (min-width: 1440px) {
+  .v4-wrap {
+    width: min(calc(100% - 96px), var(--v4-max));
+  }
+
+  .v4-nav-shell {
+    width: min(calc(100% - 80px), var(--v4-max));
+  }
+
+  .v4-section-heading {
+    grid-template-columns: 120px minmax(0, 1.15fr) minmax(350px, .65fr);
+  }
+
+  .event-line {
+    gap: 16px;
+  }
+
+  .project-showcase-row {
+    gap: 80px;
+  }
+
+  .faculty-v4-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .v4-site-header,
+  .v4-site-footer,
+  .v4-menu-toggle,
+  .route-atmosphere,
+  .scroll-cue {
+    display: none !important;
+  }
+
+  .v4-page {
+    background: white;
+    color: black;
+  }
+
+  body {
+    overflow-x: visible;
+  }
+
+  .v4-wrap {
+    width: 100% !important;
+  }
+}
+
+/* ==================== ACCESSIBILITY IMPROVEMENTS ==================== */
+/* Ensure sufficient color contrast and readable text */
+@media (prefers-contrast: more) {
+  .v4-muted {
+    color: #555;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--v4-accent);
+  outline-offset: 2px;
+}
+
+/* Ensure text is readable without background images */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Ensure minimum font size for readability */
+body {
+  font-size: clamp(14px, 2.5vw, 16px);
+}
+
+h1 {
+  font-size: clamp(28px, 6vw, 120px);
+}
+
+h2 {
+  font-size: clamp(24px, 5vw, 80px);
+}
+
+h3 {
+  font-size: clamp(18px, 3.5vw, 48px);
+}
+
+/* Ensure all form elements are accessible */
+input,
+textarea,
+select,
+button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Ensure links are always underlined for visibility */
+a {
+  text-underline-offset: 2px;
+}

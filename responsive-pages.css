@@ -1,0 +1,731 @@
+/* ======================================================================
+   RESPONSIVE ENHANCEMENTS FOR PAGE ROUTES
+   Comprehensive mobile/tablet optimizations for all public pages
+   ====================================================================== */
+
+/* ==================== PAGE HERO RESPONSIVE (max-width: 1024px) ==================== */
+@media (max-width: 1024px) {
+  .v4-page-hero {
+    min-height: auto;
+    padding-top: clamp(100px, 12vh, 150px);
+    padding-bottom: 50px;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .v4-page-hero-visual {
+    min-height: 350px;
+    align-self: center;
+  }
+
+  .v4-event-poster-stack {
+    inset: 5% 10%;
+  }
+
+  .v4-project-cube {
+    inset: 10% auto;
+  }
+
+  .v4-resource-terminal {
+    inset: 15% 10%;
+  }
+
+  .route-atmosphere {
+    width: 20vw;
+    opacity: 0.2;
+  }
+}
+
+/* ==================== PAGE HERO RESPONSIVE (max-width: 768px) ==================== */
+@media (max-width: 768px) {
+  .v4-page-hero {
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
+
+  .v4-page-hero-kicker {
+    margin-bottom: 20px;
+    font-size: 8px;
+  }
+
+  .v4-page-hero h1 {
+    font-size: clamp(40px, 8vw, 80px);
+    line-height: 1;
+  }
+
+  .v4-page-hero-copy > p {
+    font-size: clamp(14px, 3vw, 16px);
+    margin-top: 20px;
+  }
+
+  .v4-page-hero-meta {
+    gap: 8px 16px;
+    margin-top: 24px;
+    padding-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .v4-page-hero-visual {
+    min-height: 300px;
+  }
+
+  .route-atmosphere {
+    display: none;
+  }
+}
+
+/* ==================== PAGE HERO RESPONSIVE (max-width: 480px) ==================== */
+@media (max-width: 480px) {
+  .v4-page-hero {
+    width: calc(100% - 32px);
+    padding-top: 80px;
+    padding-bottom: 30px;
+  }
+
+  .v4-page-hero-kicker {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .v4-page-hero h1 {
+    font-size: clamp(32px, 10vw, 56px);
+    margin: 0;
+  }
+
+  .v4-page-hero-copy > p {
+    font-size: clamp(13px, 3.5vw, 14px);
+    margin-top: 16px;
+  }
+
+  .v4-page-hero-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 12px;
+  }
+
+  .v4-page-hero-meta span {
+    font-size: 7px;
+  }
+
+  .v4-page-hero-visual {
+    min-height: 250px;
+  }
+
+  .v4-hero-schematic {
+    inset: 10%;
+  }
+
+  .v4-event-poster-stack .stack-poster {
+    max-width: 200px;
+  }
+
+  .v4-event-poster-stack .stack-poster-3 {
+    display: none;
+  }
+}
+
+/* ==================== EVENT GRID RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .v4-page .poster-card-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px;
+  }
+
+  .poster-card {
+    aspect-ratio: 3/4;
+  }
+}
+
+@media (max-width: 480px) {
+  .v4-page .poster-card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  .poster-card {
+    aspect-ratio: 4/5;
+  }
+
+  .poster-card-media {
+    min-height: 250px;
+  }
+}
+
+/* ==================== ARCHIVE RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .v4-archive-event {
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+  }
+
+  .v4-archive-date {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .v4-archive-year {
+    grid-template-columns: 1fr;
+  }
+
+  .v4-archive-year-label {
+    position: static;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .v4-archive-year-label strong {
+    font-size: clamp(32px, 6vw, 48px);
+  }
+
+  .v4-archive-event {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 0;
+    flex-direction: column;
+  }
+
+  .v4-archive-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .v4-archive-year-label strong {
+    font-size: clamp(28px, 7vw, 40px);
+  }
+
+  .v4-archive-event {
+    padding: 16px 0;
+    gap: 12px;
+  }
+
+  .v4-archive-poster {
+    max-width: 200px;
+  }
+
+  .v4-archive-gallery {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==================== RESOURCE LIBRARY RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .v4-page .resource-library {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .resource-rail-row {
+    grid-template-columns: minmax(100px, 1fr) auto !important;
+    gap: 12px;
+  }
+
+  .resource-rail-row span {
+    display: none;
+  }
+
+  .resource-rail-row strong {
+    font-size: clamp(18px, 4vw, 28px);
+  }
+}
+
+@media (max-width: 480px) {
+  .v4-page .resource-library {
+    grid-template-columns: 1fr !important;
+  }
+
+  .resource-rail-footer {
+    flex-direction: column;
+  }
+
+  .resource-rail-footer p {
+    font-size: 13px;
+  }
+}
+
+/* ==================== PROJECT PAGE RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .v4-page .project-lead {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v4-page .project-blueprint {
+    position: static !important;
+    top: auto !important;
+    max-width: 100%;
+  }
+
+  .project-showcase-row {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-showcase-row {
+    min-height: auto;
+    padding: 30px 0;
+  }
+
+  .project-visual {
+    aspect-ratio: 16/9;
+  }
+
+  .project-code-card pre {
+    font-size: clamp(10px, 2vw, 12px);
+  }
+}
+
+@media (max-width: 480px) {
+  .project-showcase-row {
+    gap: 20px;
+    padding: 20px 0;
+  }
+
+  .project-index {
+    display: none;
+  }
+
+  .project-copy h3 {
+    font-size: clamp(28px, 6vw, 48px);
+  }
+
+  .project-copy h3 + p {
+    font-size: 14px;
+  }
+
+  .project-tags {
+    gap: 6px;
+  }
+
+  .project-tags span {
+    padding: 6px 6px;
+    font-size: 7px;
+  }
+
+  .project-visual {
+    aspect-ratio: 4/3;
+  }
+}
+
+/* ==================== TEAM PAGE RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .people-v4-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .people-number {
+    position: static;
+    top: auto;
+  }
+
+  .faculty-v4-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .v4-team-collage {
+    inset: 5%;
+  }
+}
+
+@media (max-width: 768px) {
+  .v4-team-face {
+    width: 35%;
+  }
+
+  .v4-team-face.face-1 {
+    width: 40%;
+  }
+
+  .v4-team-face.face-2 {
+    width: 35%;
+  }
+
+  .v4-team-face.face-3 {
+    width: 32%;
+  }
+
+  .v4-team-face.face-4 {
+    width: 32%;
+  }
+
+  .v4-team-face.face-5,
+  .v4-team-face.face-6 {
+    display: none;
+  }
+
+  .faculty-v4-list {
+    grid-template-columns: 1fr;
+  }
+
+  .faculty-v4-list article {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .people-number > strong {
+    font-size: clamp(80px, 18vw, 160px);
+  }
+
+  .people-group-row {
+    grid-template-columns: minmax(80px, 1fr) auto;
+    gap: 10px;
+  }
+
+  .v4-team-face {
+    width: 40%;
+  }
+
+  .v4-team-face.face-1 {
+    left: 5%;
+    width: 45%;
+  }
+
+  .v4-team-face.face-2 {
+    left: 48%;
+    width: 40%;
+  }
+
+  .v4-team-face.face-3 {
+    right: 0;
+    width: 35%;
+  }
+
+  .v4-team-face.face-4 {
+    left: 25%;
+    width: 35%;
+  }
+
+  .v4-team-collage > span {
+    font-size: 7px;
+  }
+}
+
+/* ==================== GALLERY RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .gallery-v4-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 12px;
+  }
+
+  .gallery-v4-shot {
+    aspect-ratio: 4/3;
+  }
+
+  .gallery-v4-shot.shot-1,
+  .gallery-v4-shot.shot-2,
+  .gallery-v4-shot.shot-3,
+  .gallery-v4-shot.shot-4,
+  .gallery-v4-shot.shot-5 {
+    grid-row: auto !important;
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery-v4-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gallery-v4-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .gallery-v4-placeholder {
+    min-height: 250px;
+  }
+}
+
+/* ==================== EVENT DETAIL PAGE RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .v4-event-detail-page .event-detail-hero-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .v4-event-detail-page .event-detail-poster {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .v4-event-detail-page .event-detail-hero {
+    padding-top: 100px !important;
+    padding-bottom: 50px !important;
+  }
+
+  .v4-event-detail-page .event-detail-info h1 {
+    font-size: clamp(42px, 8vw, 80px) !important;
+  }
+
+  .v4-event-detail-page .event-lead {
+    font-size: 16px !important;
+  }
+
+  .v4-event-detail-page .event-about,
+  .v4-event-detail-page .event-recap {
+    margin-top: 60px !important;
+    padding: 30px 0 !important;
+  }
+
+  .v4-event-detail-page .related-poster-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .v4-event-detail-page .event-detail-hero {
+    width: calc(100% - 32px);
+    padding-top: 80px !important;
+    padding-bottom: 30px !important;
+  }
+
+  .v4-event-detail-page .event-detail-info h1 {
+    font-size: clamp(32px, 10vw, 56px) !important;
+  }
+
+  .v4-event-detail-page .event-detail-info dt {
+    margin-top: 16px;
+  }
+
+  .v4-event-detail-page .event-about,
+  .v4-event-detail-page .event-recap,
+  .v4-event-detail-page .registration-panel {
+    margin-top: 40px !important;
+    padding: 20px 0 !important;
+  }
+
+  .v4-event-detail-page .related-poster-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ==================== CTA SECTION RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .v4-page-cta {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 40px 0;
+    align-items: start;
+  }
+
+  .v4-page-cta h2 {
+    font-size: clamp(32px, 5vw, 60px);
+  }
+
+  .v4-page-cta > a {
+    align-self: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .v4-page-cta {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 24px 0;
+  }
+
+  .v4-page-cta h2 {
+    font-size: clamp(28px, 6vw, 48px);
+  }
+
+  .v4-page-cta p {
+    font-size: 14px;
+  }
+
+  .v4-page-cta > a {
+    padding: 14px 14px;
+    font-size: 8px;
+  }
+}
+
+/* ==================== ACHIEVEMENT PAGE RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .achievement-v4-row {
+    grid-template-columns: 100px auto minmax(150px, 1fr) auto auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .achievement-v4-row {
+    grid-template-columns: minmax(80px, 1fr) auto !important;
+    gap: 12px;
+  }
+
+  .achievement-v4-row time,
+  .achievement-v4-row span,
+  .achievement-v4-row em {
+    display: none !important;
+  }
+
+  .achievement-v4-row strong {
+    font-size: clamp(18px, 4vw, 32px);
+  }
+}
+
+@media (max-width: 480px) {
+  .achievement-v4-row {
+    min-height: 60px;
+    padding: 12px 0;
+  }
+
+  .achievement-v4-row strong {
+    font-size: clamp(16px, 4vw, 24px);
+  }
+
+  .achievement-v4-row b {
+    display: none;
+  }
+}
+
+/* ==================== FORM AND REGISTRATION RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .v4-page .form-field {
+    margin-bottom: 16px;
+  }
+
+  .v4-page .form-field input,
+  .v4-page .form-field textarea,
+  .v4-page .form-field select {
+    min-height: 44px;
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .v4-page .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .registration-panel {
+    padding: 20px;
+  }
+
+  .v4-page .form-field label {
+    font-size: 14px;
+  }
+
+  .v4-page .form-field input,
+  .v4-page .form-field textarea,
+  .v4-page .form-field select {
+    font-size: 16px;
+    padding: 12px 10px;
+  }
+}
+
+/* ==================== SCROLL BEHAVIOR RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ==================== FOOTER RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .v4-footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .v4-site-footer {
+    padding: 50px 20px 16px;
+  }
+
+  .v4-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .v4-footer-brand strong {
+    font-size: 48px;
+  }
+
+  .v4-footer-links a {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .v4-site-footer {
+    padding: 40px 16px 12px;
+  }
+
+  .v4-footer-brand {
+    flex-direction: column;
+  }
+
+  .v4-footer-brand strong {
+    font-size: 40px;
+  }
+
+  .v4-footer-brand p {
+    padding-left: 0;
+    border-left: none;
+    margin-top: 12px;
+  }
+
+  .v4-footer-system {
+    border-left: none;
+    padding-left: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--v4-line);
+    margin-top: 12px;
+  }
+
+  .v4-footer-bottom {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ==================== SIGNAL STRIP RESPONSIVE ==================== */
+@media (max-width: 768px) {
+  .signal-strip-inner {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    min-height: auto;
+    padding: 16px 0;
+  }
+
+  .signal-items {
+    flex-wrap: wrap;
+  }
+
+  .signal-items p {
+    padding: 0 12px;
+    margin: 4px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .signal-strip-inner {
+    gap: 8px;
+  }
+
+  .signal-label {
+    font-size: 8px;
+  }
+
+  .signal-items p {
+    font-size: 9px;
+    padding: 0 10px;
+  }
+}

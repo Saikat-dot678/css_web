@@ -190,12 +190,13 @@ export function CustomCursor() {
         <svg width="28" height="34" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Black Outer Shadow Outline */}
           <path
+            className="arrow-outer"
             d="M2 2 L24 18 L14.5 19.5 L19.5 30 L15.5 32 L10.5 21 L2 26 Z"
             fill="#000000"
           />
           {/* Thick Crisp White Border */}
           <path
-            className="arrow-white-border"
+            className="arrow-border"
             d="M4 5 L20.5 17 L12.5 18 L17.5 27.5 L15 28.8 L10 19 L4 23 Z"
             fill="#FFFFFF"
           />

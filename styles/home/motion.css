@@ -1,0 +1,19 @@
+/* Motion-support styles are deliberately small: GSAP owns only transforms and
+   opacity; semantic content remains in normal document flow. */
+
+.v4-home [data-motion-heading] .v4-section-title { will-change: clip-path; }
+.v4-home .project-visual,
+.v4-home .event-preview,
+.v4-home .people-photo-stack figure,
+.v4-home .gallery-v4-shot { will-change: transform; }
+
+.v4-home section[data-motion-ready="true"] { --home-motion-ready: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v4-home [data-motion-heading] .v4-section-title,
+  .v4-home .project-visual,
+  .v4-home .event-preview,
+  .v4-home .people-photo-stack figure,
+  .v4-home .gallery-v4-shot { will-change: auto; transform: none !important; opacity: 1 !important; }
+}
+

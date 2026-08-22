@@ -9,7 +9,7 @@ export function ProjectsShowcase({ projects }: { projects: Project[] }) {
   return (
     <div className="projects-showcase">
       {shown.map((project, index) => (
-        <article className="project-showcase-row reveal" key={project.id}>
+        <article className="project-showcase-row" key={project.id}>
           <div className="project-index">{String(index + 1).padStart(2, "0")}</div>
           <div className="project-copy">
             <p>{project.status.toUpperCase()} / {project.academicYear}</p>

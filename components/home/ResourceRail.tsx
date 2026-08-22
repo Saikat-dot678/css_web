@@ -17,7 +17,7 @@ export function ResourceRail({ resources }: { resources: Resource[] }) {
   return (
     <div className="resource-rail">
       {resources.slice(0, 5).map((resource, index) => (
-        <a className="resource-rail-row reveal" href={resource.url} target="_blank" rel="noreferrer" key={resource.id}>
+        <a className="resource-rail-row" href={resource.url} target="_blank" rel="noreferrer" key={resource.id}>
           <span>{String(index + 1).padStart(2, "0")}</span>
           <em>{labels[resource.category] ?? resource.category}</em>
           <strong>{resource.title}</strong>
