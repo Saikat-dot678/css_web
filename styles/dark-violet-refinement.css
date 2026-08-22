@@ -1,0 +1,421 @@
+/*
+  Dark-mode refinement layer
+  --------------------------
+  This file intentionally sits after theme.css. It does not replace the V4/V3
+  structure or motion system; it only tightens dark-mode surface hierarchy,
+  introduces the CSS-logo violet as an identity signal, and adds restrained
+  ambient detail. Light mode remains on the existing editorial treatment.
+*/
+
+:root,
+html[data-theme="dark"] {
+  --site-violet-brand: #8d78f9;
+  --site-violet-deep: #5b47c9;
+  --site-violet-soft: rgba(141, 120, 249, .16);
+  --site-violet-line: rgba(141, 120, 249, .42);
+  --site-night-violet: #0d0b16;
+}
+
+html[data-theme="light"] {
+  --site-violet-brand: #604bc8;
+  --site-violet-deep: #4e3aaa;
+  --site-violet-soft: rgba(96, 75, 200, .11);
+  --site-violet-line: rgba(96, 75, 200, .32);
+  --site-night-violet: #f2efe6;
+}
+
+/* ---------------------------------------------------------------------
+   Header: preserve the current composition, add only CSS identity signal.
+   --------------------------------------------------------------------- */
+html[data-theme="dark"] .v4-public-shell .v4-brand strong {
+  text-shadow: 2px 0 0 color-mix(in srgb, var(--site-violet-brand) 68%, transparent);
+}
+
+html[data-theme="dark"] .v4-public-shell .v4-main-nav a::after {
+  background: var(--site-violet-brand);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--site-violet-brand) 38%, transparent);
+}
+
+html[data-theme="dark"] .site-theme-toggle {
+  box-shadow: 3px 3px 0 var(--site-violet-brand);
+}
+
+html[data-theme="dark"] .site-theme-toggle::after {
+  border-color: var(--site-violet-brand);
+}
+
+html[data-theme="dark"] .site-theme-toggle:hover {
+  box-shadow: 2px 2px 0 var(--site-violet-brand);
+}
+
+/* ---------------------------------------------------------------------
+   Homepage dark canvas: preserve all current DOM/content and section order.
+   Paper survives as an artifact, not as the full structural background.
+   --------------------------------------------------------------------- */
+html[data-theme="dark"] .v4-home {
+  background: var(--site-bg);
+}
+
+html[data-theme="dark"] .v4-home #about,
+html[data-theme="dark"] .v4-home #projects,
+html[data-theme="dark"] .v4-home #achievements {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 84% 14%, color-mix(in srgb, var(--site-violet-brand) 8%, transparent), transparent 31%),
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--site-grid) 1px, transparent 1px),
+    var(--site-bg);
+  background-size: auto, 52px 52px, 52px 52px, auto;
+  color: var(--site-text);
+  border-color: var(--site-border-strong);
+  box-shadow: 0 12px 0 color-mix(in srgb, var(--site-violet-brand) 52%, var(--site-orange));
+}
+
+html[data-theme="dark"] .v4-home #about::after,
+html[data-theme="dark"] .v4-home #projects::after,
+html[data-theme="dark"] .v4-home #achievements::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .26;
+  background:
+    radial-gradient(circle at 8% 78%, color-mix(in srgb, var(--site-cyan) 48%, transparent) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 91% 28%, color-mix(in srgb, var(--site-violet-brand) 62%, transparent) 0 1px, transparent 1.7px);
+  background-size: 173px 137px, 211px 181px;
+  animation: css-signal-drift 18s linear infinite alternate;
+}
+
+html[data-theme="dark"] .v4-home #about::before {
+  color: color-mix(in srgb, var(--site-violet-brand) 40%, transparent);
+}
+
+html[data-theme="dark"] .v4-home #about .v4-section-heading,
+html[data-theme="dark"] .v4-home #projects .v4-section-heading,
+html[data-theme="dark"] .v4-home #achievements .v4-section-heading {
+  border-color: var(--site-border);
+}
+
+html[data-theme="dark"] .v4-home #about .v4-section-index,
+html[data-theme="dark"] .v4-home #projects .v4-section-index,
+html[data-theme="dark"] .v4-home #achievements .v4-section-index {
+  color: var(--site-violet-brand);
+  text-shadow: 0 0 16px color-mix(in srgb, var(--site-violet-brand) 28%, transparent);
+}
+
+html[data-theme="dark"] .v4-home #about .v4-section-title > p,
+html[data-theme="dark"] .v4-home #projects .v4-section-title > p,
+html[data-theme="dark"] .v4-home #achievements .v4-section-title > p,
+html[data-theme="dark"] .v4-home #about .v4-section-copy,
+html[data-theme="dark"] .v4-home #projects .v4-section-copy,
+html[data-theme="dark"] .v4-home #achievements .v4-section-copy {
+  color: var(--site-text-muted);
+}
+
+/* About: same three principle blocks, now treated as physical artifacts. */
+html[data-theme="dark"] .v4-home #about .about-v4-statement > p,
+html[data-theme="dark"] .v4-home #about .about-v4-statement h3 span {
+  color: var(--site-violet-brand);
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-statement::after {
+  color: var(--site-orange);
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-principles {
+  border-color: var(--site-border-strong);
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-principles article {
+  border-color: var(--site-border-strong);
+  color: var(--site-paper-ink);
+  box-shadow: 7px 7px 0 transparent;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-principles article:nth-child(1) {
+  background: var(--site-paper-raised);
+  box-shadow: 7px 7px 0 var(--site-violet-brand);
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-principles article:nth-child(2) {
+  background: color-mix(in srgb, var(--site-violet-deep) 74%, #171321);
+  color: #f8f4ff;
+  box-shadow: 7px 7px 0 var(--site-yellow);
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-principles article:nth-child(3) {
+  background: #111418;
+  color: var(--site-text);
+  box-shadow: 7px 7px 0 var(--site-orange);
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-principles article:hover {
+  transform: translate(-2px, -2px);
+  border-color: var(--site-violet-line);
+}
+
+html[data-theme="dark"] .v4-home #about .about-v4-principles p {
+  color: currentColor;
+  opacity: .7;
+}
+
+/* Events: keep sticky poster/list interaction; violet marks selection, orange stays LIVE/action. */
+html[data-theme="dark"] .v4-home #events .event-line-no {
+  color: color-mix(in srgb, var(--site-violet-brand) 74%, var(--site-text-muted));
+}
+
+html[data-theme="dark"] .v4-home #events .event-line.active,
+html[data-theme="dark"] .v4-home #events .event-line[aria-current="true"],
+html[data-theme="dark"] .v4-home #events .event-line:focus-visible {
+  background: linear-gradient(90deg, var(--site-violet-soft), transparent 70%);
+  border-color: var(--site-violet-line);
+  color: var(--site-text);
+}
+
+html[data-theme="dark"] .v4-home #events .event-line.active .event-line-no,
+html[data-theme="dark"] .v4-home #events .event-line[aria-current="true"] .event-line-no {
+  color: var(--site-violet-brand);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--site-violet-brand) 46%, transparent);
+}
+
+html[data-theme="dark"] .v4-home #events .event-preview-image {
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--site-violet-brand) 76%, var(--site-orange));
+}
+
+/* Projects: retain existing rows/content and technical windows; only surface hierarchy changes. */
+html[data-theme="dark"] .v4-home #projects .project-showcase-row {
+  border-color: var(--site-border);
+}
+
+html[data-theme="dark"] .v4-home #projects .project-showcase-row::after {
+  border-color: var(--site-violet-line);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--site-cyan) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--site-violet-brand) 8%, transparent) 1px, transparent 1px);
+}
+
+html[data-theme="dark"] .v4-home #projects .project-index,
+html[data-theme="dark"] .v4-home #projects .project-copy > p:first-child {
+  color: var(--site-violet-brand);
+}
+
+html[data-theme="dark"] .v4-home #projects .project-copy h3,
+html[data-theme="dark"] .v4-home #projects .project-links a {
+  color: var(--site-text);
+}
+
+html[data-theme="dark"] .v4-home #projects .project-copy h3 + p {
+  color: var(--site-text-muted);
+}
+
+html[data-theme="dark"] .v4-home #projects .project-tags span {
+  background: color-mix(in srgb, var(--site-surface-raised) 88%, transparent);
+  color: var(--site-text);
+  border-color: var(--site-violet-line);
+}
+
+html[data-theme="dark"] .v4-home #projects .project-visual {
+  border-color: var(--site-border-strong);
+  box-shadow: 9px 9px 0 color-mix(in srgb, var(--site-violet-brand) 82%, var(--site-orange));
+}
+
+html[data-theme="dark"] .v4-home #projects .project-showcase-row:nth-child(even) .project-visual {
+  box-shadow: 9px 9px 0 color-mix(in srgb, var(--site-cyan) 42%, var(--site-violet-brand));
+}
+
+/* Resources intentionally stays yellow; violet appears only as a society marker. */
+html[data-theme="dark"] .v4-home #resources .resource-rail-row:nth-child(3) {
+  background: color-mix(in srgb, var(--site-violet-brand) 20%, var(--site-yellow));
+}
+
+html[data-theme="dark"] .v4-home #resources .resource-rail-row:nth-child(3) > span,
+html[data-theme="dark"] .v4-home #resources .resource-rail-row:nth-child(3) > b {
+  color: var(--site-violet-deep);
+}
+
+/* Team: current photos/roles stay untouched; only registration edges gain identity colour. */
+html[data-theme="dark"] .v4-home #team .people-photo-stack figure:nth-child(odd) {
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--site-violet-brand) 74%, transparent);
+}
+
+html[data-theme="dark"] .v4-home #team .people-photo-stack figure:nth-child(even) {
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--site-orange) 72%, transparent);
+}
+
+html[data-theme="dark"] .v4-home #team .people-photo-stack figcaption span,
+html[data-theme="dark"] .v4-home #team .people-group-row:hover strong {
+  color: var(--site-violet-brand);
+}
+
+html[data-theme="dark"] .v4-home #team .people-group-row:hover {
+  background: linear-gradient(90deg, var(--site-violet-soft), transparent 72%);
+}
+
+/* Achievements: keep the actual timeline DOM and data, turn the structural canvas dark. */
+html[data-theme="dark"] .v4-home #achievements .achievement-v4-list {
+  color: var(--site-text);
+}
+
+html[data-theme="dark"] .v4-home #achievements .achievement-trace {
+  background: linear-gradient(var(--site-violet-brand), var(--site-orange), var(--site-yellow));
+  box-shadow: 0 0 18px color-mix(in srgb, var(--site-violet-brand) 24%, transparent);
+}
+
+html[data-theme="dark"] .v4-home #achievements .achievement-v4-row {
+  border-color: var(--site-border);
+  color: var(--site-text);
+}
+
+html[data-theme="dark"] .v4-home #achievements .achievement-v4-row::before {
+  content: "";
+  position: absolute;
+  left: -31px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--site-violet-brand);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--site-violet-brand) 12%, transparent), 0 0 14px color-mix(in srgb, var(--site-violet-brand) 42%, transparent);
+  transform: translateY(-50%);
+}
+
+html[data-theme="dark"] .v4-home #achievements .achievement-v4-row:nth-child(2n)::before {
+  background: var(--site-orange);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--site-orange) 12%, transparent), 0 0 14px color-mix(in srgb, var(--site-orange) 38%, transparent);
+}
+
+html[data-theme="dark"] .v4-home #achievements .achievement-v4-row em {
+  color: var(--site-text-muted);
+}
+
+/* Gallery: same collage and real photos, now on a near-black violet canvas. */
+html[data-theme="dark"] .v4-home #gallery {
+  position: relative;
+  background:
+    radial-gradient(circle at 72% 26%, color-mix(in srgb, var(--site-violet-brand) 11%, transparent), transparent 34%),
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    var(--site-night-violet);
+  background-size: auto, 100% 54px, auto;
+  color: var(--site-text);
+}
+
+html[data-theme="dark"] .v4-home #gallery .v4-section-title > p,
+html[data-theme="dark"] .v4-home #gallery .v4-section-copy {
+  color: var(--site-text-muted);
+}
+
+html[data-theme="dark"] .v4-home #gallery .gallery-v4-photo,
+html[data-theme="dark"] .v4-home #gallery .gallery-v4-placeholder {
+  border-color: var(--site-border-strong);
+  box-shadow: 7px 7px 0 var(--site-violet-deep);
+}
+
+html[data-theme="dark"] .v4-home #gallery .gallery-v4-shot:nth-child(even) .gallery-v4-photo,
+html[data-theme="dark"] .v4-home #gallery .gallery-v4-shot:nth-child(even) .gallery-v4-placeholder {
+  box-shadow: 7px 7px 0 var(--site-yellow);
+}
+
+html[data-theme="dark"] .v4-home #gallery .gallery-v4-photo > span {
+  background: var(--site-violet-brand);
+  color: #0b0912;
+}
+
+/* Join: same copy and CTA, stronger CSS identity only on the outlined word. */
+html[data-theme="dark"] .v4-home .v4-join {
+  background:
+    radial-gradient(circle at 78% 42%, color-mix(in srgb, var(--site-violet-brand) 11%, transparent), transparent 28%),
+    var(--site-surface);
+}
+
+html[data-theme="dark"] .v4-home .v4-join h2 > span:nth-child(2) {
+  -webkit-text-stroke-color: var(--site-violet-brand);
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--site-violet-brand) 12%, transparent));
+}
+
+/* ---------------------------------------------------------------------
+   Inner public pages: darken only oversized structural paper containers.
+   Small tickets/cards remain paper artifacts as designed.
+   --------------------------------------------------------------------- */
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-lead > div:first-child,
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-index,
+html[data-theme="dark"] .v4-public-shell .v4-team-page .archive-context,
+html[data-theme="dark"] .v4-public-shell .v4-achievements-page .record-summary {
+  background:
+    linear-gradient(var(--site-grid) 1px, transparent 1px),
+    var(--site-surface) !important;
+  background-size: 48px 48px !important;
+  color: var(--site-text) !important;
+  border-color: var(--site-border) !important;
+}
+
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-index-head,
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-row,
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-row strong,
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-row-actions a {
+  color: var(--site-text) !important;
+  border-color: var(--site-border) !important;
+}
+
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-row p,
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-row em,
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-row > span,
+html[data-theme="dark"] .v4-public-shell .v4-team-page .archive-context,
+html[data-theme="dark"] .v4-public-shell .v4-achievements-page .record-summary p {
+  color: var(--site-text-muted) !important;
+}
+
+html[data-theme="dark"] .v4-public-shell .v4-projects-page .project-row:hover,
+html[data-theme="dark"] .v4-public-shell .v4-team-page .team-year-bar a:hover {
+  background: var(--site-violet-soft) !important;
+}
+
+html[data-theme="dark"] .v4-public-shell .v4-team-page .team-year-bar a.active {
+  background: var(--site-violet-brand) !important;
+  border-color: var(--site-violet-brand) !important;
+  color: #0b0912 !important;
+}
+
+html[data-theme="dark"] .v4-public-shell .v4-achievements-page .timeline-year article:hover,
+html[data-theme="dark"] .v4-public-shell .v4-page .poster-card:hover {
+  border-color: var(--site-violet-line) !important;
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--site-violet-brand) 30%, transparent);
+}
+
+html[data-theme="dark"] .v4-public-shell .route-trace-progress {
+  background: linear-gradient(var(--site-violet-brand), var(--site-cyan), var(--site-orange));
+}
+
+html[data-theme="dark"] .v4-public-shell .route-glyph .box-b {
+  border-color: var(--site-violet-line);
+}
+
+/* ---------------------------------------------------------------------
+   Ambient effects. Existing GSAP scroll choreography remains authoritative.
+   --------------------------------------------------------------------- */
+@keyframes css-signal-drift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 34px -22px, -28px 30px; }
+}
+
+@media (max-width: 840px) {
+  html[data-theme="dark"] .v4-home #about,
+  html[data-theme="dark"] .v4-home #projects,
+  html[data-theme="dark"] .v4-home #achievements {
+    box-shadow: 0 8px 0 color-mix(in srgb, var(--site-violet-brand) 50%, var(--site-orange));
+  }
+
+  html[data-theme="dark"] .v4-home #achievements .achievement-v4-row::before {
+    left: -13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="dark"] .v4-home #about::after,
+  html[data-theme="dark"] .v4-home #projects::after,
+  html[data-theme="dark"] .v4-home #achievements::after {
+    animation: none;
+  }
+}
