@@ -14,7 +14,7 @@ const testPath = path.join(process.cwd(), "data", ".forms-test.json");
 const fakeStorage: FileStorage = { saveFormFile: async () => ({ url: "/uploads/test.pdf", mimeType: "application/pdf", size: 1 }) };
 const field = (id: string, type: FormField["type"], label: string, order: number, required = false, patch: Partial<FormField> = {}): FormField => ({ id, type, label, order, required, ...patch });
 
-async function expectSubmissionError(run: () => unknown | Promise<unknown>, contains: string) {
+async function expectSubmissionError(run: () => Promise<unknown>, contains: string) {
   await assert.rejects(run, (error: unknown) => error instanceof FormSubmissionError && error.message.includes(contains));
 }
 
