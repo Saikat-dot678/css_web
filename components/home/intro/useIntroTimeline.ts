@@ -29,6 +29,7 @@ export function useIntroTimeline(
   const [reduced, setReduced] = useState(false);
   const [skipVisible, setSkipVisible] = useState(false);
   const phaseRef = useRef<IntroPhase>("PRELOAD");
+  const completedRef = useRef(false);
   const autoFrameRef = useRef(0);
   const skipTimerRef = useRef(0);
 
@@ -57,7 +58,8 @@ export function useIntroTimeline(
     mapRef.current?.setRevealProgress(map);
   }, [bootRef, laptopRef, mapRef, rootRef]);
 
-  const showMap = useCallback((remember = false) => {
+  const showMap = useCallback(() => {
+    if (completedRef.current) return;
     cancelAuto();
     setDeviceState(1, 1, 1, 1);
     mapRef.current?.setRouteProgress(0);
@@ -68,12 +70,29 @@ export function useIntroTimeline(
     changePhase("MAP_READY");
     setSkipVisible(false);
     window.requestAnimationFrame(() => takeoverRef.current?.syncSourceRect());
-    if (remember) {
-      try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* Storage may be unavailable. */ }
-    }
   }, [cancelAuto, changePhase, laptopRef, mapRef, setDeviceState, takeoverRef]);
 
-  const finishExperience = useCallback(() => {
+  const retireScrollStory = useCallback((compensate: boolean) => {
+    const root = rootRef.current;
+    if (!root || root.dataset.bypassed === "true") return;
+    const anchor = root.nextElementSibling instanceof HTMLElement ? root.nextElementSibling : null;
+    const beforeTop = compensate && anchor ? anchor.getBoundingClientRect().top : 0;
+    root.dataset.bypassed = "true";
+    // Force layout so the same post-intro anchor can be used to compensate for
+    // the removed cinematic scroll height without a visible document jump.
+    root.getBoundingClientRect();
+    if (compensate && anchor) {
+      const afterTop = anchor.getBoundingClientRect().top;
+      const delta = afterTop - beforeTop;
+      if (Number.isFinite(delta) && Math.abs(delta) > 0.5) window.scrollBy({ top: delta, behavior: "auto" });
+    }
+  }, [rootRef]);
+
+  const finishExperience = useCallback((remember = true, compensate = true) => {
+    if (completedRef.current) return;
+    // The latch is set before any DOM-height or scroll compensation work. Any
+    // scroll event caused by the collapse is therefore unable to reverse state.
+    completedRef.current = true;
     cancelAuto();
     setDeviceState(1, 1, 1, 1);
     mapRef.current?.setRouteProgress(1);
@@ -82,17 +101,22 @@ export function useIntroTimeline(
     takeoverRef.current?.setProgress(1);
     rootRef.current?.style.setProperty("--intro-scroll", "1");
     rootRef.current?.style.setProperty("--intro-arrival", "1");
-    rootRef.current?.setAttribute("data-bypassed", "true");
+    retireScrollStory(compensate);
     document.documentElement.classList.remove("intro-running");
     changePhase("COMPLETE");
     setSkipVisible(false);
-  }, [cancelAuto, changePhase, laptopRef, mapRef, rootRef, setDeviceState, takeoverRef]);
+    if (remember) {
+      try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* Storage may be unavailable. */ }
+    }
+  }, [cancelAuto, changePhase, laptopRef, mapRef, retireScrollStory, rootRef, setDeviceState, takeoverRef]);
 
-  const skipIntro = useCallback(() => showMap(true), [showMap]);
+  const skipIntro = useCallback(() => showMap(), [showMap]);
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
+    completedRef.current = false;
+    root.dataset.bypassed = "false";
     const reducedQuery = matchMedia("(prefers-reduced-motion: reduce)");
     const motionReduced = reducedQuery.matches;
     setReduced(motionReduced);
@@ -100,11 +124,11 @@ export function useIntroTimeline(
     let seen = false;
     try { seen = sessionStorage.getItem(SESSION_KEY) === "1"; } catch { /* Storage may be unavailable. */ }
 
-    const onCanvasFailure = () => showMap(false);
+    const onCanvasFailure = () => showMap();
     window.addEventListener("css:intro-canvas-failed", onCanvasFailure);
     const initialFrame = requestAnimationFrame(() => {
       if (motionReduced || seen) {
-        finishExperience();
+        finishExperience(!seen, false);
         return;
       }
 
@@ -120,6 +144,7 @@ export function useIntroTimeline(
       const started = performance.now();
 
       const animate = (now: number) => {
+        if (completedRef.current) return;
         const elapsed = now - started;
         const assembly = easeOut(range(timing.assemblyStart, timing.assemblyEnd, elapsed));
         const open = smoothstep(timing.openStart, timing.openEnd, elapsed);
@@ -130,7 +155,7 @@ export function useIntroTimeline(
         if (elapsed >= timing.openStart && phaseRef.current === "ASSEMBLE") changePhase("OPEN");
         if (elapsed >= timing.bootStart && phaseRef.current === "OPEN") changePhase("BOOT");
         if (elapsed < timing.duration) autoFrameRef.current = requestAnimationFrame(animate);
-        else showMap(false);
+        else showMap();
       };
       autoFrameRef.current = requestAnimationFrame(animate);
     });
@@ -145,10 +170,11 @@ export function useIntroTimeline(
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root || reduced || (phase !== "MAP_READY" && phase !== "ROUTE" && phase !== "TAKEOVER" && phase !== "COMPLETE")) return;
+    if (!root || reduced || completedRef.current || (phase !== "MAP_READY" && phase !== "ROUTE" && phase !== "TAKEOVER")) return;
     let frame = 0;
     const update = () => {
       frame = 0;
+      if (completedRef.current) return;
       const bounds = root.getBoundingClientRect();
       const distance = Math.max(1, root.offsetHeight - innerHeight);
       const holdVh = Number.parseFloat(getComputedStyle(root).getPropertyValue("--arrival-hold-vh")) || 0;
@@ -167,13 +193,11 @@ export function useIntroTimeline(
       laptopRef.current?.setTakeoverProgress(takeover);
       takeoverRef.current?.setProgress(takeover);
       if (progress > .015 && progress < .7) changePhase("ROUTE");
-      if (progress >= .7 && progress < .995) changePhase("TAKEOVER");
-      if (progress >= .995) {
-        changePhase("COMPLETE");
-        try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* Storage may be unavailable. */ }
-      }
+      if (progress >= .7) changePhase("TAKEOVER");
+      // Completion occurs only after the existing arrival hold is consumed.
+      if (progress >= .999 && arrival >= .999) finishExperience(true, true);
     };
-    const queueUpdate = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const queueUpdate = () => { if (!frame && !completedRef.current) frame = requestAnimationFrame(update); };
     window.addEventListener("scroll", queueUpdate, { passive: true });
     window.addEventListener("resize", queueUpdate, { passive: true });
     update();
@@ -182,7 +206,7 @@ export function useIntroTimeline(
       window.removeEventListener("scroll", queueUpdate);
       window.removeEventListener("resize", queueUpdate);
     };
-  }, [changePhase, laptopRef, mapRef, phase, reduced, rootRef, takeoverRef]);
+  }, [changePhase, finishExperience, laptopRef, mapRef, phase, reduced, rootRef, takeoverRef]);
 
   return { phase, reduced, skipIntro, skipVisible };
 }

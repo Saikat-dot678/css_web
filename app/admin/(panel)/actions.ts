@@ -8,7 +8,7 @@ import { requireAdmin } from "@/lib/auth";
 import { createAchievement, deleteAchievement, updateAchievement } from "@/lib/repositories/achievements";
 import { createAnnouncement, deleteAnnouncement, getSiteContent, updateAnnouncement, updateSiteContent } from "@/lib/repositories/content";
 import { createEvent, deleteEvent, getEventById, updateEvent } from "@/lib/repositories/events";
-import { createRegistrationForm, deleteRegistration, deleteRegistrationForm, getRegistrationFormByEventId, getRegistrations } from "@/lib/repositories/forms";
+import { countFormResponses, createForm, deleteForm, deleteFormResponse, getFormByEventId, updateForm } from "@/lib/repositories/forms";
 import { createMember, deleteMember, getMemberById, updateMember } from "@/lib/repositories/members";
 import { createProject, deleteProject, updateProject } from "@/lib/repositories/projects";
 import { createResource, deleteResource, updateResource } from "@/lib/repositories/resources";
@@ -83,10 +83,27 @@ export async function createEventAction(data: FormData) {
   await requireAdmin();
   const input = await eventInput(data);
   const created = await createEvent(input);
-  const form = await createRegistrationForm({ eventId: created.id, title: `${created.title} registration`, fields: [] });
-  await updateEvent(created.id, { registrationFormId: form.id });
+  try {
+    const form = await createForm({
+      slug: `${created.slug}-registration-${crypto.randomUUID().slice(0, 6).toLowerCase()}`,
+      title: `${created.title} registration`,
+      kind: "event",
+      eventId: created.id,
+      eventOwned: true,
+      status: "published",
+      submitLabel: "Submit registration",
+      successTitle: "Registration received.",
+      successMessage: "Your registration has been recorded.",
+      fields: [],
+    });
+    await updateEvent(created.id, { registrationFormId: form.id });
+  } catch (error) {
+    await deleteEvent(created.id);
+    throw error;
+  }
   revalidatePath("/events");
   revalidatePath("/admin/events");
+  revalidatePath("/admin/form-builder");
   redirect(`/admin/events/${created.id}/edit`);
 }
 
@@ -106,13 +123,20 @@ export async function updateEventAction(data: FormData) {
 export async function deleteEventAction(data: FormData) {
   await requireAdmin();
   const id = value(data, "id");
-  const form = await getRegistrationFormByEventId(id);
-  const registrations = await getRegistrations(id);
-  await Promise.all(registrations.map((item) => deleteRegistration(item.id)));
-  if (form) await deleteRegistrationForm(form.id);
+  const form = await getFormByEventId(id);
+  if (form) {
+    const responseCount = await countFormResponses(form.id);
+    if (form.eventOwned && responseCount === 0) {
+      await deleteForm(form.id);
+    } else {
+      await updateForm(form.id, { kind: "standalone", eventId: undefined, eventOwned: false, status: "draft" });
+    }
+  }
   await deleteEvent(id);
   revalidatePath("/events");
   revalidatePath("/admin/events");
+  revalidatePath("/admin/form-builder");
+  revalidatePath("/admin/responses");
 }
 
 const memberValues = async (data: FormData, existingPhoto?: string) => {
@@ -120,42 +144,22 @@ const memberValues = async (data: FormData, existingPhoto?: string) => {
   const programme = value(data, "programme") || (["office_bearer", "third_year", "second_year"].includes(academicGroup) ? "B.Tech CSE" : academicGroup === "mtech" ? "M.Tech CSE" : "PhD CSE");
   const upload = await uploadedImage(data, "photoFile", "members");
   return {
-    name: value(data, "name"),
-    photo: upload || value(data, "photo") || existingPhoto || `/api/avatars/member-${Date.now()}`,
-    role: value(data, "role"),
-    programme,
-    academicGroup,
+    name: value(data, "name"), photo: upload || value(data, "photo") || existingPhoto || `/api/avatars/member-${Date.now()}`,
+    role: value(data, "role"), programme, academicGroup,
     workingGroup: academicGroup === "office_bearer" ? "Office bearers" : value(data, "workingGroup"),
-    academicYear: value(data, "academicYear"),
-    linkedin: emptyToUndefined(value(data, "linkedin")),
-    instagram: emptyToUndefined(value(data, "instagram")),
-    facebook: emptyToUndefined(value(data, "facebook")),
-    github: emptyToUndefined(value(data, "github")),
-    email: emptyToUndefined(value(data, "email")),
-    researchArea: emptyToUndefined(value(data, "researchArea")),
-    bio: emptyToUndefined(value(data, "bio")),
+    academicYear: value(data, "academicYear"), linkedin: emptyToUndefined(value(data, "linkedin")), instagram: emptyToUndefined(value(data, "instagram")),
+    facebook: emptyToUndefined(value(data, "facebook")), github: emptyToUndefined(value(data, "github")), email: emptyToUndefined(value(data, "email")),
+    researchArea: emptyToUndefined(value(data, "researchArea")), bio: emptyToUndefined(value(data, "bio")),
   };
 };
 
-export async function createMemberAction(data: FormData) {
-  await requireAdmin();
-  await createMember(await memberValues(data));
-  revalidatePath("/team"); revalidatePath("/admin/team");
-}
-export async function updateMemberAction(data: FormData) {
-  await requireAdmin();
-  const id = value(data, "id");
-  const current = await getMemberById(id);
-  if (!current) throw new Error("Member not found.");
-  await updateMember(id, await memberValues(data, current.photo));
-  revalidatePath("/team"); revalidatePath("/admin/team");
-}
-export async function deleteMemberAction(data: FormData) {
-  await requireAdmin(); await deleteMember(value(data, "id")); revalidatePath("/team"); revalidatePath("/admin/team");
-}
+export async function createMemberAction(data: FormData) { await requireAdmin(); await createMember(await memberValues(data)); revalidatePath("/team"); revalidatePath("/admin/team"); }
+export async function updateMemberAction(data: FormData) { await requireAdmin(); const id = value(data, "id"); const current = await getMemberById(id); if (!current) throw new Error("Member not found."); await updateMember(id, await memberValues(data, current.photo)); revalidatePath("/team"); revalidatePath("/admin/team"); }
+export async function deleteMemberAction(data: FormData) { await requireAdmin(); await deleteMember(value(data, "id")); revalidatePath("/team"); revalidatePath("/admin/team"); }
 
 const projectValues = (data: FormData) => ({
-  slug: slugify(value(data, "slug") || value(data, "title")), title: value(data, "title"), description: value(data, "description"), status: value(data, "status") as ProjectStatus, technologies: csvList(data.get("technologies")), contributors: csvList(data.get("contributors")), githubUrl: emptyToUndefined(value(data, "githubUrl")), externalUrl: emptyToUndefined(value(data, "externalUrl")), image: emptyToUndefined(value(data, "image")), acceptingContributors: checked(data, "acceptingContributors"), owner: value(data, "owner"), academicYear: value(data, "academicYear"),
+  slug: slugify(value(data, "slug") || value(data, "title")), title: value(data, "title"), description: value(data, "description"), status: value(data, "status") as ProjectStatus,
+  technologies: csvList(data.get("technologies")), contributors: csvList(data.get("contributors")), githubUrl: emptyToUndefined(value(data, "githubUrl")), externalUrl: emptyToUndefined(value(data, "externalUrl")), image: emptyToUndefined(value(data, "image")), acceptingContributors: checked(data, "acceptingContributors"), owner: value(data, "owner"), academicYear: value(data, "academicYear"),
 });
 export async function createProjectAction(data: FormData) { await requireAdmin(); await createProject(projectValues(data)); revalidatePath("/projects"); revalidatePath("/admin/projects"); }
 export async function updateProjectAction(data: FormData) { await requireAdmin(); await updateProject(value(data, "id"), projectValues(data)); revalidatePath("/projects"); revalidatePath("/admin/projects"); }
@@ -184,5 +188,4 @@ export async function updateSiteContentAction(data: FormData) {
 export async function createAnnouncementAction(data: FormData) { await requireAdmin(); await createAnnouncement({ title: value(data, "title"), content: value(data, "content"), pinned: checked(data, "pinned"), published: checked(data, "published") }); revalidatePath("/"); revalidatePath("/admin/content"); }
 export async function updateAnnouncementAction(data: FormData) { await requireAdmin(); await updateAnnouncement(value(data, "id"), { title: value(data, "title"), content: value(data, "content"), pinned: checked(data, "pinned"), published: checked(data, "published") }); revalidatePath("/"); revalidatePath("/admin/content"); }
 export async function deleteAnnouncementAction(data: FormData) { await requireAdmin(); await deleteAnnouncement(value(data, "id")); revalidatePath("/"); revalidatePath("/admin/content"); }
-
-export async function deleteRegistrationAction(data: FormData) { await requireAdmin(); await deleteRegistration(value(data, "id")); revalidatePath("/admin/responses"); }
+export async function deleteRegistrationAction(data: FormData) { await requireAdmin(); await deleteFormResponse(value(data, "id")); revalidatePath("/admin/responses"); }

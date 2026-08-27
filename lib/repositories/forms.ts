@@ -2,51 +2,49 @@ import "server-only";
 
 import { requireAdmin } from "@/lib/auth";
 import { getDatabase } from "@/lib/db";
-import { registrationFormSchema, registrationSchema } from "@/lib/validation/forms";
-import type { Registration, RegistrationForm } from "@/types/forms";
-import { createEntity, updateEntity, type EntityInput } from "./base";
+import { FormService, type FormInput, type FormResponseInput } from "@/lib/forms/service";
+import type { FormDefinition, FormResponse } from "@/types/forms";
 
-export const getRegistrationForms = () =>
-  getDatabase().list<RegistrationForm>("registrationForms");
-export const getRegistrationFormById = (id: string) =>
-  getDatabase().findById<RegistrationForm>("registrationForms", id);
-export const getRegistrationFormByEventId = (eventId: string) =>
-  getDatabase().findOne<RegistrationForm>("registrationForms", { eventId });
+const service = () => new FormService(getDatabase());
 
-export async function createRegistrationForm(input: EntityInput<RegistrationForm>) {
-  return registrationFormSchema.parse(
-    await createEntity<RegistrationForm>("registrationForms", "form", input),
-  );
-}
+export const getForms = () => service().listForms();
+export const getFormById = (id: string) => service().getFormById(id);
+export const getFormBySlug = (slug: string) => service().getFormBySlug(slug);
+export const getFormByEventId = (eventId: string) => service().getFormByEventId(eventId);
+export const createForm = (input: FormInput) => service().createForm(input);
+export const updateForm = (id: string, patch: Partial<FormInput>) => service().updateForm(id, patch);
+export const duplicateForm = (id: string) => service().duplicateForm(id);
+export const countFormResponses = (formId: string) => service().countResponses(formId);
+export const createFormResponse = (input: FormResponseInput) => service().createResponse(input);
 
-export async function updateRegistrationForm(id: string, fields: RegistrationForm["fields"]) {
-  const current = await getRegistrationFormById(id);
-  if (!current) throw new Error("Registration form not found.");
-  const parsed = registrationFormSchema.parse({ ...current, fields });
-  return updateEntity<RegistrationForm>("registrationForms", id, parsed);
-}
-
-export const deleteRegistrationForm = (id: string) =>
-  getDatabase().remove("registrationForms", id);
-
-export const getRegistrations = async (eventId?: string) => {
+export async function getFormResponses(filters: { formId?: string; eventId?: string } = {}) {
   await requireAdmin();
-  const registrations = await getDatabase().list<Registration>("registrations");
-  return eventId
-    ? registrations.filter((registration) => registration.eventId === eventId)
-    : registrations;
-};
-export const getRegistrationById = async (id: string) => {
-  await requireAdmin();
-  return getDatabase().findById<Registration>("registrations", id);
-};
-export async function createRegistration(input: EntityInput<Registration>) {
-  return registrationSchema.parse(
-    await createEntity<Registration>(
-      "registrations",
-      "registration",
-      registrationSchema.omit({ id: true, createdAt: true, updatedAt: true }).parse(input),
-    ),
-  );
+  return service().listResponses(filters);
 }
-export const deleteRegistration = (id: string) => getDatabase().remove("registrations", id);
+
+export async function getFormResponseById(id: string) {
+  await requireAdmin();
+  return service().getResponseById(id);
+}
+
+export async function deleteFormResponse(id: string) {
+  await requireAdmin();
+  return service().deleteResponse(id);
+}
+
+export async function deleteForm(id: string) {
+  await requireAdmin();
+  return service().deleteForm(id);
+}
+
+// Compatibility exports for the existing event registration code while it uses the generic engine.
+export const getRegistrationForms = getForms;
+export const getRegistrationFormById = getFormById;
+export const getRegistrationFormByEventId = getFormByEventId;
+export const createRegistrationForm = createForm;
+export const updateRegistrationForm = async (id: string, fields: FormDefinition["fields"]) => updateForm(id, { fields });
+export const deleteRegistrationForm = deleteForm;
+export const getRegistrations = async (eventId?: string): Promise<FormResponse[]> => getFormResponses({ eventId });
+export const getRegistrationById = getFormResponseById;
+export const createRegistration = createFormResponse;
+export const deleteRegistration = deleteFormResponse;

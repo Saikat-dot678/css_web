@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 const links = [
@@ -13,6 +14,30 @@ const links = [
   ["Team", "/team"],
   ["Resources", "/resources"],
 ] as const;
+
+const brandLinkStyle: CSSProperties = {
+  minHeight: 0,
+  padding: 0,
+};
+
+const brandMarkStyle: CSSProperties = {
+  width: "clamp(60px, 7vw, 78px)",
+  aspectRatio: "837 / 343",
+  display: "grid",
+  placeItems: "center",
+  flex: "0 0 auto",
+  overflow: "hidden",
+  lineHeight: 0,
+  background: "#07011d",
+};
+
+const brandImageStyle: CSSProperties = {
+  display: "block",
+  width: "100%",
+  height: "100%",
+  objectFit: "contain",
+  maxWidth: "100%",
+};
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -35,36 +60,44 @@ export function SiteHeader() {
     return () => document.body.classList.remove("menu-open");
   }, [open]);
 
-  // Close menu on escape key
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && open) {
-        setOpen(false);
-      }
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && open) setOpen(false);
     };
-    
-    if (open) {
-      window.addEventListener("keydown", handleEscape);
-    }
-    
+    if (open) window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
   }, [open]);
 
-  const active = (href: string) => {
-    if (href.startsWith("/#")) return home;
-    return pathname.startsWith(href);
-  };
-
-  const handleNavClick = () => {
-    setOpen(false);
-  };
+  const active = (href: string) => (href.startsWith("/#") ? home : pathname.startsWith(href));
+  const handleNavClick = () => setOpen(false);
 
   return (
     <header className={`v4-site-header ${home ? "v4-header-home" : ""} ${scrolled ? "scrolled" : ""}`}>
       <div className="v4-nav-shell">
-        <Link className="v4-brand" href="/" aria-label="CSS home" onClick={handleNavClick}>
-          <strong>CSS</strong>
-          <span>CSE STUDENTS’ SOCIETY<br />NIT DURGAPUR</span>
+        <Link
+          className="v4-brand"
+          href="/"
+          aria-label="CSE Students’ Society home"
+          onClick={handleNavClick}
+          style={brandLinkStyle}
+        >
+          <div className="v4-brand-mark" aria-hidden="true" style={brandMarkStyle}>
+            <Image
+              src="/brand/css-logo.jpg"
+              alt=""
+              width={837}
+              height={343}
+              sizes="(max-width: 480px) 60px, 78px"
+              style={brandImageStyle}
+              priority
+              unoptimized
+            />
+          </div>
+          <span className="v4-brand-copy">
+            CSE Students’ Society
+            <br />
+            NIT DURGAPUR
+          </span>
         </Link>
 
         <nav className="v4-main-nav" aria-label="Primary navigation">
@@ -77,7 +110,9 @@ export function SiteHeader() {
 
         <div className="v4-nav-actions">
           <ThemeToggle />
-          <Link className="v4-nav-join" href="/team#recruitment">JOIN CSS ↗</Link>
+          <Link className="v4-nav-join" href="/team#recruitment">
+            JOIN CSS ↗
+          </Link>
           <button
             className="v4-menu-toggle"
             type="button"
@@ -86,7 +121,8 @@ export function SiteHeader() {
             aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             onClick={() => setOpen((value) => !value)}
           >
-            <span /><span />
+            <span />
+            <span />
             <b>{open ? "CLOSE" : "MENU"}</b>
           </button>
         </div>
@@ -107,7 +143,11 @@ export function SiteHeader() {
             <b>↗</b>
           </Link>
         </div>
-        <p>CSS / NIT DURGAPUR<br />23.5491° N · 87.2909° E</p>
+        <p>
+          CSS / NIT DURGAPUR
+          <br />
+          23.5491° N · 87.2909° E
+        </p>
       </nav>
     </header>
   );

@@ -1,11 +1,11 @@
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { FormBuilder } from "@/components/admin/FormBuilder";
 import { getEvents } from "@/lib/repositories/events";
-import { getRegistrationFormByEventId } from "@/lib/repositories/forms";
+import { getForms } from "@/lib/repositories/forms";
 
-export default async function FormBuilderPage({ searchParams }: { searchParams: Promise<{ event?: string }> }) {
-  const events = await getEvents();
-  const selectedId = (await searchParams).event || events[0]?.id;
-  const form = selectedId ? await getRegistrationFormByEventId(selectedId) : null;
-  return <><AdminHeader title="Registration form builder" description="Add, reorder, require, and configure fields for each event." /><main className="admin-content">{form ? <FormBuilder form={form} events={events} /> : <div className="empty-state"><strong>No form available</strong><p>Create an event first; its registration form will be created automatically.</p></div>}</main></>;
+export default async function FormBuilderPage({ searchParams }: { searchParams: Promise<{ form?: string; event?: string }> }) {
+  const [events, forms] = await Promise.all([getEvents(), getForms()]);
+  const params = await searchParams;
+  const selected = forms.find((form) => form.id === params.form) ?? forms.find((form) => form.eventId === params.event) ?? forms[0];
+  return <><AdminHeader title="Form builder" description="Build standalone forms or event registrations from the same reusable form engine." /><main className="admin-content"><FormBuilder forms={forms} selectedForm={selected} events={events} /></main></>;
 }

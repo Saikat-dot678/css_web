@@ -1,0 +1,24 @@
+name: Branch validation
+
+on:
+  push:
+    branches:
+      - design/dark-violet-refinement
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:db
+      - run: npm run test:forms
+      - run: npm run build
