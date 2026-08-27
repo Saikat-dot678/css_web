@@ -9,7 +9,8 @@
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "seed": "tsx scripts/seed.ts",
-    "test:db": "tsx scripts/test-json-db.ts"
+    "test:db": "tsx scripts/test-json-db.ts",
+    "test:forms": "tsx scripts/test-forms.ts"
   },
   "dependencies": {
     "gsap": "latest",
