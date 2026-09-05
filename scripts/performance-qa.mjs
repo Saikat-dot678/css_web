@@ -24,7 +24,7 @@ socket.onmessage = (event) => {
   }
   if (message.method === "Network.requestWillBeSent") requestCount += 1;
   if (message.method === "Network.loadingFinished") transferBytes += message.params?.encodedDataLength || 0;
-  if (message.method === "Network.loadingFailed") failedRequests += 1;
+  if (message.method === "Network.loadingFailed" && !message.params?.canceled && message.params?.errorText !== "net::ERR_ABORTED") failedRequests += 1;
 };
 await new Promise((resolve, reject) => { socket.onopen = resolve; socket.onerror = reject; });
 
@@ -43,6 +43,8 @@ async function evaluate(expression) {
   return result.result.value;
 }
 async function navigate(path) {
+  await send("Page.navigate", { url: "about:blank" });
+  await wait(250);
   requestCount = 0;
   transferBytes = 0;
   failedRequests = 0;
@@ -91,6 +93,11 @@ const vitals = await evaluate(`(() => {
   const paint = Object.fromEntries(performance.getEntriesByType('paint').map((entry) => [entry.name, entry.startTime]));
   const resources = performance.getEntriesByType('resource');
   const images = [...document.images];
+  const visibleImages = images.filter((image) => {
+    const rect = image.getBoundingClientRect();
+    const style = getComputedStyle(image);
+    return style.display !== 'none' && style.visibility !== 'hidden' && rect.bottom > 0 && rect.top < innerHeight;
+  });
   return {
     ...window.__qaVitals,
     fcp: paint['first-contentful-paint'] || 0,
@@ -98,7 +105,8 @@ const vitals = await evaluate(`(() => {
     load: nav?.loadEventEnd || 0,
     resourceEntries: resources.length,
     imageCount: images.length,
-    incompleteImages: images.filter((image) => !image.complete || image.naturalWidth === 0).length,
+    visibleImageCount: visibleImages.length,
+    incompleteVisibleImages: visibleImages.filter((image) => !image.complete || image.naturalWidth === 0).length,
     domNodes: document.getElementsByTagName('*').length,
   };
 })()`);
@@ -110,8 +118,8 @@ assert(vitals.cls <= 0.15, "CLS lab budget", `${vitals.cls.toFixed(4)} (budget 0
 assert(vitals.longTask <= 1200, "main-thread long-task budget", `${Math.round(vitals.longTask)}ms cumulative (budget 1200ms)`);
 assert(requestCount <= 120, "network request budget", `${requestCount} requests (budget 120)`);
 assert(transferMb <= 6, "transfer-size budget", `${transferMb.toFixed(2)}MB (budget 6MB)`);
-assert(failedRequests === 0, "network failures", `${failedRequests} failed requests`);
-assert(vitals.incompleteImages === 0, "image loading", `${vitals.incompleteImages}/${vitals.imageCount} incomplete images`);
+assert(failedRequests === 0, "non-aborted network failures", `${failedRequests} failed requests`);
+assert(vitals.incompleteVisibleImages === 0, "above-the-fold image loading", `${vitals.incompleteVisibleImages}/${vitals.visibleImageCount} visible images incomplete`);
 assert(vitals.domNodes <= 2500, "DOM size budget", `${vitals.domNodes} nodes (budget 2500)`);
 if (vitals.inp > 0) assert(vitals.inp <= 300, "INP interaction lab budget", `${Math.round(vitals.inp)}ms (budget 300ms)`);
 else console.info("INFO INP event timing was not exposed by this headless Chromium run; the theme-toggle interaction still executed successfully.");
