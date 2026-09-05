@@ -93,7 +93,7 @@ scripts/             Seeder, persistence tests, security tests, browser QA and p
 
 The admin routes manage events, student committee records, faculty advisors, projects, resources, achievements, announcements, and homepage copy. Faculty advisors now have the same create/edit/delete administration path as student members and feed the public Team/Home surfaces. Event creation also creates a registration form. The form builder supports the current field set, ordering, duplication, required state, option editing, publish/close/re-open flows, and standalone or event-linked forms. Public submissions are validated on the server, stored through the active database adapter, searchable in `/admin/responses`, and exportable as CSV with human-readable field labels and spreadsheet-formula neutralization.
 
-Event posters, member images, and faculty images may be public URLs or local paths under `public/uploads`. Those admin image-upload actions currently write to local disk. This is acceptable for local development or a single persistent Node host, but it is not durable on typical serverless filesystems. Move those helpers to persistent object storage before such a deployment.
+Event poster, member-photo, and faculty-photo file uploads write under `public/uploads` only in development. Direct admin image uploads are intentionally rejected in production so an ephemeral filesystem cannot silently appear durable. Production admins can continue to use durable public image URLs; wire these image actions to object storage before enabling direct production uploads.
 
 Form-file uploads use the storage abstraction in `lib/storage`. The bundled local adapter validates MIME type and size and generates safe filenames, but it is disabled in production. Text-only forms continue to work when production file storage is unavailable; submitting an actual file returns a clear service-unavailable response rather than silently losing the file.
 
@@ -108,7 +108,7 @@ The browser QA covers the public and admin route sets at 1920×1080, 1440×900, 
 ## Deployment notes
 
 1. Set MongoDB configuration, both admin credentials, and the public URL in the host’s secret manager.
-2. Configure durable object storage before enabling production file-upload fields or relying on uploaded admin images on an ephemeral host.
+2. Configure durable object storage before enabling production form-file uploads or direct admin image uploads.
 3. Run the full branch-validation workflow before release; it includes audit, typecheck, lint, data/form/security tests, build, runtime, responsive, CRUD, and browser performance checks.
 4. Verify the production runtime against the real database/storage providers and deployment origin; local JSON/browser CI cannot certify unavailable external credentials.
 5. Deploy the generated Next.js application using a Node-compatible host. Mongo credentials and admin secrets must never be exposed to client bundles.
