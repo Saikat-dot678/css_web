@@ -6,16 +6,37 @@ on:
       - design/dark-violet-refinement
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: design/dark-violet-refinement
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+      - name: Refresh patched Next.js lockfile
+        run: npm install next@16.3.3 eslint-config-next@16.3.3 --save-exact --package-lock-only
+      - name: Verify high-severity dependency audit
+        run: npm audit --audit-level=high
+      - name: Commit patched dependency files
+        shell: bash
+        run: |
+          if git diff --quiet -- package.json package-lock.json; then
+            echo "Dependency files already current."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add package.json package-lock.json
+            git commit -m "fix: update Next.js security patch"
+            git push origin HEAD:design/dark-violet-refinement
+          fi
       - run: npm ci
       - run: npm run typecheck
       - run: npm run lint
