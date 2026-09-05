@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DynamicField } from "@/components/forms/DynamicForm";
 import type { Event } from "@/types/event";
@@ -33,12 +33,6 @@ export function FormBuilder({ forms, selectedForm, events }: { forms: FormDefini
   const [saveState, setSaveState] = useState("All changes are local until saved.");
   const fields = useMemo(() => draft?.fields.toSorted((a, b) => a.order - b.order) ?? [], [draft]);
   const selectedField = fields.find((field) => field.id === selectedFieldId);
-
-  useEffect(() => {
-    setDraft(selectedForm);
-    setSelectedFieldId(selectedForm?.fields.toSorted((a, b) => a.order - b.order)[0]?.id);
-    setSaveState("All changes are local until saved.");
-  }, [selectedForm]);
 
   const updateDraft = (patch: Partial<FormDefinition>) => setDraft((current) => current ? { ...current, ...patch } : current);
   const updateField = (id: string, patch: Partial<FormField>) => setDraft((current) => current ? {
@@ -148,7 +142,7 @@ export function FormBuilder({ forms, selectedForm, events }: { forms: FormDefini
       {draft.status !== "published" && <button className="admin-secondary" type="button" onClick={() => save("published")}>Publish</button>}
       {draft.status === "published" && <button className="admin-secondary" type="button" onClick={() => save("closed")}>Close</button>}
       {draft.status === "closed" && <button className="admin-secondary" type="button" onClick={() => save("published")}>Re-open</button>}
-      {previewHref && <Link className="admin-secondary" href={previewHref} target="_blank">Preview ↗</Link>}
+      {previewHref && <Link className="admin-secondary" href={previewHref} target="_blank" rel="noreferrer">Preview ↗</Link>}
       <button className="admin-secondary" type="button" onClick={duplicateCurrent}>Duplicate</button>
       <button className="admin-secondary danger" type="button" onClick={deleteCurrent}>Delete</button>
       <span className="builder-save-state" role="status">{saveState}</span>
