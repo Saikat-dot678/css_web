@@ -46,12 +46,20 @@ export function SiteHeader() {
   const home = pathname === "/" || pathname === "/home";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    const initialFrame = window.requestAnimationFrame(onScroll);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const next = window.scrollY > 30;
+      setScrolled((current) => current === next ? current : next);
+    };
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    requestUpdate();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
     return () => {
-      window.cancelAnimationFrame(initialFrame);
-      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", requestUpdate);
     };
   }, []);
 
