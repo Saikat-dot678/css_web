@@ -98,7 +98,6 @@ export function SiteHeader() {
               sizes="(max-width: 480px) 60px, 78px"
               style={brandImageStyle}
               priority
-              unoptimized
             />
           </div>
           <span className="v4-brand-copy">
