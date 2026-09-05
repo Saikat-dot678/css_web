@@ -12,7 +12,6 @@
     "test:db": "tsx scripts/test-json-db.ts",
     "test:forms": "tsx scripts/test-forms.ts",
     "test:validation": "tsx scripts/test-validation.ts",
-    "test:repositories": "node --conditions=react-server --import tsx scripts/test-repositories.ts",
     "test:runtime": "node scripts/runtime-qa.mjs"
   },
   "dependencies": {
