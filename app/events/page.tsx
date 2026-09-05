@@ -28,7 +28,7 @@ export default async function EventsPage() {
           <div className="v4-event-poster-stack">
             {collage.map((event, index) => (
               <Link href={`/events/${event.slug}`} key={event.id} className={`stack-poster stack-poster-${index + 1}`}>
-                <PosterImage src={event.poster} title={event.title} priority={index === 0} />
+                <PosterImage src={event.poster} title={event.title} priority />
               </Link>
             ))}
             <span>EVENT STREAM / CSS</span>
