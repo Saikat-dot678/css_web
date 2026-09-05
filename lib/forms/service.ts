@@ -29,9 +29,9 @@ export class FormService {
     return (await this.listForms()).find((form) => form.kind === "event" && form.eventId === eventId) ?? null;
   }
 
-  private async assertPublishedSlugAvailable(slug: string, excludeId?: string) {
-    const clash = (await this.listForms()).find((form) => form.status === "published" && form.slug === slug && form.id !== excludeId);
-    if (clash) throw new Error(`A published form already uses the slug “${slug}”.`);
+  private async assertSlugAvailable(slug: string, excludeId?: string) {
+    const clash = (await this.listForms()).find((form) => form.slug === slug && form.id !== excludeId);
+    if (clash) throw new Error(`A form already uses the slug “${slug}”.`);
   }
 
   async createForm(input: FormInput): Promise<FormDefinition> {
@@ -42,7 +42,7 @@ export class FormService {
       createdAt: timestamp,
       updatedAt: timestamp,
     });
-    if (parsed.status === "published") await this.assertPublishedSlugAvailable(parsed.slug);
+    await this.assertSlugAvailable(parsed.slug);
     return this.database.insert("registrationForms", parsed);
   }
 
@@ -50,7 +50,7 @@ export class FormService {
     const current = await this.getFormById(id);
     if (!current) throw new Error("Form not found.");
     const parsed = formDefinitionSchema.parse({ ...current, ...patch, id, updatedAt: nowIso() });
-    if (parsed.status === "published") await this.assertPublishedSlugAvailable(parsed.slug, id);
+    await this.assertSlugAvailable(parsed.slug, id);
     return this.database.update("registrationForms", id, parsed);
   }
 
@@ -58,9 +58,12 @@ export class FormService {
     const source = await this.getFormById(id);
     if (!source) throw new Error("Form not found.");
     const suffix = crypto.randomUUID().slice(0, 6).toLowerCase();
-    const { id: _id, createdAt: _createdAt, updatedAt: _updatedAt, ...copy } = source;
+    const copy = structuredClone(source) as Partial<FormDefinition>;
+    delete copy.id;
+    delete copy.createdAt;
+    delete copy.updatedAt;
     return this.createForm({
-      ...copy,
+      ...(copy as FormInput),
       title: `${source.title} copy`,
       slug: `${source.slug}-copy-${suffix}`,
       kind: "standalone",
