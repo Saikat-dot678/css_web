@@ -63,6 +63,11 @@ jobs:
             cat /tmp/css-chrome.log
             exit 1
           fi
+          if ! node scripts/performance-qa.mjs; then
+            cat /tmp/css-server.log
+            cat /tmp/css-chrome.log
+            exit 1
+          fi
       - name: Development admin runtime QA
         env:
           QA_BASE_URL: http://127.0.0.1:3000
