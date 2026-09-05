@@ -3,7 +3,7 @@
     {
       "id": "event-resume-rewired",
       "createdAt": "2026-08-07T12:00:00.000Z",
-      "updatedAt": "2026-08-07T12:00:00.000Z",
+      "updatedAt": "2026-09-05T05:55:40.746Z",
       "slug": "resume-rewired",
       "title": "Resume Rewired",
       "category": "Career",
@@ -42,7 +42,7 @@
       "gallery": [],
       "resources": [],
       "results": [],
-      "poster": "/api/posters/resume-rewired"
+      "poster": "/uploads/posters/1788587740740-21e8271e.png"
     },
     {
       "id": "event-build-night",
@@ -2100,6 +2100,18 @@
       "linkedin": "https://www.linkedin.com/",
       "instagram": "https://www.instagram.com/",
       "facebook": "https://www.facebook.com/"
+    },
+    {
+      "name": "Saikat Khan",
+      "photo": "/uploads/members/1788587350042-db1ae916.png",
+      "role": "Wev dev",
+      "programme": "B.Tech CSE",
+      "academicGroup": "third_year",
+      "workingGroup": "Editorial",
+      "academicYear": "2026-27",
+      "id": "member_mtnyq7tr_213ac5ea",
+      "createdAt": "2026-09-05T05:49:10.047Z",
+      "updatedAt": "2026-09-05T05:49:10.047Z"
     }
   ],
   "faculty": [
@@ -2366,6 +2378,15 @@
       "title": "CSE Students’ Society founded",
       "description": "CSS begins as the official Computer Science and Engineering society of NIT Durgapur.",
       "category": "Foundation"
+    },
+    {
+      "year": "2026",
+      "title": "BurnBrain",
+      "description": "First Dept society to organize a hackathon in NIT Dgp",
+      "category": "Competition",
+      "id": "achievement_mtnytkib_cc103467",
+      "createdAt": "2026-09-05T05:51:46.451Z",
+      "updatedAt": "2026-09-05T05:51:46.451Z"
     }
   ],
   "announcements": [
@@ -2401,23 +2422,30 @@
     {
       "id": "form-resume-rewired",
       "createdAt": "2026-08-07T12:00:00.000Z",
-      "updatedAt": "2026-08-07T14:45:30.733Z",
-      "eventId": "event-resume-rewired",
+      "updatedAt": "2026-09-05T05:54:55.115Z",
+      "slug": "event-form-form-resume-rewired",
       "title": "Resume Rewired registration",
+      "kind": "event",
+      "eventId": "event-resume-rewired",
+      "eventOwned": true,
+      "status": "published",
+      "submitLabel": "Submit registration",
       "fields": [
         {
           "id": "name",
           "type": "shortText",
           "label": "Full name",
           "required": true,
-          "order": 0
+          "order": 0,
+          "allowMultipleFiles": false
         },
         {
           "id": "email",
           "type": "email",
           "label": "Institute email",
           "required": true,
-          "order": 1
+          "order": 1,
+          "allowMultipleFiles": false
         },
         {
           "id": "year",
@@ -2432,28 +2460,71 @@
             "M.Tech",
             "PhD"
           ],
-          "order": 2
+          "order": 2,
+          "allowMultipleFiles": false
         },
         {
           "id": "resume",
           "type": "file",
           "label": "Resume PDF",
           "required": false,
-          "order": 3
+          "order": 3,
+          "allowMultipleFiles": false
         },
         {
           "id": "goal",
           "type": "longText",
           "label": "What should this session help you fix?",
           "required": false,
-          "order": 4
+          "order": 4,
+          "allowMultipleFiles": false
         },
         {
           "id": "consent",
           "type": "consent",
           "label": "I consent to CSS using this response for event coordination.",
           "required": true,
-          "order": 5
+          "order": 5,
+          "allowMultipleFiles": false
+        },
+        {
+          "id": "4b35e2b8-fd4d-4c9a-af34-0ae5aeb84c8b",
+          "type": "divider",
+          "label": "Divider",
+          "required": false,
+          "order": 6
+        },
+        {
+          "id": "89c2a725-e031-4a0d-8a8f-efac4339b853",
+          "type": "dropdown",
+          "label": "Dropdown",
+          "required": false,
+          "options": [
+            "Option 1",
+            "Option 2"
+          ],
+          "order": 7
+        },
+        {
+          "id": "7f0a60a9-7359-4ed7-b6b9-f4d4642d86fb",
+          "type": "number",
+          "label": "Number",
+          "required": false,
+          "order": 8
+        },
+        {
+          "id": "380da8bd-bb55-4e1b-a863-1289071010df",
+          "type": "longText",
+          "label": "Long answer",
+          "required": false,
+          "order": 9
+        },
+        {
+          "id": "02341c15-b1b3-4175-ba5b-6fda614c0e37",
+          "type": "shortText",
+          "label": "Short text",
+          "required": false,
+          "order": 10
         }
       ]
     },
