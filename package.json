@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "seed": "tsx scripts/seed.ts",
     "test:db": "tsx scripts/test-json-db.ts",
-    "test:forms": "tsx scripts/test-forms.ts"
+    "test:forms": "tsx scripts/test-forms.ts",
+    "test:validation": "tsx scripts/test-validation.ts"
   },
   "dependencies": {
     "gsap": "latest",
