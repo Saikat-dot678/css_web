@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
+import { createResponsesCsv } from "../lib/forms/csv";
 import { FormSubmissionError, parseFormSubmission } from "../lib/forms/submission";
 import type { FileStorage } from "../lib/storage/types";
 import { urlSchema } from "../lib/validation/common";
 import { resourceInputSchema } from "../lib/validation/resource";
-import type { FormDefinition } from "../types/forms";
+import type { FormDefinition, FormResponse } from "../types/forms";
 
 for (const value of ["https://example.com/path?q=1", "http://localhost:3000/test", "/uploads/image.png", "/api/posters/demo", "#", " /safe-looking "]) {
   assert.equal(urlSchema.safeParse(value).success, true, `expected safe URL: ${value}`);
@@ -49,4 +50,24 @@ for (const status of [413, 415]) {
   );
 }
 
-console.info("URL safety and upload validation status propagation passed.");
+const csvForm: FormDefinition = {
+  ...uploadForm,
+  id: "csv-form",
+  slug: "csv-form",
+  title: "CSV form",
+  fields: [{ id: "answer", type: "shortText", label: "Answer", required: false, order: 0 }],
+};
+const csvResponse: FormResponse = {
+  id: "csv-response",
+  formId: csvForm.id,
+  formSlug: csvForm.slug,
+  answers: { answer: "=1+1" },
+  submittedAt: timestamp,
+  createdAt: timestamp,
+  updatedAt: timestamp,
+};
+const csv = createResponsesCsv([csvForm], [csvResponse], [], csvForm.id);
+assert.ok(csv.includes("\"'=1+1\""), "formula-leading CSV values must be neutralized");
+assert.ok(!csv.includes("\"=1+1\""), "raw spreadsheet formulas must not be emitted");
+
+console.info("URL safety, upload validation status propagation, and CSV formula neutralization passed.");
