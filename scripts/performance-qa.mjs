@@ -96,7 +96,22 @@ const vitals = await evaluate(`(() => {
   const visibleImages = images.filter((image) => {
     const rect = image.getBoundingClientRect();
     const style = getComputedStyle(image);
-    return style.display !== 'none' && style.visibility !== 'hidden' && rect.bottom > 0 && rect.top < innerHeight;
+    return style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0 && rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < innerHeight;
+  });
+  const incompleteVisibleImages = visibleImages.filter((image) => !image.complete || image.naturalWidth === 0).map((image) => {
+    const rect = image.getBoundingClientRect();
+    return {
+      src: image.currentSrc || image.src,
+      alt: image.alt,
+      loading: image.loading,
+      complete: image.complete,
+      naturalWidth: image.naturalWidth,
+      top: Math.round(rect.top),
+      bottom: Math.round(rect.bottom),
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+      className: image.className,
+    };
   });
   return {
     ...window.__qaVitals,
@@ -106,7 +121,7 @@ const vitals = await evaluate(`(() => {
     resourceEntries: resources.length,
     imageCount: images.length,
     visibleImageCount: visibleImages.length,
-    incompleteVisibleImages: visibleImages.filter((image) => !image.complete || image.naturalWidth === 0).length,
+    incompleteVisibleImages,
     domNodes: document.getElementsByTagName('*').length,
   };
 })()`);
@@ -119,7 +134,7 @@ assert(vitals.longTask <= 1200, "main-thread long-task budget", `${Math.round(vi
 assert(requestCount <= 120, "network request budget", `${requestCount} requests (budget 120)`);
 assert(transferMb <= 6, "transfer-size budget", `${transferMb.toFixed(2)}MB (budget 6MB)`);
 assert(failedRequests === 0, "non-aborted network failures", `${failedRequests} failed requests`);
-assert(vitals.incompleteVisibleImages === 0, "above-the-fold image loading", `${vitals.incompleteVisibleImages}/${vitals.visibleImageCount} visible images incomplete`);
+assert(vitals.incompleteVisibleImages.length === 0, "above-the-fold image loading", vitals.incompleteVisibleImages.length ? JSON.stringify(vitals.incompleteVisibleImages) : `${vitals.visibleImageCount} visible images complete`);
 assert(vitals.domNodes <= 2500, "DOM size budget", `${vitals.domNodes} nodes (budget 2500)`);
 if (vitals.inp > 0) assert(vitals.inp <= 300, "INP interaction lab budget", `${Math.round(vitals.inp)}ms (budget 300ms)`);
 else console.info("INFO INP event timing was not exposed by this headless Chromium run; the theme-toggle interaction still executed successfully.");
