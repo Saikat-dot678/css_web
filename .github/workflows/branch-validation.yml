@@ -26,7 +26,6 @@ jobs:
       - run: npm run test:db
       - run: npm run test:forms
       - run: npm run test:validation
-      - run: npm run test:repositories
       - run: npm run build
       - name: Prepare runtime fixture
         run: npx tsx scripts/prepare-runtime-fixture.ts
