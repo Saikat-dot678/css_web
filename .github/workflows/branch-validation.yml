@@ -21,8 +21,10 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Refresh patched Next.js lockfile
-        run: npm install next@16.3.3 eslint-config-next@16.3.3 --save-exact --package-lock-only
+      - name: Refresh patched dependency lockfile
+        run: |
+          npm install next@16.3.3 eslint-config-next@16.3.3 --save-exact --package-lock-only
+          npm audit fix --package-lock-only
       - name: Verify high-severity dependency audit
         run: npm audit --audit-level=high
       - name: Commit patched dependency files
