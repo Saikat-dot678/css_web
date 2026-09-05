@@ -25,4 +25,75 @@ jobs:
       - run: npm run lint
       - run: npm run test:db
       - run: npm run test:forms
+      - run: npm run test:validation
       - run: npm run build
+      - name: Prepare runtime fixture
+        run: npx tsx scripts/prepare-runtime-fixture.ts
+      - name: Production public runtime QA
+        env:
+          QA_BASE_URL: http://127.0.0.1:3000
+          QA_MODE: public
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm start > /tmp/css-server.log 2>&1 &
+          SERVER_PID=$!
+          CHROME_PID=""
+          cleanup() {
+            if [ -n "$CHROME_PID" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
+            kill "$SERVER_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/events >/dev/null; then break; fi
+            if [ "$attempt" -eq 60 ]; then cat /tmp/css-server.log; exit 1; fi
+            sleep 1
+          done
+          CHROME_BIN="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then echo "Chrome/Chromium is unavailable on the runner."; exit 1; fi
+          "$CHROME_BIN" --headless=new --no-sandbox --disable-gpu --remote-debugging-address=127.0.0.1 --remote-debugging-port=9222 --user-data-dir=/tmp/css-qa-prod http://127.0.0.1:3000/events > /tmp/css-chrome.log 2>&1 &
+          CHROME_PID=$!
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:9222/json >/dev/null; then break; fi
+            if [ "$attempt" -eq 30 ]; then cat /tmp/css-chrome.log; exit 1; fi
+            sleep 1
+          done
+          if ! npm run test:runtime; then
+            cat /tmp/css-server.log
+            cat /tmp/css-chrome.log
+            exit 1
+          fi
+      - name: Development admin runtime QA
+        env:
+          QA_BASE_URL: http://127.0.0.1:3000
+          QA_MODE: admin
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run dev -- --hostname 127.0.0.1 > /tmp/css-dev.log 2>&1 &
+          SERVER_PID=$!
+          CHROME_PID=""
+          cleanup() {
+            if [ -n "$CHROME_PID" ]; then kill "$CHROME_PID" 2>/dev/null || true; fi
+            kill "$SERVER_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/admin >/dev/null; then break; fi
+            if [ "$attempt" -eq 60 ]; then cat /tmp/css-dev.log; exit 1; fi
+            sleep 1
+          done
+          CHROME_BIN="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_BIN" ]; then echo "Chrome/Chromium is unavailable on the runner."; exit 1; fi
+          "$CHROME_BIN" --headless=new --no-sandbox --disable-gpu --remote-debugging-address=127.0.0.1 --remote-debugging-port=9222 --user-data-dir=/tmp/css-qa-dev http://127.0.0.1:3000/admin > /tmp/css-dev-chrome.log 2>&1 &
+          CHROME_PID=$!
+          for attempt in {1..30}; do
+            if curl -fsS http://127.0.0.1:9222/json >/dev/null; then break; fi
+            if [ "$attempt" -eq 30 ]; then cat /tmp/css-dev-chrome.log; exit 1; fi
+            sleep 1
+          done
+          if ! npm run test:runtime; then
+            cat /tmp/css-dev.log
+            cat /tmp/css-dev-chrome.log
+            exit 1
+          fi
