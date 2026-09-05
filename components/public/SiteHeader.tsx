@@ -91,7 +91,7 @@ export function SiteHeader() {
         >
           <div className="v4-brand-mark" aria-hidden="true" style={brandMarkStyle}>
             <Image
-              src="/brand/css-logo.jpg"
+              src="/brand/css-logo.jpeg"
               alt=""
               width={837}
               height={343}
