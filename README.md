@@ -86,22 +86,30 @@ lib/validation/      Zod schemas used on server writes
 types/               Shared domain types
 data/db.json         Seeded local fallback database
 public/uploads/      Local development image and registration-file storage
-scripts/             Seeder, persistence tests, and browser QA
+scripts/             Seeder, persistence tests, security tests, browser QA and performance QA
 ```
 
 ## Admin and forms
 
-The admin routes manage events, team records, projects, resources, achievements, announcements, and homepage copy. Event creation also creates a registration form. The form builder supports the current field set, ordering, duplication, required state, option editing, publish/close/re-open flows, and standalone or event-linked forms. Public submissions are validated on the server, stored through the active database adapter, searchable in `/admin/responses`, and exportable as CSV with human-readable field labels.
+The admin routes manage events, student committee records, faculty advisors, projects, resources, achievements, announcements, and homepage copy. Faculty advisors now have the same create/edit/delete administration path as student members and feed the public Team/Home surfaces. Event creation also creates a registration form. The form builder supports the current field set, ordering, duplication, required state, option editing, publish/close/re-open flows, and standalone or event-linked forms. Public submissions are validated on the server, stored through the active database adapter, searchable in `/admin/responses`, and exportable as CSV with human-readable field labels and spreadsheet-formula neutralization.
 
-Event posters and member images may be public URLs or local paths under `public/uploads`. Those admin image-upload actions currently write to local disk. This is acceptable for local development or a single persistent Node host, but it is not durable on typical serverless filesystems. Move those helpers to persistent object storage before such a deployment.
+Event posters, member images, and faculty images may be public URLs or local paths under `public/uploads`. Those admin image-upload actions currently write to local disk. This is acceptable for local development or a single persistent Node host, but it is not durable on typical serverless filesystems. Move those helpers to persistent object storage before such a deployment.
 
 Form-file uploads use the storage abstraction in `lib/storage`. The bundled local adapter validates MIME type and size and generates safe filenames, but it is disabled in production. Text-only forms continue to work when production file storage is unavailable; submitting an actual file returns a clear service-unavailable response rather than silently losing the file.
+
+## Validation and runtime QA
+
+The branch-validation workflow is read-only and runs install/audit, type checking, lint, JSON persistence tests, generic form tests, backend security-boundary tests, and an optimized production build. It then runs a production headless-Chromium pass and a development-admin pass.
+
+The browser QA covers the public and admin route sets at 1920×1080, 1440×900, 1280×800, 1024×768, 768×1024, 430×932, 390×844, 360×800, and 320×700. It checks horizontal overflow, basic form/control accessibility, missing image alternatives, unsafe target-blank links, browser exceptions, failed document/static resources, mobile navigation behavior, Light/Dark persistence and first paint, reduced motion, and the one-time intro/session behavior. The development pass also exercises form CRUD and real Server Action CRUD for members, faculty, projects, resources, achievements, homepage content, announcements, and events with public read-back and cleanup.
+
+`scripts/performance-qa.mjs` runs a local production-browser lab check for LCP, CLS, available INP event timing, long tasks, network request/transfer budgets, failed requests, image completion, and DOM size. These are regression budgets from a CI runner, not a substitute for field Core Web Vitals from real users.
 
 ## Deployment notes
 
 1. Set MongoDB configuration, both admin credentials, and the public URL in the host’s secret manager.
 2. Configure durable object storage before enabling production file-upload fields or relying on uploaded admin images on an ephemeral host.
-3. Run `npm ci`, `npm audit --audit-level=high`, `npm run typecheck`, `npm run lint`, `npm run test:db`, `npm run test:forms`, `npm run test:validation`, and `npm run build` in CI.
+3. Run the full branch-validation workflow before release; it includes audit, typecheck, lint, data/form/security tests, build, runtime, responsive, CRUD, and browser performance checks.
 4. Verify the production runtime against the real database/storage providers and deployment origin; local JSON/browser CI cannot certify unavailable external credentials.
 5. Deploy the generated Next.js application using a Node-compatible host. Mongo credentials and admin secrets must never be exposed to client bundles.
 
