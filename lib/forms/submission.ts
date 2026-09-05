@@ -34,7 +34,7 @@ export function assertFormAvailable(
 export async function parseFormSubmission(
   form: FormDefinition,
   data: FormData,
-  storage: FileStorage,
+  storage?: FileStorage,
   allowedMetadataKeys: string[] = [],
 ): Promise<Record<string, FormAnswerValue>> {
   const fields = form.fields.toSorted((a, b) => a.order - b.order);
@@ -56,6 +56,7 @@ export async function parseFormSubmission(
       if (field.required && files.length === 0) throw new FormSubmissionError(`${field.label} is required.`);
       if (files.length === 0) continue;
       if (!field.allowMultipleFiles && files.length > 1) throw new FormSubmissionError(`${field.label} accepts one file only.`);
+      if (!storage) throw new FormSubmissionError("File uploads are not available on this deployment.", 503);
       const stored: string[] = [];
       for (const file of files) {
         const result = await storage.saveFormFile(file, {
