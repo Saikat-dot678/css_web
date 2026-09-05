@@ -33,11 +33,17 @@ export const memberInputSchema = memberSchema.omit({
 });
 
 export const facultySchema = baseEntitySchema.extend({
-  name: z.string().trim().min(2),
+  name: z.string().trim().min(2).max(120),
   photo: urlSchema,
-  role: z.string().trim().min(2),
-  department: z.string().trim().min(2),
+  role: z.string().trim().min(2).max(120),
+  department: z.string().trim().min(2).max(160),
   email: z.union([z.string().email(), z.literal("")]).optional(),
   profileUrl: optionalUrlSchema,
-  bio: z.string().trim().optional(),
+  bio: z.string().trim().max(2000).optional(),
+});
+
+export const facultyInputSchema = facultySchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
