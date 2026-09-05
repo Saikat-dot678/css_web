@@ -11,7 +11,8 @@
     "seed": "tsx scripts/seed.ts",
     "test:db": "tsx scripts/test-json-db.ts",
     "test:forms": "tsx scripts/test-forms.ts",
-    "test:validation": "tsx scripts/test-validation.ts"
+    "test:validation": "tsx scripts/test-validation.ts",
+    "test:runtime": "node scripts/runtime-qa.mjs"
   },
   "dependencies": {
     "gsap": "latest",
