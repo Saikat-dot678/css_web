@@ -1,9 +1,21 @@
 import { z } from "zod";
 
 export const idSchema = z.string().trim().min(1).max(120);
+
+const httpUrlSchema = z.string().url().refine((value) => {
+  try {
+    const protocol = new URL(value).protocol;
+    return protocol === "http:" || protocol === "https:";
+  } catch {
+    return false;
+  }
+}, "Use an http or https URL.");
+
+const rootRelativeUrlSchema = z.string().trim().regex(/^\/(?!\/)[^\s]*$/, "Use a root-relative path beginning with a single slash.");
+
 export const urlSchema = z.union([
-  z.string().url(),
-  z.string().startsWith("/"),
+  httpUrlSchema,
+  rootRelativeUrlSchema,
   z.literal("#"),
 ]);
 export const optionalUrlSchema = z.union([urlSchema, z.literal("")]).optional();

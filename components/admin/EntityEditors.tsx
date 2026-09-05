@@ -3,11 +3,12 @@ import {
   deleteAchievementAction, deleteAnnouncementAction, deleteMemberAction, deleteProjectAction, deleteResourceAction,
   updateAchievementAction, updateAnnouncementAction, updateMemberAction, updateProjectAction, updateResourceAction,
 } from "@/app/admin/(panel)/actions";
+import { createFacultyAction, deleteFacultyAction, updateFacultyAction } from "@/app/admin/(panel)/faculty-actions";
 import { academicGroupLabel, resourceCategoryLabel } from "@/lib/utils";
 import type { Achievement } from "@/types/achievement";
 import type { Announcement } from "@/types/content";
 import type { Event } from "@/types/event";
-import type { Member } from "@/types/member";
+import type { Faculty, Member } from "@/types/member";
 import type { Project } from "@/types/project";
 import type { Resource } from "@/types/resource";
 
@@ -39,6 +40,25 @@ export function MemberCreateForm({ academicYear }: { academicYear: string }) {
 
 export function MemberEditForm({ member }: { member: Member }) {
   return <><details className="admin-edit-details"><summary>Edit member</summary><form action={updateMemberAction} className="admin-inline-form"><input type="hidden" name="id" value={member.id} /><MemberFields member={member} academicYear={member.academicYear} /><button className="admin-primary" type="submit">Save changes</button></form></details><form action={deleteMemberAction} className="admin-list-actions"><input type="hidden" name="id" value={member.id} /><button className="danger" type="submit">Delete</button></form></>;
+}
+
+export function FacultyFields({ faculty }: { faculty?: Faculty }) {
+  return <>
+    <div className="two"><label>Name<input name="name" required defaultValue={faculty?.name} /></label><label>Role<input name="role" required defaultValue={faculty?.role ?? "Faculty Advisor"} /></label></div>
+    <div className="two"><label>Department<input name="department" required defaultValue={faculty?.department ?? "Computer Science and Engineering"} /></label><label>Email<input type="email" name="email" defaultValue={faculty?.email} /></label></div>
+    <label>Photo URL<input name="photo" defaultValue={faculty?.photo} placeholder="/uploads/faculty/photo.jpg" /></label>
+    <label>Upload photo<input name="photoFile" type="file" accept="image/*" /></label>
+    <label>Profile URL<input type="url" name="profileUrl" defaultValue={faculty?.profileUrl} /></label>
+    <label>Bio<textarea name="bio" defaultValue={faculty?.bio} /></label>
+  </>;
+}
+
+export function FacultyCreateForm() {
+  return <form action={createFacultyAction} className="admin-inline-form"><FacultyFields /><button className="admin-primary" type="submit">Add faculty</button></form>;
+}
+
+export function FacultyEditForm({ faculty }: { faculty: Faculty }) {
+  return <><details className="admin-edit-details"><summary>Edit faculty</summary><form action={updateFacultyAction} className="admin-inline-form"><input type="hidden" name="id" value={faculty.id} /><FacultyFields faculty={faculty} /><button className="admin-primary" type="submit">Save faculty</button></form></details><form action={deleteFacultyAction} className="admin-list-actions"><input type="hidden" name="id" value={faculty.id} /><button className="danger" type="submit">Delete</button></form></>;
 }
 
 export function ProjectFields({ project, academicYear }: { project?: Project; academicYear: string }) {

@@ -7,13 +7,15 @@ import { redirect } from "next/navigation";
 const COOKIE_NAME = "css_admin_session";
 
 const configured = () => Boolean(process.env.ADMIN_EMAIL?.trim() && process.env.ADMIN_PASSWORD?.trim());
+const production = () => process.env.NODE_ENV === "production";
 const secret = () => process.env.ADMIN_PASSWORD?.trim() || "css-local-demo-session";
 const signatureFor = (payload: string) => createHmac("sha256", `${secret()}:css-admin-session-v1`).update(payload).digest("hex");
 
 export const adminAuthConfigured = configured;
+export const adminDemoModeEnabled = () => !configured() && !production();
 
 export async function isAdminAuthenticated() {
-  if (!configured()) return true;
+  if (!configured()) return !production();
   const value = (await cookies()).get(COOKIE_NAME)?.value;
   if (!value) return false;
   const [payload, signature, extra] = value.split(".");
@@ -34,7 +36,7 @@ export async function requireAdmin() {
 }
 
 export async function verifyAdminCredentials(email: string, password: string) {
-  if (!configured()) return true;
+  if (!configured()) return !production();
   const actualEmail = Buffer.from(email);
   const expectedEmail = Buffer.from(process.env.ADMIN_EMAIL || "");
   const actualPassword = Buffer.from(password);
@@ -43,12 +45,13 @@ export async function verifyAdminCredentials(email: string, password: string) {
 }
 
 export async function createAdminSession(email: string) {
+  if (!configured() && production()) throw new Error("Admin authentication is not configured for production.");
   const maxAge = 60 * 60 * 8;
   const payload = Buffer.from(JSON.stringify({ email, expiresAt: Date.now() + maxAge * 1000 })).toString("base64url");
   (await cookies()).set(COOKIE_NAME, `${payload}.${signatureFor(payload)}`, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: production(),
     path: "/",
     maxAge,
   });

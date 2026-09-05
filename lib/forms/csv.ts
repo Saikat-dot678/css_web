@@ -1,7 +1,11 @@
 import type { Event } from "@/types/event";
 import type { FormDefinition, FormResponse } from "@/types/forms";
 
-const csvCell = (value: unknown) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+const csvCell = (value: unknown) => {
+  const text = String(value ?? "");
+  const safe = /^[=+\-@]/.test(text.trimStart()) ? `'${text}` : text;
+  return `"${safe.replaceAll('"', '""')}"`;
+};
 const inputFields = (form: FormDefinition) => form.fields.toSorted((a, b) => a.order - b.order).filter((field) => !["sectionHeading", "information", "divider"].includes(field.type));
 
 export function uniqueFieldHeaders(form: FormDefinition) {

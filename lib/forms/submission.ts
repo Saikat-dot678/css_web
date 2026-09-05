@@ -18,6 +18,14 @@ const isValidDate = (value: string) => {
 
 const isValidTime = (value: string) => /^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/.test(value);
 
+const normalizeUploadError = (error: unknown) => {
+  if (error instanceof FormSubmissionError) return error;
+  const rawStatus = typeof error === "object" && error !== null && "status" in error ? (error as { status?: unknown }).status : undefined;
+  const status = typeof rawStatus === "number" && Number.isInteger(rawStatus) && rawStatus >= 400 && rawStatus <= 599 ? rawStatus : 500;
+  const message = error instanceof Error && error.message ? error.message : "The uploaded file could not be stored.";
+  return new FormSubmissionError(message, status);
+};
+
 export function assertFormAvailable(
   form: FormDefinition,
   options: { responseCount: number; eventAcceptsRegistrations?: boolean; now?: Date } = { responseCount: 0 },
@@ -34,7 +42,7 @@ export function assertFormAvailable(
 export async function parseFormSubmission(
   form: FormDefinition,
   data: FormData,
-  storage: FileStorage,
+  storage?: FileStorage,
   allowedMetadataKeys: string[] = [],
 ): Promise<Record<string, FormAnswerValue>> {
   const fields = form.fields.toSorted((a, b) => a.order - b.order);
@@ -56,17 +64,22 @@ export async function parseFormSubmission(
       if (field.required && files.length === 0) throw new FormSubmissionError(`${field.label} is required.`);
       if (files.length === 0) continue;
       if (!field.allowMultipleFiles && files.length > 1) throw new FormSubmissionError(`${field.label} accepts one file only.`);
+      if (!storage) throw new FormSubmissionError("File uploads are not available on this deployment.", 503);
       const stored: string[] = [];
       for (const file of files) {
-        const result = await storage.saveFormFile(file, {
-          formId: form.id,
-          fieldId: field.id,
-          allowedTypes: field.allowedFileTypes?.length
-            ? field.allowedFileTypes
-            : ["application/pdf", "image/jpeg", "image/png", "image/webp"],
-          maxBytes: Math.round((field.maxFileSizeMb ?? 5) * 1024 * 1024),
-        });
-        stored.push(result.url);
+        try {
+          const result = await storage.saveFormFile(file, {
+            formId: form.id,
+            fieldId: field.id,
+            allowedTypes: field.allowedFileTypes?.length
+              ? field.allowedFileTypes
+              : ["application/pdf", "image/jpeg", "image/png", "image/webp"],
+            maxBytes: Math.round((field.maxFileSizeMb ?? 5) * 1024 * 1024),
+          });
+          stored.push(result.url);
+        } catch (error) {
+          throw normalizeUploadError(error);
+        }
       }
       answers[field.id] = field.allowMultipleFiles ? stored : stored[0];
       continue;

@@ -10,14 +10,16 @@
     "typecheck": "tsc --noEmit",
     "seed": "tsx scripts/seed.ts",
     "test:db": "tsx scripts/test-json-db.ts",
-    "test:forms": "tsx scripts/test-forms.ts"
+    "test:forms": "tsx scripts/test-forms.ts",
+    "test:validation": "tsx scripts/test-validation.ts",
+    "test:runtime": "node scripts/runtime-qa.mjs"
   },
   "dependencies": {
     "gsap": "latest",
     "lenis": "latest",
     "lucide-react": "latest",
     "mongodb": "latest",
-    "next": "^16.3.0",
+    "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "zod": "latest"
@@ -27,7 +29,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "eslint": "latest",
-    "eslint-config-next": "16.3.0",
+    "eslint-config-next": "16.3.3",
     "tsx": "latest",
     "typescript": "latest"
   }
