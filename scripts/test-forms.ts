@@ -7,15 +7,15 @@ import { FormService } from "../lib/forms/service";
 import { assertFormAvailable, FormSubmissionError, parseFormSubmission } from "../lib/forms/submission";
 import type { FileStorage } from "../lib/storage/types";
 import type { DatabaseShape } from "../types/database";
-import type { FormDefinition, FormField } from "../types/forms";
+import type { FormField } from "../types/forms";
 
 const sourcePath = path.join(process.cwd(), "data", "db.json");
 const testPath = path.join(process.cwd(), "data", ".forms-test.json");
 const fakeStorage: FileStorage = { saveFormFile: async () => ({ url: "/uploads/test.pdf", mimeType: "application/pdf", size: 1 }) };
 const field = (id: string, type: FormField["type"], label: string, order: number, required = false, patch: Partial<FormField> = {}): FormField => ({ id, type, label, order, required, ...patch });
 
-async function expectSubmissionError(run: () => Promise<unknown>, contains: string) {
-  await assert.rejects(run, (error: unknown) => error instanceof FormSubmissionError && error.message.includes(contains));
+async function expectSubmissionError(run: () => Promise<unknown>, contains: string, status?: number) {
+  await assert.rejects(run, (error: unknown) => error instanceof FormSubmissionError && error.message.includes(contains) && (status === undefined || error.status === status));
 }
 
 async function main() {
@@ -80,9 +80,15 @@ async function main() {
   const missing = new FormData();
   await expectSubmissionError(() => parseFormSubmission(restored, missing, fakeStorage), "Name");
 
-  const cloneData = (source: FormData) => { const copy = new FormData(); source.forEach((value, key) => copy.append(key, value)); return copy; };
+  const cloneData = (sourceData: FormData) => { const copy = new FormData(); sourceData.forEach((entry, key) => copy.append(key, entry)); return copy; };
   const badEmail = cloneData(valid); badEmail.set("email", "not-an-email");
   await expectSubmissionError(() => parseFormSubmission(restored, badEmail, fakeStorage), "valid email");
+
+  const tooShort = cloneData(valid); tooShort.set("name", "A");
+  await expectSubmissionError(() => parseFormSubmission(restored, tooShort, fakeStorage), "at least 2 characters");
+
+  const tooLong = cloneData(valid); tooLong.set("name", "x".repeat(121));
+  await expectSubmissionError(() => parseFormSubmission(restored, tooLong, fakeStorage), "no more than 120 characters");
 
   const badChoice = cloneData(valid); badChoice.set("domain", "Secret option");
   await expectSubmissionError(() => parseFormSubmission(restored, badChoice, fakeStorage), "invalid choice");
@@ -91,21 +97,35 @@ async function main() {
     slug: "number-validation-test", title: "Number validation", kind: "standalone", status: "published", eventOwned: false, submitLabel: "Send",
     fields: [field("score", "number", "Score", 0, true, { min: 1, max: 5, step: 1 })],
   });
+  const belowMin = new FormData(); belowMin.set("score", "0");
+  await expectSubmissionError(() => parseFormSubmission(numericForm, belowMin, fakeStorage), "at least 1");
   const badNumber = new FormData(); badNumber.set("score", "6");
   await expectSubmissionError(() => parseFormSubmission(numericForm, badNumber, fakeStorage), "at most 5");
+  const badStep = new FormData(); badStep.set("score", "2.5");
+  await expectSubmissionError(() => parseFormSubmission(numericForm, badStep, fakeStorage), "increments of 1");
 
   await assert.rejects(() => service.createForm({
-    slug: standalone.slug, title: "Duplicate published slug", kind: "standalone", eventOwned: false, status: "published", submitLabel: "Send", fields: [],
-  }), /published form already uses/i);
+    slug: standalone.slug, title: "Duplicate slug", kind: "standalone", eventOwned: false, status: "draft", submitLabel: "Send", fields: [],
+  }), /form already uses the slug/i);
 
   assert.throws(() => assertFormAvailable({ ...restored, status: "draft" }, { responseCount: 0 }), /draft/);
   assert.throws(() => assertFormAvailable({ ...restored, status: "closed" }, { responseCount: 0 }), /closed/);
+  assert.throws(() => assertFormAvailable({ ...restored, opensAt: "2099-01-01T00:00:00.000Z" }, { responseCount: 0, now: new Date("2026-09-05T00:00:00.000Z") }), /not open yet/);
+  assert.throws(() => assertFormAvailable({ ...restored, closesAt: "2026-01-01T00:00:00.000Z" }, { responseCount: 0, now: new Date("2026-09-05T00:00:00.000Z") }), /closed/);
   assert.throws(() => assertFormAvailable({ ...restored, responseLimit: 1 }, { responseCount: 1 }), /response limit/);
   assert.throws(() => assertFormAvailable(eventForm, { responseCount: 0, eventAcceptsRegistrations: false }), /Registration is not open/);
 
   assertFormAvailable(restored, { responseCount: 0 });
-  const answers = await parseFormSubmission(restored, valid, fakeStorage);
-  const standaloneResponse = await service.createResponse({ formId: restored.id, formSlug: restored.slug, answers, submittedAt: new Date().toISOString() });
+  const answersWithoutUploadStorage = await parseFormSubmission(restored, valid);
+  assert.equal(answersWithoutUploadStorage.email, "student@nitdgp.ac.in");
+
+  const uploadData = cloneData(valid);
+  uploadData.set("resume", new File(["resume"], "resume.pdf", { type: "application/pdf" }));
+  await expectSubmissionError(() => parseFormSubmission(restored, uploadData), "File uploads are not available", 503);
+  const uploadedAnswers = await parseFormSubmission(restored, uploadData, fakeStorage);
+  assert.equal(uploadedAnswers.resume, "/uploads/test.pdf");
+
+  const standaloneResponse = await service.createResponse({ formId: restored.id, formSlug: restored.slug, answers: answersWithoutUploadStorage, submittedAt: new Date().toISOString() });
   assert.equal(standaloneResponse.answers.email, "student@nitdgp.ac.in");
 
   const eventData = new FormData(); eventData.set("attendee", "Event Student"); eventData.set("mail", "event@nitdgp.ac.in");
@@ -125,7 +145,7 @@ async function main() {
   assert.equal((await restarted.getFormById(restored.id))?.title, "CSS Second-Year Audition 2026");
   assert.equal((await restarted.getResponseById(eventResponse.id))?.formId, eventForm.id);
 
-  console.info("Generic form CRUD, legacy normalization, field validation, availability, standalone/event responses, delete safety, CSV labels, and JSON persistence passed.");
+  console.info("Generic form CRUD, legacy normalization, field validation, availability, storage gating, standalone/event responses, delete safety, CSV labels, and JSON persistence passed.");
 }
 
 main().finally(() => fs.rm(testPath, { force: true })).catch((error) => { console.error(error); process.exitCode = 1; });
