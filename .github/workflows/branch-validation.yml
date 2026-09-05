@@ -97,3 +97,8 @@ jobs:
             cat /tmp/css-dev-chrome.log
             exit 1
           fi
+          if ! node scripts/admin-crud-qa.mjs; then
+            cat /tmp/css-dev.log
+            cat /tmp/css-dev-chrome.log
+            exit 1
+          fi
