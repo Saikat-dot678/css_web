@@ -26,6 +26,9 @@ const emptyToUndefined = (input: string) => input || undefined;
 async function uploadedImage(data: FormData, name: string, folder: string) {
   const file = data.get(name);
   if (!(file instanceof File) || !file.size) return undefined;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Direct image uploads are disabled in production until durable object storage is configured. Use a durable public image URL instead.");
+  }
   const imageExtensions: Record<string, string> = { "image/jpeg": ".jpg", "image/png": ".png", "image/webp": ".webp", "image/gif": ".gif" };
   const extension = imageExtensions[file.type];
   if (!extension) throw new Error("Only JPEG, PNG, WebP, or GIF images are accepted.");
