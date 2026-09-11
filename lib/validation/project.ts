@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { baseEntitySchema, optionalUrlSchema } from "./common";
+import { academicYearSchema, baseEntitySchema, optionalUrlSchema } from "./common";
 
 export const projectSchema = baseEntitySchema.extend({
   slug: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -13,7 +13,7 @@ export const projectSchema = baseEntitySchema.extend({
   image: optionalUrlSchema,
   acceptingContributors: z.boolean(),
   owner: z.string().trim().min(2),
-  academicYear: z.string().trim().regex(/^\d{4}-\d{2}$/),
+  academicYear: academicYearSchema,
 });
 
 export const projectInputSchema = projectSchema.omit({

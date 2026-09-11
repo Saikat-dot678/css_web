@@ -23,5 +23,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, maximumScale: 5, userScalable: true };
 export const dynamic = "force-dynamic";
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className={robotoMono.variable} data-scroll-behavior="auto" data-theme="dark" suppressHydrationWarning><head><meta name="theme-color" content="#080b0f" data-site-theme-color /><ThemeScript /></head><body><a className="skip-link" href="#main">Skip to content</a>{children}</body></html>;
+  return <html lang="en" className={robotoMono.variable} data-scroll-behavior="smooth" data-theme="dark" suppressHydrationWarning><head><meta name="theme-color" content="#080b0f" data-site-theme-color /><ThemeScript /></head><body><a className="skip-link" href="#main">Skip to content</a>{children}</body></html>;
 }

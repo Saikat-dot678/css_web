@@ -65,8 +65,8 @@ export default async function HomePage() {
           <V4SectionHeader
             index="01"
             eyebrow="ABOUT / THE SOCIETY"
-            title="A technical community, not another club page."
-            copy="CSS connects students, faculty, projects and opportunities around the CSE department. The website should make that work visible instead of hiding it inside generic cards."
+            title={content.heroHeadline}
+            copy={content.heroDescription}
           />
 
           <div className="about-v4-layout">
@@ -180,12 +180,12 @@ export default async function HomePage() {
         <section className="v4-join" id="contact">
           <JoinMotion />
           <div className="v4-wrap v4-join-inner">
-            <p>CSS / NIT DURGAPUR / {content.currentAcademicYear}</p>
-            <h2>
-              <span>BUILD</span>
-              <span>SOMETHING</span>
-              <span>WITH US.</span>
-            </h2>
+            <p>CSS / NIT DURGAPUR / {content.currentAcademicYear} / RECRUITMENT {content.recruitmentOpen ? "OPEN" : "CLOSED"}</p>
+            {content.recruitmentOpen ? <h2>
+              <span>BUILD</span><span>SOMETHING</span><span>WITH US.</span>
+            </h2> : <h2>
+              <span>MEET THE</span><span>PEOPLE</span><span>BUILDING CSS.</span>
+            </h2>}
             <div className="v4-join-bottom">
               <p>{content.recruitmentText}</p>
               <div>

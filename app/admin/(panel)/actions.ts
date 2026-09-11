@@ -2,26 +2,48 @@
 
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { revalidatePath } from "next/cache";
+import { refresh, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import type { ZodError } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { createAchievement, deleteAchievement, updateAchievement } from "@/lib/repositories/achievements";
-import { createAnnouncement, deleteAnnouncement, getSiteContent, updateAnnouncement, updateSiteContent } from "@/lib/repositories/content";
+import { createAnnouncement, deleteAnnouncement, getAnnouncementById, updateAnnouncement, updateSiteContent } from "@/lib/repositories/content";
 import { createEvent, deleteEvent, getEventById, updateEvent } from "@/lib/repositories/events";
 import { countFormResponses, createForm, deleteForm, deleteFormResponse, getFormByEventId, updateForm } from "@/lib/repositories/forms";
 import { createMember, deleteMember, getMemberById, updateMember } from "@/lib/repositories/members";
 import { createProject, deleteProject, updateProject } from "@/lib/repositories/projects";
 import { createResource, deleteResource, updateResource } from "@/lib/repositories/resources";
+import { announcementInputSchema, siteContentSchema } from "@/lib/validation/content";
 import { csvList, lines } from "@/lib/validation/common";
 import { slugify } from "@/lib/utils";
 import type { EventSpeaker, ScheduleItem } from "@/types/event";
 import type { AcademicGroup } from "@/types/member";
 import type { ProjectStatus } from "@/types/project";
 import type { ResourceCategory } from "@/types/resource";
+import type { Announcement } from "@/types/content";
 
 const value = (data: FormData, name: string) => String(data.get(name) || "").trim();
 const checked = (data: FormData, name: string) => data.get(name) === "on";
 const emptyToUndefined = (input: string) => input || undefined;
+
+export type ContentActionState = {
+  status: "idle" | "success" | "error";
+  message: string;
+  fieldErrors?: Record<string, string[]>;
+  announcement?: Announcement;
+  deletedId?: string;
+};
+
+const validationState = (error: ZodError): ContentActionState => {
+  const fieldErrors = error.flatten().fieldErrors as Record<string, string[] | undefined>;
+  return {
+    status: "error",
+    message: error.issues[0]?.message ?? "Review the highlighted fields and try again.",
+    fieldErrors: Object.fromEntries(
+      Object.entries(fieldErrors).filter((entry): entry is [string, string[]] => Boolean(entry[1]?.length)),
+    ),
+  };
+};
 
 async function uploadedImage(data: FormData, name: string, folder: string) {
   const file = data.get(name);
@@ -182,13 +204,85 @@ export async function createAchievementAction(data: FormData) { await requireAdm
 export async function updateAchievementAction(data: FormData) { await requireAdmin(); await updateAchievement(value(data, "id"), achievementValues(data)); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }
 export async function deleteAchievementAction(data: FormData) { await requireAdmin(); await deleteAchievement(value(data, "id")); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }
 
-export async function updateSiteContentAction(data: FormData) {
-  await requireAdmin();
-  const current = await getSiteContent();
-  await updateSiteContent({ ...current, heroHeadline: value(data, "heroHeadline"), heroDescription: value(data, "heroDescription"), recruitmentText: value(data, "recruitmentText"), recruitmentOpen: checked(data, "recruitmentOpen"), currentAcademicYear: value(data, "currentAcademicYear") });
-  revalidatePath("/"); revalidatePath("/team"); revalidatePath("/admin/content");
+function revalidateSiteContentSurfaces() {
+  for (const path of ["/", "/team", "/admin", "/admin/content", "/admin/team", "/admin/projects"]) {
+    revalidatePath(path);
+  }
 }
-export async function createAnnouncementAction(data: FormData) { await requireAdmin(); await createAnnouncement({ title: value(data, "title"), content: value(data, "content"), pinned: checked(data, "pinned"), published: checked(data, "published") }); revalidatePath("/"); revalidatePath("/admin/content"); }
-export async function updateAnnouncementAction(data: FormData) { await requireAdmin(); await updateAnnouncement(value(data, "id"), { title: value(data, "title"), content: value(data, "content"), pinned: checked(data, "pinned"), published: checked(data, "published") }); revalidatePath("/"); revalidatePath("/admin/content"); }
-export async function deleteAnnouncementAction(data: FormData) { await requireAdmin(); await deleteAnnouncement(value(data, "id")); revalidatePath("/"); revalidatePath("/admin/content"); }
+
+function revalidateAnnouncementSurfaces() {
+  for (const path of ["/", "/events", "/archive", "/projects", "/resources", "/admin/content"]) {
+    revalidatePath(path);
+  }
+  revalidatePath("/events/[slug]", "page");
+  revalidatePath("/forms/[slug]", "page");
+}
+
+export async function updateSiteContentAction(
+  _previousState: ContentActionState,
+  data: FormData,
+): Promise<ContentActionState> {
+  await requireAdmin();
+  const parsed = siteContentSchema.safeParse({
+    heroHeadline: value(data, "heroHeadline"),
+    heroDescription: value(data, "heroDescription"),
+    recruitmentText: value(data, "recruitmentText"),
+    recruitmentOpen: checked(data, "recruitmentOpen"),
+    currentAcademicYear: value(data, "currentAcademicYear"),
+  });
+  if (!parsed.success) return validationState(parsed.error);
+  await updateSiteContent(parsed.data);
+  revalidateSiteContentSurfaces();
+  refresh();
+  return { status: "success", message: "Homepage content saved." };
+}
+
+export async function createAnnouncementAction(
+  _previousState: ContentActionState,
+  data: FormData,
+): Promise<ContentActionState> {
+  await requireAdmin();
+  const parsed = announcementInputSchema.safeParse({
+    title: value(data, "title"),
+    content: value(data, "content"),
+    pinned: checked(data, "pinned"),
+    published: checked(data, "published"),
+  });
+  if (!parsed.success) return validationState(parsed.error);
+  const announcement = await createAnnouncement(parsed.data);
+  revalidateAnnouncementSurfaces();
+  return { status: "success", message: "Announcement created.", announcement };
+}
+
+export async function updateAnnouncementAction(
+  _previousState: ContentActionState,
+  data: FormData,
+): Promise<ContentActionState> {
+  await requireAdmin();
+  const id = value(data, "id");
+  if (!id || !(await getAnnouncementById(id))) {
+    return { status: "error", message: "This announcement no longer exists. Refresh the page and try again." };
+  }
+  const parsed = announcementInputSchema.safeParse({
+    title: value(data, "title"),
+    content: value(data, "content"),
+    pinned: checked(data, "pinned"),
+    published: checked(data, "published"),
+  });
+  if (!parsed.success) return validationState(parsed.error);
+  const announcement = await updateAnnouncement(id, parsed.data);
+  revalidateAnnouncementSurfaces();
+  return { status: "success", message: "Announcement saved.", announcement };
+}
+
+export async function deleteAnnouncementAction(
+  _previousState: ContentActionState,
+  data: FormData,
+): Promise<ContentActionState> {
+  await requireAdmin();
+  const removed = await deleteAnnouncement(value(data, "id"));
+  if (!removed) return { status: "error", message: "This announcement was already removed." };
+  revalidateAnnouncementSurfaces();
+  return { status: "success", message: "Announcement deleted.", deletedId: value(data, "id") };
+}
 export async function deleteRegistrationAction(data: FormData) { await requireAdmin(); await deleteFormResponse(value(data, "id")); revalidatePath("/admin/responses"); }

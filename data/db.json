@@ -3,7 +3,7 @@
     {
       "id": "event-resume-rewired",
       "createdAt": "2026-08-07T12:00:00.000Z",
-      "updatedAt": "2026-09-05T05:55:40.746Z",
+      "updatedAt": "2026-09-08T20:46:37.110Z",
       "slug": "resume-rewired",
       "title": "Resume Rewired",
       "category": "Career",
@@ -42,7 +42,7 @@
       "gallery": [],
       "resources": [],
       "results": [],
-      "poster": "/uploads/posters/1788587740740-21e8271e.png"
+      "poster": "/api/posters/resume-rewired"
     },
     {
       "id": "event-build-night",

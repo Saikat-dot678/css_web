@@ -169,6 +169,76 @@ button {
   background: #fafaf7;
 }
 
+.content-form small {
+  color: #666;
+  font: 500 10px/1.45 var(--mono);
+  text-transform: none;
+}
+
+.admin-field-error {
+  color: #a20e1b;
+  font: 700 10px/1.4 var(--mono);
+  text-transform: none;
+}
+
+.admin-form-status {
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #777;
+  background: #efefe9;
+  font: 700 10px/1.4 var(--mono);
+  text-transform: none;
+}
+
+.admin-form-status.success { border-color: #39734b; background: #dcebdc; color: #174a28; }
+.admin-form-status.error { border-color: #a20e1b; background: #f4c6ba; color: #710713; }
+.admin-primary:disabled,
+.admin-list-actions button:disabled { cursor: wait; opacity: .65; }
+
+/* The imported prototype used a broad `.notice-editor div` rule. Reset its
+   nested form side effects while retaining the current Admin visual system. */
+.notice-editor .content-announcement-list {
+  display: block;
+  grid-template-columns: none;
+  padding: 0;
+  border: 0;
+}
+
+.notice-editor .content-announcement-list article > div {
+  display: flex;
+  grid-template-columns: none;
+  padding: 0;
+  border: 0;
+}
+
+.notice-editor .content-announcement-list .admin-inline-form > div {
+  padding: 0;
+  border: 0;
+}
+
+.notice-editor .content-announcement-list .two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.notice-editor .content-announcement-list .admin-list-actions {
+  display: flex;
+  grid-template-columns: none;
+  padding: 0;
+  border: 0;
+}
+
+.notice-editor .content-announcement-list .admin-form-status {
+  display: block;
+  padding: 10px 12px;
+  border: 1px solid #777;
+}
+
+.notice-editor .content-announcement-list .admin-form-status.success { border-color: #39734b; }
+.notice-editor .content-announcement-list .admin-form-status.error { border-color: #a20e1b; }
+
 .inline-form { display: inline; }
 .inline-form + .inline-form { margin-left: 4px; }
 
@@ -319,6 +389,7 @@ summary:focus-visible {
     grid-template-columns: minmax(0, 1fr) auto;
   }
   .builder-save-state { grid-column: 1 / -1; }
+  .notice-editor .content-announcement-list .two { grid-template-columns: 1fr; }
 }
 
 html {

@@ -2,11 +2,29 @@ import assert from "node:assert/strict";
 import { createResponsesCsv } from "../lib/forms/csv";
 import { FormSubmissionError, parseFormSubmission } from "../lib/forms/submission";
 import type { FileStorage } from "../lib/storage/types";
-import { urlSchema } from "../lib/validation/common";
+import { academicYearSchema, urlSchema } from "../lib/validation/common";
+import { announcementInputSchema, siteContentSchema } from "../lib/validation/content";
 import { resourceInputSchema } from "../lib/validation/resource";
 import type { FormDefinition, FormResponse } from "../types/forms";
 
 async function main() {
+  const siteContent = {
+    heroHeadline: "A valid homepage headline",
+    heroDescription: "A valid homepage description.",
+    recruitmentText: "A valid recruitment message.",
+    recruitmentOpen: true,
+    currentAcademicYear: "2026-27",
+  };
+  assert.equal(siteContentSchema.safeParse(siteContent).success, true);
+  assert.equal(siteContentSchema.safeParse({ ...siteContent, heroHeadline: "   " }).success, false);
+  assert.equal(siteContentSchema.safeParse({ ...siteContent, heroDescription: "x".repeat(1001) }).success, false);
+  assert.equal(siteContentSchema.safeParse({ ...siteContent, currentAcademicYear: "2026-99" }).success, false);
+  assert.equal(academicYearSchema.safeParse("2027-28").success, true);
+  assert.equal(academicYearSchema.safeParse("2027/28").success, false);
+  assert.equal(announcementInputSchema.safeParse({ title: "Notice", content: "Published content", pinned: false, published: true }).success, true);
+  assert.equal(announcementInputSchema.safeParse({ title: "   ", content: "Published content", pinned: false, published: true }).success, false);
+  assert.equal(announcementInputSchema.safeParse({ title: "Notice", content: "x".repeat(1001), pinned: false, published: true }).success, false);
+
   for (const value of ["https://example.com/path?q=1", "http://localhost:3000/test", "/uploads/image.png", "/api/posters/demo", "#", " /safe-looking "]) {
     assert.equal(urlSchema.safeParse(value).success, true, `expected safe URL: ${value}`);
   }
@@ -71,7 +89,7 @@ async function main() {
   assert.ok(csv.includes("\"'=1+1\""), "formula-leading CSV values must be neutralized");
   assert.ok(!csv.includes("\"=1+1\""), "raw spreadsheet formulas must not be emitted");
 
-  console.info("URL safety, upload validation status propagation, and CSV formula neutralization passed.");
+  console.info("Content, academic-year, announcement, URL, upload-status, and CSV validation passed.");
 }
 
 main().catch((error) => {

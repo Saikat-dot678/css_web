@@ -56,6 +56,7 @@ async function poll(expression, timeout = 5000, interval = 80) {
 }
 
 async function submitForm(buttonText, values = {}, scopeText = null) {
+  const beforeUrl = await evaluate("location.href");
   const result = await evaluate(`(() => {
     const buttonText = ${JSON.stringify(buttonText)};
     const scopeText = ${JSON.stringify(scopeText)};
@@ -66,7 +67,7 @@ async function submitForm(buttonText, values = {}, scopeText = null) {
       if (!submitter) return false;
       if (!scopeText) return true;
       const scope = candidate.closest('article, tr') || candidate.parentElement;
-      return Boolean(scope && (scope.innerText || '').includes(scopeText));
+      return Boolean(scope && ((scope.textContent || '').includes(scopeText) || [...scope.querySelectorAll('input,textarea')].some((control) => control.value.includes(scopeText))));
     });
     if (!form) return { ok: false, reason: 'form not found', buttonText, scopeText };
     for (const [name, value] of Object.entries(values)) {
@@ -87,12 +88,19 @@ async function submitForm(buttonText, values = {}, scopeText = null) {
     return { ok: true };
   })()`);
   assert(result.ok, `locate and submit ${buttonText}${scopeText ? ` for ${scopeText}` : ""}`, JSON.stringify(result));
-  if (result.ok) await wait(450);
+  if (result.ok) {
+    await wait(2500);
+    const afterUrl = await evaluate("location.href").catch(() => beforeUrl);
+    if (afterUrl === beforeUrl) {
+      const current = new URL(afterUrl);
+      await navigate(`${current.pathname}${current.search}`);
+    }
+  }
   return result.ok;
 }
 
-const bodyContains = (text) => `document.body.innerText.includes(${JSON.stringify(text)})`;
-const bodyMissing = (text) => `!document.body.innerText.includes(${JSON.stringify(text)})`;
+const bodyContains = (text) => `document.documentElement.textContent.includes(${JSON.stringify(text)}) || [...document.querySelectorAll('input,textarea')].some((control) => control.value.includes(${JSON.stringify(text)}))`;
+const bodyMissing = (text) => `!(document.documentElement.textContent.includes(${JSON.stringify(text)}) || [...document.querySelectorAll('input,textarea')].some((control) => control.value.includes(${JSON.stringify(text)})))`;
 async function fetchText(path) {
   const response = await fetch(`${BASE_URL}${path}`, { redirect: "manual" });
   return { response, text: await response.text() };

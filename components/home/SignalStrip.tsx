@@ -11,7 +11,7 @@ export function SignalStrip({ announcements }: { announcements: Announcement[] }
         <div className="signal-items">
           {visible.map((item) => (
             <p key={item.id}>
-              {item.pinned && <b>PINNED</b>} {item.content}
+              {item.pinned && <b>PINNED</b>} <strong>{item.title}:</strong> {item.content}
             </p>
           ))}
         </div>

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { baseEntitySchema, optionalUrlSchema, urlSchema } from "./common";
+import { academicYearSchema, baseEntitySchema, optionalUrlSchema, urlSchema } from "./common";
 
 export const academicGroupSchema = z.enum([
   "office_bearer",
@@ -16,7 +16,7 @@ export const memberSchema = baseEntitySchema.extend({
   programme: z.string().trim().min(2).max(120),
   academicGroup: academicGroupSchema,
   workingGroup: z.string().trim().min(2).max(120),
-  academicYear: z.string().trim().regex(/^\d{4}-\d{2}$/),
+  academicYear: academicYearSchema,
   linkedin: optionalUrlSchema,
   instagram: optionalUrlSchema,
   facebook: optionalUrlSchema,

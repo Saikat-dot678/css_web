@@ -1,12 +1,11 @@
 import {
-  createAchievementAction, createAnnouncementAction, createMemberAction, createProjectAction, createResourceAction,
-  deleteAchievementAction, deleteAnnouncementAction, deleteMemberAction, deleteProjectAction, deleteResourceAction,
-  updateAchievementAction, updateAnnouncementAction, updateMemberAction, updateProjectAction, updateResourceAction,
+  createAchievementAction, createMemberAction, createProjectAction, createResourceAction,
+  deleteAchievementAction, deleteMemberAction, deleteProjectAction, deleteResourceAction,
+  updateAchievementAction, updateMemberAction, updateProjectAction, updateResourceAction,
 } from "@/app/admin/(panel)/actions";
 import { createFacultyAction, deleteFacultyAction, updateFacultyAction } from "@/app/admin/(panel)/faculty-actions";
 import { academicGroupLabel, resourceCategoryLabel } from "@/lib/utils";
 import type { Achievement } from "@/types/achievement";
-import type { Announcement } from "@/types/content";
 import type { Event } from "@/types/event";
 import type { Faculty, Member } from "@/types/member";
 import type { Project } from "@/types/project";
@@ -101,5 +100,3 @@ export function AchievementFields({ achievement, events, members, projects }: { 
 export function AchievementCreateForm(props: { events: Event[]; members: Member[]; projects: Project[] }) { return <form action={createAchievementAction} className="admin-inline-form"><AchievementFields {...props} /><button className="admin-primary">Add achievement</button></form>; }
 export function AchievementEditForm({ achievement, ...props }: { achievement: Achievement; events: Event[]; members: Member[]; projects: Project[] }) { return <><details className="admin-edit-details"><summary>Edit achievement</summary><form action={updateAchievementAction} className="admin-inline-form"><input type="hidden" name="id" value={achievement.id} /><AchievementFields achievement={achievement} {...props} /><button className="admin-primary">Save achievement</button></form></details><form action={deleteAchievementAction} className="admin-list-actions"><input type="hidden" name="id" value={achievement.id} /><button className="danger">Delete</button></form></>; }
 
-export function AnnouncementCreateForm() { return <form action={createAnnouncementAction} className="admin-inline-form"><label>Title<input name="title" required /></label><label>Content<textarea name="content" required /></label><div className="two"><Check name="pinned" label="Pin announcement" /><Check name="published" label="Publish now" defaultChecked /></div><button className="admin-primary">Add announcement</button></form>; }
-export function AnnouncementEditForm({ announcement }: { announcement: Announcement }) { return <><details className="admin-edit-details"><summary>Edit announcement</summary><form action={updateAnnouncementAction} className="admin-inline-form"><input type="hidden" name="id" value={announcement.id} /><label>Title<input name="title" required defaultValue={announcement.title} /></label><label>Content<textarea name="content" required defaultValue={announcement.content} /></label><div className="two"><Check name="pinned" label="Pinned" defaultChecked={announcement.pinned} /><Check name="published" label="Published" defaultChecked={announcement.published} /></div><button className="admin-primary">Save announcement</button></form></details><form action={deleteAnnouncementAction} className="admin-list-actions"><input type="hidden" name="id" value={announcement.id} /><button className="danger">Delete</button></form></>; }

@@ -21,6 +21,14 @@ export const urlSchema = z.union([
 export const optionalUrlSchema = z.union([urlSchema, z.literal("")]).optional();
 export const isoDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 export const timestampSchema = z.string().datetime({ offset: true });
+export const academicYearSchema = z
+  .string()
+  .trim()
+  .regex(/^\d{4}-\d{2}$/, "Use the academic-year format YYYY-YY, for example 2026-27.")
+  .refine((value) => {
+    const [start, end] = value.split("-").map(Number);
+    return Number.isFinite(start) && Number.isFinite(end) && (start + 1) % 100 === end;
+  }, "The second year must immediately follow the first, for example 2026-27.");
 export const baseEntitySchema = z.object({
   id: idSchema,
   createdAt: timestampSchema,

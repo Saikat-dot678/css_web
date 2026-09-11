@@ -12,6 +12,8 @@
     "test:db": "tsx scripts/test-json-db.ts",
     "test:forms": "tsx scripts/test-forms.ts",
     "test:validation": "tsx scripts/test-validation.ts",
+    "test:content": "node scripts/content-qa.mjs",
+    "test:routes": "node scripts/route-smoke-qa.mjs",
     "test:runtime": "node scripts/runtime-qa.mjs"
   },
   "dependencies": {
