@@ -1,4 +1,5 @@
 import { getEventBySlug } from "@/lib/repositories/events";
+import { eventIsPublic } from "@/lib/events";
 
 const colors: Record<string, [string, string, string]> = {
   Career: ["#E84A27", "#FFFDF7", "#12120F"],
@@ -16,7 +17,7 @@ const escapeXml = (value: string) =>
 export async function GET(_: Request, context: { params: Promise<{ slug: string }> }) {
   const { slug } = await context.params;
   const event = await getEventBySlug(slug);
-  if (!event) return new Response("Poster not found", { status: 404 });
+  if (!event || !eventIsPublic(event)) return new Response("Poster not found", { status: 404 });
   const date = new Date(`${event.date}T12:00:00`);
   const day = String(date.getDate()).padStart(2, "0");
   const month = date.toLocaleString("en", { month: "short" }).toUpperCase();

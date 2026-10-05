@@ -5,6 +5,7 @@ import path from "node:path";
 import { refresh, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { ZodError } from "zod";
+import { runAdminMutation } from "@/lib/admin-mutation";
 import { requireAdmin } from "@/lib/auth";
 import { createAchievement, deleteAchievement, updateAchievement } from "@/lib/repositories/achievements";
 import { createAnnouncement, deleteAnnouncement, getAnnouncementById, updateAnnouncement, updateSiteContent } from "@/lib/repositories/content";
@@ -106,6 +107,7 @@ async function eventInput(data: FormData, existingPoster?: string) {
 
 export async function createEventAction(data: FormData) {
   await requireAdmin();
+  return runAdminMutation(async () => {
   const input = await eventInput(data);
   const created = await createEvent(input);
   try {
@@ -130,10 +132,12 @@ export async function createEventAction(data: FormData) {
   revalidatePath("/admin/events");
   revalidatePath("/admin/form-builder");
   redirect(`/admin/events/${created.id}/edit`);
+  });
 }
 
 export async function updateEventAction(data: FormData) {
   await requireAdmin();
+  return runAdminMutation(async () => {
   const id = value(data, "id");
   const existing = await getEventById(id);
   if (!existing) throw new Error("Event not found.");
@@ -143,10 +147,12 @@ export async function updateEventAction(data: FormData) {
   revalidatePath(`/events/${input.slug}`);
   revalidatePath("/admin/events");
   redirect("/admin/events");
+  });
 }
 
 export async function deleteEventAction(data: FormData) {
   await requireAdmin();
+  return runAdminMutation(async () => {
   const id = value(data, "id");
   const form = await getFormByEventId(id);
   if (form) {
@@ -162,6 +168,7 @@ export async function deleteEventAction(data: FormData) {
   revalidatePath("/admin/events");
   revalidatePath("/admin/form-builder");
   revalidatePath("/admin/responses");
+  });
 }
 
 const memberValues = async (data: FormData, existingPhoto?: string) => {
@@ -178,17 +185,17 @@ const memberValues = async (data: FormData, existingPhoto?: string) => {
   };
 };
 
-export async function createMemberAction(data: FormData) { await requireAdmin(); await createMember(await memberValues(data)); revalidatePath("/team"); revalidatePath("/admin/team"); }
-export async function updateMemberAction(data: FormData) { await requireAdmin(); const id = value(data, "id"); const current = await getMemberById(id); if (!current) throw new Error("Member not found."); await updateMember(id, await memberValues(data, current.photo)); revalidatePath("/team"); revalidatePath("/admin/team"); }
-export async function deleteMemberAction(data: FormData) { await requireAdmin(); await deleteMember(value(data, "id")); revalidatePath("/team"); revalidatePath("/admin/team"); }
+export async function createMemberAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await createMember(await memberValues(data)); revalidatePath("/team"); revalidatePath("/admin/team"); }); }
+export async function updateMemberAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { const id = value(data, "id"); const current = await getMemberById(id); if (!current) throw new Error("Member not found."); await updateMember(id, await memberValues(data, current.photo)); revalidatePath("/team"); revalidatePath("/admin/team"); }); }
+export async function deleteMemberAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await deleteMember(value(data, "id")); revalidatePath("/team"); revalidatePath("/admin/team"); }); }
 
 const projectValues = (data: FormData) => ({
   slug: slugify(value(data, "slug") || value(data, "title")), title: value(data, "title"), description: value(data, "description"), status: value(data, "status") as ProjectStatus,
   technologies: csvList(data.get("technologies")), contributors: csvList(data.get("contributors")), githubUrl: emptyToUndefined(value(data, "githubUrl")), externalUrl: emptyToUndefined(value(data, "externalUrl")), image: emptyToUndefined(value(data, "image")), acceptingContributors: checked(data, "acceptingContributors"), owner: value(data, "owner"), academicYear: value(data, "academicYear"),
 });
-export async function createProjectAction(data: FormData) { await requireAdmin(); await createProject(projectValues(data)); revalidatePath("/projects"); revalidatePath("/admin/projects"); }
-export async function updateProjectAction(data: FormData) { await requireAdmin(); await updateProject(value(data, "id"), projectValues(data)); revalidatePath("/projects"); revalidatePath("/admin/projects"); }
-export async function deleteProjectAction(data: FormData) { await requireAdmin(); await deleteProject(value(data, "id")); revalidatePath("/projects"); revalidatePath("/admin/projects"); }
+export async function createProjectAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await createProject(projectValues(data)); revalidatePath("/projects"); revalidatePath("/admin/projects"); }); }
+export async function updateProjectAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await updateProject(value(data, "id"), projectValues(data)); revalidatePath("/projects"); revalidatePath("/admin/projects"); }); }
+export async function deleteProjectAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await deleteProject(value(data, "id")); revalidatePath("/projects"); revalidatePath("/admin/projects"); }); }
 
 const resourceValues = (data: FormData) => ({
   title: value(data, "title"),
@@ -201,16 +208,16 @@ const resourceValues = (data: FormData) => ({
   expiryDate: emptyToUndefined(value(data, "expiryDate")),
   meta: emptyToUndefined(value(data, "meta")),
 });
-export async function createResourceAction(data: FormData) { await requireAdmin(); await createResource(resourceValues(data)); revalidatePath("/resources"); revalidatePath("/admin/resources"); }
-export async function updateResourceAction(data: FormData) { await requireAdmin(); await updateResource(value(data, "id"), resourceValues(data)); revalidatePath("/resources"); revalidatePath("/admin/resources"); }
-export async function deleteResourceAction(data: FormData) { await requireAdmin(); await deleteResource(value(data, "id")); revalidatePath("/resources"); revalidatePath("/admin/resources"); }
+export async function createResourceAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await createResource(resourceValues(data)); revalidatePath("/resources"); revalidatePath("/admin/resources"); }); }
+export async function updateResourceAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await updateResource(value(data, "id"), resourceValues(data)); revalidatePath("/resources"); revalidatePath("/admin/resources"); }); }
+export async function deleteResourceAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await deleteResource(value(data, "id")); revalidatePath("/resources"); revalidatePath("/admin/resources"); }); }
 
 const achievementValues = (data: FormData) => ({
   year: value(data, "year"), title: value(data, "title"), description: value(data, "description"), category: value(data, "category"), linkedMemberId: emptyToUndefined(value(data, "linkedMemberId")), linkedProjectId: emptyToUndefined(value(data, "linkedProjectId")), linkedEventId: emptyToUndefined(value(data, "linkedEventId")), image: emptyToUndefined(value(data, "image")), externalUrl: emptyToUndefined(value(data, "externalUrl")),
 });
-export async function createAchievementAction(data: FormData) { await requireAdmin(); await createAchievement(achievementValues(data)); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }
-export async function updateAchievementAction(data: FormData) { await requireAdmin(); await updateAchievement(value(data, "id"), achievementValues(data)); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }
-export async function deleteAchievementAction(data: FormData) { await requireAdmin(); await deleteAchievement(value(data, "id")); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }
+export async function createAchievementAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await createAchievement(achievementValues(data)); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }); }
+export async function updateAchievementAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await updateAchievement(value(data, "id"), achievementValues(data)); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }); }
+export async function deleteAchievementAction(data: FormData) { await requireAdmin(); return runAdminMutation(async () => { await deleteAchievement(value(data, "id")); revalidatePath("/achievements"); revalidatePath("/admin/achievements"); }); }
 
 function revalidateSiteContentSurfaces() {
   for (const path of ["/", "/team", "/admin", "/admin/content", "/admin/team", "/admin/projects"]) {

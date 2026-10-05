@@ -18,8 +18,7 @@ export const getPreviousCommittees = () =>
 export async function createMember(input: EntityInput<Member>) {
   const parseResult = memberInputSchema.safeParse(input);
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Member validation failed (${issues})`);
+    throw parseResult.error;
   }
   return memberSchema.parse(
     await createEntity<Member>("members", "member", parseResult.data),
@@ -31,8 +30,7 @@ export async function updateMember(id: string, patch: Partial<EntityInput<Member
   if (!current) throw new Error("Member not found.");
   const parseResult = memberInputSchema.safeParse({ ...current, ...patch });
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Member validation failed (${issues})`);
+    throw parseResult.error;
   }
   return memberSchema.parse(await updateEntity<Member>("members", id, parseResult.data));
 }
@@ -42,8 +40,7 @@ export const deleteMember = (id: string) => getDatabase().remove("members", id);
 export async function createFaculty(input: EntityInput<Faculty>) {
   const parseResult = facultyInputSchema.safeParse(input);
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Faculty validation failed (${issues})`);
+    throw parseResult.error;
   }
   return facultySchema.parse(
     await createEntity<Faculty>("faculty", "faculty", parseResult.data),
@@ -55,8 +52,7 @@ export async function updateFaculty(id: string, patch: Partial<EntityInput<Facul
   if (!current) throw new Error("Faculty member not found.");
   const parseResult = facultyInputSchema.safeParse({ ...current, ...patch });
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Faculty validation failed (${issues})`);
+    throw parseResult.error;
   }
   return facultySchema.parse(await updateEntity<Faculty>("faculty", id, parseResult.data));
 }

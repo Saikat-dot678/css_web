@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { PublicShell } from "@/components/public/PublicShell";
 import { V4PageHero } from "@/components/public/V4PageHero";

@@ -14,8 +14,7 @@ export const getAchievementById = (id: string) =>
 export async function createAchievement(input: EntityInput<Achievement>) {
   const parseResult = achievementInputSchema.safeParse(input);
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Achievement validation failed (${issues})`);
+    throw parseResult.error;
   }
   return achievementSchema.parse(
     await createEntity<Achievement>(
@@ -30,8 +29,7 @@ export async function updateAchievement(id: string, patch: Partial<EntityInput<A
   if (!current) throw new Error("Achievement not found.");
   const parseResult = achievementInputSchema.safeParse({ ...current, ...patch });
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Achievement validation failed (${issues})`);
+    throw parseResult.error;
   }
   return achievementSchema.parse(
     await updateEntity<Achievement>(

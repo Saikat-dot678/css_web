@@ -3,6 +3,7 @@ import "server-only";
 import { getDatabase } from "@/lib/db";
 import { eventInputSchema, eventSchema } from "@/lib/validation/event";
 import type { Event } from "@/types/event";
+import { eventIsPublic } from "@/lib/events";
 import { createEntity, updateEntity, type EntityInput } from "./base";
 
 export const getEvents = async () => {
@@ -17,8 +18,7 @@ export const getEventBySlug = (slug: string) =>
 export async function createEvent(input: EntityInput<Event>) {
   const parseResult = eventInputSchema.safeParse(input);
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Event validation failed (${issues})`);
+    throw parseResult.error;
   }
   const parsed = parseResult.data;
   const existing = await getEventBySlug(parsed.slug);
@@ -31,8 +31,7 @@ export async function updateEvent(id: string, patch: Partial<EntityInput<Event>>
   if (!current) throw new Error("Event not found.");
   const parseResult = eventInputSchema.safeParse({ ...current, ...patch });
   if (!parseResult.success) {
-    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
-    throw new Error(`Event validation failed (${issues})`);
+    throw parseResult.error;
   }
   const parsed = parseResult.data;
   const slugMatch = await getEventBySlug(parsed.slug);
@@ -41,3 +40,6 @@ export async function updateEvent(id: string, patch: Partial<EntityInput<Event>>
 }
 
 export const deleteEvent = (id: string) => getDatabase().remove("events", id);
+
+
+export const getPublicEvents = async () => (await getEvents()).filter(eventIsPublic);

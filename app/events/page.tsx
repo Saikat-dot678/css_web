@@ -1,10 +1,12 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { EventExplorer } from "@/components/events/EventExplorer";
 import { PosterImage } from "@/components/events/PosterImage";
 import { PublicShell } from "@/components/public/PublicShell";
 import { V4PageHero } from "@/components/public/V4PageHero";
 import { getAnnouncements } from "@/lib/repositories/content";
-import { getEvents } from "@/lib/repositories/events";
+import { getPublicEvents as getEvents } from "@/lib/repositories/events";
 import { eventPhase } from "@/lib/events";
 
 export const metadata = { title: "Events" };

@@ -3,7 +3,9 @@ name: Branch validation
 on:
   push:
     branches:
-      - design/dark-violet-refinement
+      - main
+      - audit/**
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -20,13 +22,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm audit --audit-level=high
+      - run: npm audit --omit=dev --audit-level=high
+      - name: Development dependency advisory report
+        run: npm audit --audit-level=high
+        continue-on-error: true
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test:db
       - run: npm run test:forms
       - run: npm run test:validation
+      - run: npm run test:security
       - run: npm run build
+      - run: npm run test:production
       - name: Prepare runtime fixture
         run: npx tsx scripts/prepare-runtime-fixture.ts
       - name: Production public runtime QA

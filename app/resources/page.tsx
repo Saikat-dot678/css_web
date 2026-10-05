@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { PublicShell } from "@/components/public/PublicShell";
 import { ResourceExplorer } from "@/components/public/ResourceExplorer";
 import { V4PageHero } from "@/components/public/V4PageHero";
