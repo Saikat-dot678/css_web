@@ -14,7 +14,7 @@ import { createMember, deleteMember, getMemberById, updateMember } from "@/lib/r
 import { createProject, deleteProject, updateProject } from "@/lib/repositories/projects";
 import { createResource, deleteResource, updateResource } from "@/lib/repositories/resources";
 import { announcementInputSchema, siteContentSchema } from "@/lib/validation/content";
-import { csvList, lines } from "@/lib/validation/common";
+import { csvList, lines, normalizeUrlInput } from "@/lib/validation/common";
 import { slugify } from "@/lib/utils";
 import type { EventSpeaker, ScheduleItem } from "@/types/event";
 import type { AcademicGroup } from "@/types/member";
@@ -191,7 +191,15 @@ export async function updateProjectAction(data: FormData) { await requireAdmin()
 export async function deleteProjectAction(data: FormData) { await requireAdmin(); await deleteProject(value(data, "id")); revalidatePath("/projects"); revalidatePath("/admin/projects"); }
 
 const resourceValues = (data: FormData) => ({
-  title: value(data, "title"), description: value(data, "description"), category: value(data, "category") as ResourceCategory, url: value(data, "url") || "#", deadline: emptyToUndefined(value(data, "deadline")), eligibility: emptyToUndefined(value(data, "eligibility")), featured: checked(data, "featured"), expiryDate: emptyToUndefined(value(data, "expiryDate")), meta: emptyToUndefined(value(data, "meta")),
+  title: value(data, "title"),
+  description: value(data, "description"),
+  category: value(data, "category") as ResourceCategory,
+  url: normalizeUrlInput(value(data, "url") || "#"),
+  deadline: emptyToUndefined(value(data, "deadline")),
+  eligibility: emptyToUndefined(value(data, "eligibility")),
+  featured: checked(data, "featured"),
+  expiryDate: emptyToUndefined(value(data, "expiryDate")),
+  meta: emptyToUndefined(value(data, "meta")),
 });
 export async function createResourceAction(data: FormData) { await requireAdmin(); await createResource(resourceValues(data)); revalidatePath("/resources"); revalidatePath("/admin/resources"); }
 export async function updateResourceAction(data: FormData) { await requireAdmin(); await updateResource(value(data, "id"), resourceValues(data)); revalidatePath("/resources"); revalidatePath("/admin/resources"); }

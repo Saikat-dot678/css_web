@@ -1,5 +1,11 @@
 import { z } from "zod";
-import { baseEntitySchema, isoDateSchema, optionalUrlSchema, urlSchema } from "./common";
+import {
+  baseEntitySchema,
+  isoDateSchema,
+  optionalStringSchema,
+  optionalUrlSchema,
+  urlSchema,
+} from "./common";
 
 export const eventStatusSchema = z.enum([
   "draft",
@@ -34,20 +40,20 @@ export const eventSchema = baseEntitySchema.extend({
   status: eventStatusSchema,
   date: isoDateSchema,
   startTime: z.string().regex(/^\d{2}:\d{2}$/),
-  endTime: z.union([z.string().regex(/^\d{2}:\d{2}$/), z.literal("")]).optional(),
+  endTime: z.union([z.string().regex(/^\d{2}:\d{2}$/), z.literal(""), z.null()]).optional().transform((v) => (v ? v : undefined)),
   venue: z.string().trim().min(2).max(180),
   shortDescription: z.string().trim().min(5).max(280),
   fullDescription: z.string().trim().min(10).max(8000),
   registrationOpen: z.boolean(),
-  registrationDeadline: z.string().trim().optional(),
-  eligibility: z.string().trim().optional(),
-  entryFee: z.string().trim().optional(),
+  registrationDeadline: optionalStringSchema,
+  eligibility: optionalStringSchema,
+  entryFee: optionalStringSchema,
   featured: z.boolean(),
   speakers: z.array(speakerSchema),
   schedule: z.array(scheduleSchema),
-  registrationFormId: z.string().trim().optional(),
-  recap: z.string().trim().optional(),
-  attendance: z.string().trim().optional(),
+  registrationFormId: optionalStringSchema,
+  recap: optionalStringSchema,
+  attendance: optionalStringSchema,
   gallery: z.array(urlSchema),
   resources: z.array(z.object({ label: z.string().min(1), url: urlSchema })),
   results: z.array(
