@@ -21,9 +21,9 @@ function Check({ name, label, defaultChecked }: { name: string; label: string; d
 
 export function MemberFields({ member, academicYear }: { member?: Member; academicYear: string }) {
   return <>
-    <div className="two"><label>Name<input name="name" required defaultValue={member?.name} /></label><label>Role / domain<input name="role" required defaultValue={member?.role} /></label></div>
+    <div className="two"><label>Name<input name="name" required minLength={2} maxLength={120} defaultValue={member?.name} /></label><label>Role / domain<input name="role" required minLength={2} maxLength={120} defaultValue={member?.role} /></label></div>
     <div className="two"><label>Academic group<select name="academicGroup" required defaultValue={member?.academicGroup ?? "second_year"}>{academicGroups.map((group) => <option value={group} key={group}>{academicGroupLabel(group)}</option>)}</select></label><label>Programme<input name="programme" defaultValue={member?.programme} placeholder="B.Tech CSE" /></label></div>
-    <div className="two"><label>Working group<input name="workingGroup" required defaultValue={member?.workingGroup ?? "Editorial"} /></label><label>Academic year<input name="academicYear" required pattern="\d{4}-\d{2}" defaultValue={member?.academicYear ?? academicYear} /></label></div>
+    <div className="two"><label>Working group<input name="workingGroup" required minLength={2} maxLength={120} defaultValue={member?.workingGroup ?? "Editorial"} /></label><label>Academic year<input name="academicYear" required pattern="\d{4}-\d{2}" defaultValue={member?.academicYear ?? academicYear} /></label></div>
     <label>Photo URL<input name="photo" defaultValue={member?.photo} placeholder="/uploads/members/photo.jpg" /></label>
     <label>Upload photo<input name="photoFile" type="file" accept="image/*" /></label>
     <div className="two"><label>LinkedIn<input type="url" name="linkedin" defaultValue={member?.linkedin} /></label><label>Instagram<input type="url" name="instagram" defaultValue={member?.instagram} /></label></div>
@@ -43,8 +43,8 @@ export function MemberEditForm({ member }: { member: Member }) {
 
 export function FacultyFields({ faculty }: { faculty?: Faculty }) {
   return <>
-    <div className="two"><label>Name<input name="name" required defaultValue={faculty?.name} /></label><label>Role<input name="role" required defaultValue={faculty?.role ?? "Faculty Advisor"} /></label></div>
-    <div className="two"><label>Department<input name="department" required defaultValue={faculty?.department ?? "Computer Science and Engineering"} /></label><label>Email<input type="email" name="email" defaultValue={faculty?.email} /></label></div>
+    <div className="two"><label>Name<input name="name" required minLength={2} maxLength={120} defaultValue={faculty?.name} /></label><label>Role<input name="role" required minLength={2} maxLength={120} defaultValue={faculty?.role ?? "Faculty Advisor"} /></label></div>
+    <div className="two"><label>Department<input name="department" required minLength={2} maxLength={160} defaultValue={faculty?.department ?? "Computer Science and Engineering"} /></label><label>Email<input type="email" name="email" defaultValue={faculty?.email} /></label></div>
     <label>Photo URL<input name="photo" defaultValue={faculty?.photo} placeholder="/uploads/faculty/photo.jpg" /></label>
     <label>Upload photo<input name="photoFile" type="file" accept="image/*" /></label>
     <label>Profile URL<input type="url" name="profileUrl" defaultValue={faculty?.profileUrl} /></label>
@@ -62,9 +62,9 @@ export function FacultyEditForm({ faculty }: { faculty: Faculty }) {
 
 export function ProjectFields({ project, academicYear }: { project?: Project; academicYear: string }) {
   return <>
-    <div className="two"><label>Title<input name="title" required defaultValue={project?.title} /></label><label>Slug<input name="slug" defaultValue={project?.slug} /></label></div>
-    <label>Description<textarea name="description" required defaultValue={project?.description} /></label>
-    <div className="two"><label>Status<select name="status" defaultValue={project?.status ?? "active"}>{projectStatuses.map((status) => <option value={status} key={status}>{status}</option>)}</select></label><label>Owner<input name="owner" required defaultValue={project?.owner ?? "CSS Project Desk"} /></label></div>
+    <div className="two"><label>Title<input name="title" required minLength={2} maxLength={180} defaultValue={project?.title} /></label><label>Slug<input name="slug" defaultValue={project?.slug} /></label></div>
+    <label>Description<textarea name="description" required minLength={8} maxLength={4000} defaultValue={project?.description} placeholder="Minimum 8 characters description" /></label>
+    <div className="two"><label>Status<select name="status" defaultValue={project?.status ?? "active"}>{projectStatuses.map((status) => <option value={status} key={status}>{status}</option>)}</select></label><label>Owner<input name="owner" required minLength={2} defaultValue={project?.owner ?? "CSS Project Desk"} /></label></div>
     <div className="two"><label>Technologies (comma separated)<input name="technologies" defaultValue={project?.technologies.join(", ")} /></label><label>Contributors (comma separated)<input name="contributors" defaultValue={project?.contributors.join(", ")} /></label></div>
     <div className="two"><label>GitHub URL<input type="url" name="githubUrl" defaultValue={project?.githubUrl} /></label><label>External URL<input type="url" name="externalUrl" defaultValue={project?.externalUrl} /></label></div>
     <div className="two"><label>Image URL<input name="image" defaultValue={project?.image} /></label><label>Academic year<input name="academicYear" required pattern="\d{4}-\d{2}" defaultValue={project?.academicYear ?? academicYear} /></label></div>
@@ -72,31 +72,31 @@ export function ProjectFields({ project, academicYear }: { project?: Project; ac
   </>;
 }
 
-export function ProjectCreateForm({ academicYear }: { academicYear: string }) { return <form action={createProjectAction} className="admin-inline-form"><ProjectFields academicYear={academicYear} /><button className="admin-primary">Add project</button></form>; }
-export function ProjectEditForm({ project }: { project: Project }) { return <><details className="admin-edit-details"><summary>Edit project</summary><form action={updateProjectAction} className="admin-inline-form"><input type="hidden" name="id" value={project.id} /><ProjectFields project={project} academicYear={project.academicYear} /><button className="admin-primary">Save project</button></form></details><form action={deleteProjectAction} className="admin-list-actions"><input type="hidden" name="id" value={project.id} /><button className="danger">Delete</button></form></>; }
+export function ProjectCreateForm({ academicYear }: { academicYear: string }) { return <form action={createProjectAction} className="admin-inline-form"><ProjectFields academicYear={academicYear} /><button className="admin-primary" type="submit">Add project</button></form>; }
+export function ProjectEditForm({ project }: { project: Project }) { return <><details className="admin-edit-details"><summary>Edit project</summary><form action={updateProjectAction} className="admin-inline-form"><input type="hidden" name="id" value={project.id} /><ProjectFields project={project} academicYear={project.academicYear} /><button className="admin-primary" type="submit">Save project</button></form></details><form action={deleteProjectAction} className="admin-list-actions"><input type="hidden" name="id" value={project.id} /><button className="danger" type="submit">Delete</button></form></>; }
 
 export function ResourceFields({ resource }: { resource?: Resource }) {
   return <>
-    <div className="two"><label>Title<input name="title" required defaultValue={resource?.title} /></label><label>Category<select name="category" defaultValue={resource?.category ?? "technical_resources"}>{resourceCategories.map((category) => <option value={category} key={category}>{resourceCategoryLabel(category)}</option>)}</select></label></div>
-    <label>Description<textarea name="description" required defaultValue={resource?.description} /></label>
-    <label>URL<input type="url" name="url" required defaultValue={resource?.url} /></label>
+    <div className="two"><label>Title<input name="title" required minLength={2} maxLength={180} defaultValue={resource?.title} /></label><label>Category<select name="category" defaultValue={resource?.category ?? "technical_resources"}>{resourceCategories.map((category) => <option value={category} key={category}>{resourceCategoryLabel(category)}</option>)}</select></label></div>
+    <label>Description<textarea name="description" required minLength={5} maxLength={4000} defaultValue={resource?.description} placeholder="Minimum 5 characters description" /></label>
+    <label>URL<input type="text" name="url" required inputMode="url" autoComplete="url" defaultValue={resource?.url} placeholder="example.com, https://..., or /path" /></label>
     <div className="two"><label>Deadline<input type="date" name="deadline" defaultValue={resource?.deadline} /></label><label>Expiry date<input type="date" name="expiryDate" defaultValue={resource?.expiryDate} /></label></div>
     <div className="two"><label>Eligibility<input name="eligibility" defaultValue={resource?.eligibility} /></label><label>Meta / source<input name="meta" defaultValue={resource?.meta} /></label></div>
     <Check name="featured" label="Featured resource" defaultChecked={resource?.featured} />
   </>;
 }
-export function ResourceCreateForm() { return <form action={createResourceAction} className="admin-inline-form"><ResourceFields /><button className="admin-primary">Add resource</button></form>; }
-export function ResourceEditForm({ resource }: { resource: Resource }) { return <><details className="admin-edit-details"><summary>Edit resource</summary><form action={updateResourceAction} className="admin-inline-form"><input type="hidden" name="id" value={resource.id} /><ResourceFields resource={resource} /><button className="admin-primary">Save resource</button></form></details><form action={deleteResourceAction} className="admin-list-actions"><input type="hidden" name="id" value={resource.id} /><button className="danger">Delete</button></form></>; }
+export function ResourceCreateForm() { return <form action={createResourceAction} className="admin-inline-form"><ResourceFields /><button className="admin-primary" type="submit">Add resource</button></form>; }
+export function ResourceEditForm({ resource }: { resource: Resource }) { return <><details className="admin-edit-details"><summary>Edit resource</summary><form action={updateResourceAction} className="admin-inline-form"><input type="hidden" name="id" value={resource.id} /><ResourceFields resource={resource} /><button className="admin-primary" type="submit">Save resource</button></form></details><form action={deleteResourceAction} className="admin-list-actions"><input type="hidden" name="id" value={resource.id} /><button className="danger" type="submit">Delete</button></form></>; }
 
 export function AchievementFields({ achievement, events, members, projects }: { achievement?: Achievement; events: Event[]; members: Member[]; projects: Project[] }) {
   return <>
-    <div className="two"><label>Year<input name="year" required defaultValue={achievement?.year ?? new Date().getFullYear()} /></label><label>Category<input name="category" required defaultValue={achievement?.category ?? "Competition"} /></label></div>
-    <label>Title<input name="title" required defaultValue={achievement?.title} /></label><label>Description<textarea name="description" required defaultValue={achievement?.description} /></label>
+    <div className="two"><label>Year<input name="year" required pattern="\d{4}" defaultValue={achievement?.year ?? new Date().getFullYear()} /></label><label>Category<input name="category" required minLength={2} maxLength={120} defaultValue={achievement?.category ?? "Competition"} /></label></div>
+    <label>Title<input name="title" required minLength={2} maxLength={220} defaultValue={achievement?.title} /></label><label>Description<textarea name="description" required minLength={5} maxLength={4000} defaultValue={achievement?.description} placeholder="Minimum 5 characters description" /></label>
     <div className="two"><label>Linked member<select name="linkedMemberId" defaultValue={achievement?.linkedMemberId ?? ""}><option value="">None</option>{members.map((member) => <option value={member.id} key={member.id}>{member.name}</option>)}</select></label><label>Linked project<select name="linkedProjectId" defaultValue={achievement?.linkedProjectId ?? ""}><option value="">None</option>{projects.map((project) => <option value={project.id} key={project.id}>{project.title}</option>)}</select></label></div>
     <label>Linked event<select name="linkedEventId" defaultValue={achievement?.linkedEventId ?? ""}><option value="">None</option>{events.map((event) => <option value={event.id} key={event.id}>{event.title}</option>)}</select></label>
     <div className="two"><label>Image URL<input name="image" defaultValue={achievement?.image} /></label><label>External URL<input type="url" name="externalUrl" defaultValue={achievement?.externalUrl} /></label></div>
   </>;
 }
-export function AchievementCreateForm(props: { events: Event[]; members: Member[]; projects: Project[] }) { return <form action={createAchievementAction} className="admin-inline-form"><AchievementFields {...props} /><button className="admin-primary">Add achievement</button></form>; }
-export function AchievementEditForm({ achievement, ...props }: { achievement: Achievement; events: Event[]; members: Member[]; projects: Project[] }) { return <><details className="admin-edit-details"><summary>Edit achievement</summary><form action={updateAchievementAction} className="admin-inline-form"><input type="hidden" name="id" value={achievement.id} /><AchievementFields achievement={achievement} {...props} /><button className="admin-primary">Save achievement</button></form></details><form action={deleteAchievementAction} className="admin-list-actions"><input type="hidden" name="id" value={achievement.id} /><button className="danger">Delete</button></form></>; }
+export function AchievementCreateForm(props: { events: Event[]; members: Member[]; projects: Project[] }) { return <form action={createAchievementAction} className="admin-inline-form"><AchievementFields {...props} /><button className="admin-primary" type="submit">Add achievement</button></form>; }
+export function AchievementEditForm({ achievement, ...props }: { achievement: Achievement; events: Event[]; members: Member[]; projects: Project[] }) { return <><details className="admin-edit-details"><summary>Edit achievement</summary><form action={updateAchievementAction} className="admin-inline-form"><input type="hidden" name="id" value={achievement.id} /><AchievementFields achievement={achievement} {...props} /><button className="admin-primary" type="submit">Save achievement</button></form></details><form action={deleteAchievementAction} className="admin-list-actions"><input type="hidden" name="id" value={achievement.id} /><button className="danger" type="submit">Delete</button></form></>; }
 

@@ -16,31 +16,49 @@ export const getPreviousCommittees = () =>
   getDatabase().list<PreviousCommittee>("previousCommittees");
 
 export async function createMember(input: EntityInput<Member>) {
+  const parseResult = memberInputSchema.safeParse(input);
+  if (!parseResult.success) {
+    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`Member validation failed (${issues})`);
+  }
   return memberSchema.parse(
-    await createEntity<Member>("members", "member", memberInputSchema.parse(input)),
+    await createEntity<Member>("members", "member", parseResult.data),
   );
 }
 
 export async function updateMember(id: string, patch: Partial<EntityInput<Member>>) {
   const current = await getMemberById(id);
   if (!current) throw new Error("Member not found.");
-  const parsed = memberInputSchema.parse({ ...current, ...patch });
-  return memberSchema.parse(await updateEntity<Member>("members", id, parsed));
+  const parseResult = memberInputSchema.safeParse({ ...current, ...patch });
+  if (!parseResult.success) {
+    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`Member validation failed (${issues})`);
+  }
+  return memberSchema.parse(await updateEntity<Member>("members", id, parseResult.data));
 }
 
 export const deleteMember = (id: string) => getDatabase().remove("members", id);
 
 export async function createFaculty(input: EntityInput<Faculty>) {
+  const parseResult = facultyInputSchema.safeParse(input);
+  if (!parseResult.success) {
+    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`Faculty validation failed (${issues})`);
+  }
   return facultySchema.parse(
-    await createEntity<Faculty>("faculty", "faculty", facultyInputSchema.parse(input)),
+    await createEntity<Faculty>("faculty", "faculty", parseResult.data),
   );
 }
 
 export async function updateFaculty(id: string, patch: Partial<EntityInput<Faculty>>) {
   const current = await getFacultyById(id);
   if (!current) throw new Error("Faculty member not found.");
-  const parsed = facultyInputSchema.parse({ ...current, ...patch });
-  return facultySchema.parse(await updateEntity<Faculty>("faculty", id, parsed));
+  const parseResult = facultyInputSchema.safeParse({ ...current, ...patch });
+  if (!parseResult.success) {
+    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`Faculty validation failed (${issues})`);
+  }
+  return facultySchema.parse(await updateEntity<Faculty>("faculty", id, parseResult.data));
 }
 
 export const deleteFaculty = (id: string) => getDatabase().remove("faculty", id);

@@ -15,7 +15,12 @@ export const getEventBySlug = (slug: string) =>
   getDatabase().findOne<Event>("events", { slug });
 
 export async function createEvent(input: EntityInput<Event>) {
-  const parsed = eventInputSchema.parse(input);
+  const parseResult = eventInputSchema.safeParse(input);
+  if (!parseResult.success) {
+    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`Event validation failed (${issues})`);
+  }
+  const parsed = parseResult.data;
   const existing = await getEventBySlug(parsed.slug);
   if (existing) throw new Error("An event already uses this slug.");
   return eventSchema.parse(await createEntity<Event>("events", "event", parsed));
@@ -24,7 +29,12 @@ export async function createEvent(input: EntityInput<Event>) {
 export async function updateEvent(id: string, patch: Partial<EntityInput<Event>>) {
   const current = await getEventById(id);
   if (!current) throw new Error("Event not found.");
-  const parsed = eventInputSchema.parse({ ...current, ...patch });
+  const parseResult = eventInputSchema.safeParse({ ...current, ...patch });
+  if (!parseResult.success) {
+    const issues = parseResult.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ");
+    throw new Error(`Event validation failed (${issues})`);
+  }
+  const parsed = parseResult.data;
   const slugMatch = await getEventBySlug(parsed.slug);
   if (slugMatch && slugMatch.id !== id) throw new Error("An event already uses this slug.");
   return eventSchema.parse(await updateEntity<Event>("events", id, parsed));
