@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -5,7 +7,7 @@ import { EventPosterCard } from "@/components/events/EventPosterCard";
 import { PosterImage } from "@/components/events/PosterImage";
 import { RegistrationForm } from "@/components/events/RegistrationForm";
 import { PublicShell } from "@/components/public/PublicShell";
-import { eventAcceptsRegistrations, eventPhase } from "@/lib/events";
+import { eventAcceptsRegistrations, eventIsPublic, eventPhase } from "@/lib/events";
 import { getAnnouncements } from "@/lib/repositories/content";
 import { getEventBySlug, getEvents } from "@/lib/repositories/events";
 import { getRegistrationFormByEventId } from "@/lib/repositories/forms";
@@ -13,17 +15,17 @@ import { formatDate, formatStatus } from "@/lib/utils";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const event = await getEventBySlug((await params).slug);
-  return { title: event?.title ?? "Event", description: event?.shortDescription };
+  return event && eventIsPublic(event) ? { title: event.title, description: event.shortDescription } : { title: "Event" };
 }
 
 export default async function EventDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [event, allEvents, announcements] = await Promise.all([getEventBySlug(slug), getEvents(), getAnnouncements(true)]);
-  if (!event) notFound();
+  if (!event || !eventIsPublic(event)) notFound();
   const form = event.registrationFormId ? await getRegistrationFormByEventId(event.id) : null;
   const phase = eventPhase(event);
   const canRegister = eventAcceptsRegistrations(event) && Boolean(form);
-  const related = allEvents.filter((item) => item.id !== event.id && item.category === event.category).slice(0, 3);
+  const related = allEvents.filter((item) => eventIsPublic(item) && item.id !== event.id && item.category === event.category).slice(0, 3);
   const backHref = phase === "Past" ? "/archive" : "/events";
   const backLabel = phase === "Past" ? "Event archive" : "All events";
 

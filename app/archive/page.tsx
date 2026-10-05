@@ -1,9 +1,11 @@
+export const dynamic = "force-dynamic";
+
 import { ArchiveTimeline } from "@/components/archive/ArchiveTimeline";
 import { PublicShell } from "@/components/public/PublicShell";
 import { V4PageHero } from "@/components/public/V4PageHero";
 import { eventPhase } from "@/lib/events";
 import { getAnnouncements } from "@/lib/repositories/content";
-import { getEvents } from "@/lib/repositories/events";
+import { getPublicEvents as getEvents } from "@/lib/repositories/events";
 
 export const metadata = {
   title: "Event Archive",

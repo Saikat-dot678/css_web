@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { notFound } from "next/navigation";
 import { DynamicForm } from "@/components/forms/DynamicForm";
 import { PublicShell } from "@/components/public/PublicShell";

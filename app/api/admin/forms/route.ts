@@ -1,9 +1,12 @@
+import { isSameOriginMutation } from "@/lib/request-security";
+import { adminErrorMessage } from "@/lib/admin-errors";
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { createForm, duplicateForm } from "@/lib/repositories/forms";
 import { slugify } from "@/lib/utils";
 
 export async function POST(request: Request) {
+  if (!isSameOriginMutation(request)) return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   if (!(await isAdminAuthenticated())) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
     const payload = await request.json() as { title?: string; duplicateFromId?: string };
@@ -26,6 +29,6 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ form }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ message: error instanceof Error ? error.message : "Could not create form." }, { status: 422 });
+    return NextResponse.json({ message: adminErrorMessage(error, "Could not create form.") }, { status: 422 });
   }
 }

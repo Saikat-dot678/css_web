@@ -18,7 +18,7 @@ const httpUrlSchema = z
 const rootRelativeUrlSchema = z
   .string()
   .trim()
-  .regex(/^\/(?!\/)[^\s]*$/, "Use a root-relative path beginning with a single slash.");
+  .regex(/^\/(?!\/)[^\s\\\u0000-\u001f\u007f]*$/, "Use a root-relative path beginning with a single slash.");
 
 /** Normalizes admin-entered links before URL schema validation. */
 export function normalizeUrlInput(raw: string): string {
@@ -34,10 +34,10 @@ export const urlSchema = z.preprocess(
   (value) => (typeof value === "string" ? normalizeUrlInput(value) : value),
   z.union([httpUrlSchema, rootRelativeUrlSchema, z.literal("#")]),
 );
-export const optionalUrlSchema = z
-  .union([urlSchema, z.literal(""), z.null()])
-  .optional()
-  .transform((v) => (v ? v : undefined));
+export const optionalUrlSchema = z.preprocess(
+  (value) => value === null || (typeof value === "string" && !value.trim()) ? undefined : value,
+  urlSchema.optional(),
+);
 
 export const optionalStringSchema = z
   .union([z.string(), z.null()])

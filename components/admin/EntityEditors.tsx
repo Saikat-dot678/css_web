@@ -1,3 +1,4 @@
+import { MutationForm } from "./MutationForm";
 import {
   createAchievementAction, createMemberAction, createProjectAction, createResourceAction,
   deleteAchievementAction, deleteMemberAction, deleteProjectAction, deleteResourceAction,
@@ -34,11 +35,11 @@ export function MemberFields({ member, academicYear }: { member?: Member; academ
 }
 
 export function MemberCreateForm({ academicYear }: { academicYear: string }) {
-  return <form action={createMemberAction} className="admin-inline-form"><MemberFields academicYear={academicYear} /><button className="admin-primary" type="submit">Add member</button></form>;
+  return <MutationForm action={createMemberAction} className="admin-inline-form"><MemberFields academicYear={academicYear} /><button className="admin-primary" type="submit">Add member</button></MutationForm>;
 }
 
 export function MemberEditForm({ member }: { member: Member }) {
-  return <><details className="admin-edit-details"><summary>Edit member</summary><form action={updateMemberAction} className="admin-inline-form"><input type="hidden" name="id" value={member.id} /><MemberFields member={member} academicYear={member.academicYear} /><button className="admin-primary" type="submit">Save changes</button></form></details><form action={deleteMemberAction} className="admin-list-actions"><input type="hidden" name="id" value={member.id} /><button className="danger" type="submit">Delete</button></form></>;
+  return <><details className="admin-edit-details"><summary>Edit member</summary><MutationForm action={updateMemberAction} className="admin-inline-form"><input type="hidden" name="id" value={member.id} /><MemberFields member={member} academicYear={member.academicYear} /><button className="admin-primary" type="submit">Save changes</button></MutationForm></details><MutationForm action={deleteMemberAction} className="admin-list-actions"><input type="hidden" name="id" value={member.id} /><button className="danger" type="submit">Delete</button></MutationForm></>;
 }
 
 export function FacultyFields({ faculty }: { faculty?: Faculty }) {
@@ -53,11 +54,11 @@ export function FacultyFields({ faculty }: { faculty?: Faculty }) {
 }
 
 export function FacultyCreateForm() {
-  return <form action={createFacultyAction} className="admin-inline-form"><FacultyFields /><button className="admin-primary" type="submit">Add faculty</button></form>;
+  return <MutationForm action={createFacultyAction} className="admin-inline-form"><FacultyFields /><button className="admin-primary" type="submit">Add faculty</button></MutationForm>;
 }
 
 export function FacultyEditForm({ faculty }: { faculty: Faculty }) {
-  return <><details className="admin-edit-details"><summary>Edit faculty</summary><form action={updateFacultyAction} className="admin-inline-form"><input type="hidden" name="id" value={faculty.id} /><FacultyFields faculty={faculty} /><button className="admin-primary" type="submit">Save faculty</button></form></details><form action={deleteFacultyAction} className="admin-list-actions"><input type="hidden" name="id" value={faculty.id} /><button className="danger" type="submit">Delete</button></form></>;
+  return <><details className="admin-edit-details"><summary>Edit faculty</summary><MutationForm action={updateFacultyAction} className="admin-inline-form"><input type="hidden" name="id" value={faculty.id} /><FacultyFields faculty={faculty} /><button className="admin-primary" type="submit">Save faculty</button></MutationForm></details><MutationForm action={deleteFacultyAction} className="admin-list-actions"><input type="hidden" name="id" value={faculty.id} /><button className="danger" type="submit">Delete</button></MutationForm></>;
 }
 
 export function ProjectFields({ project, academicYear }: { project?: Project; academicYear: string }) {
@@ -72,8 +73,8 @@ export function ProjectFields({ project, academicYear }: { project?: Project; ac
   </>;
 }
 
-export function ProjectCreateForm({ academicYear }: { academicYear: string }) { return <form action={createProjectAction} className="admin-inline-form"><ProjectFields academicYear={academicYear} /><button className="admin-primary" type="submit">Add project</button></form>; }
-export function ProjectEditForm({ project }: { project: Project }) { return <><details className="admin-edit-details"><summary>Edit project</summary><form action={updateProjectAction} className="admin-inline-form"><input type="hidden" name="id" value={project.id} /><ProjectFields project={project} academicYear={project.academicYear} /><button className="admin-primary" type="submit">Save project</button></form></details><form action={deleteProjectAction} className="admin-list-actions"><input type="hidden" name="id" value={project.id} /><button className="danger" type="submit">Delete</button></form></>; }
+export function ProjectCreateForm({ academicYear }: { academicYear: string }) { return <MutationForm action={createProjectAction} className="admin-inline-form"><ProjectFields academicYear={academicYear} /><button className="admin-primary" type="submit">Add project</button></MutationForm>; }
+export function ProjectEditForm({ project }: { project: Project }) { return <><details className="admin-edit-details"><summary>Edit project</summary><MutationForm action={updateProjectAction} className="admin-inline-form"><input type="hidden" name="id" value={project.id} /><ProjectFields project={project} academicYear={project.academicYear} /><button className="admin-primary" type="submit">Save project</button></MutationForm></details><MutationForm action={deleteProjectAction} className="admin-list-actions"><input type="hidden" name="id" value={project.id} /><button className="danger" type="submit">Delete</button></MutationForm></>; }
 
 export function ResourceFields({ resource }: { resource?: Resource }) {
   return <>
@@ -85,8 +86,8 @@ export function ResourceFields({ resource }: { resource?: Resource }) {
     <Check name="featured" label="Featured resource" defaultChecked={resource?.featured} />
   </>;
 }
-export function ResourceCreateForm() { return <form action={createResourceAction} className="admin-inline-form"><ResourceFields /><button className="admin-primary" type="submit">Add resource</button></form>; }
-export function ResourceEditForm({ resource }: { resource: Resource }) { return <><details className="admin-edit-details"><summary>Edit resource</summary><form action={updateResourceAction} className="admin-inline-form"><input type="hidden" name="id" value={resource.id} /><ResourceFields resource={resource} /><button className="admin-primary" type="submit">Save resource</button></form></details><form action={deleteResourceAction} className="admin-list-actions"><input type="hidden" name="id" value={resource.id} /><button className="danger" type="submit">Delete</button></form></>; }
+export function ResourceCreateForm() { return <MutationForm action={createResourceAction} className="admin-inline-form"><ResourceFields /><button className="admin-primary" type="submit">Add resource</button></MutationForm>; }
+export function ResourceEditForm({ resource }: { resource: Resource }) { return <><details className="admin-edit-details"><summary>Edit resource</summary><MutationForm action={updateResourceAction} className="admin-inline-form"><input type="hidden" name="id" value={resource.id} /><ResourceFields resource={resource} /><button className="admin-primary" type="submit">Save resource</button></MutationForm></details><MutationForm action={deleteResourceAction} className="admin-list-actions"><input type="hidden" name="id" value={resource.id} /><button className="danger" type="submit">Delete</button></MutationForm></>; }
 
 export function AchievementFields({ achievement, events, members, projects }: { achievement?: Achievement; events: Event[]; members: Member[]; projects: Project[] }) {
   return <>
@@ -97,6 +98,5 @@ export function AchievementFields({ achievement, events, members, projects }: { 
     <div className="two"><label>Image URL<input name="image" defaultValue={achievement?.image} /></label><label>External URL<input type="url" name="externalUrl" defaultValue={achievement?.externalUrl} /></label></div>
   </>;
 }
-export function AchievementCreateForm(props: { events: Event[]; members: Member[]; projects: Project[] }) { return <form action={createAchievementAction} className="admin-inline-form"><AchievementFields {...props} /><button className="admin-primary" type="submit">Add achievement</button></form>; }
-export function AchievementEditForm({ achievement, ...props }: { achievement: Achievement; events: Event[]; members: Member[]; projects: Project[] }) { return <><details className="admin-edit-details"><summary>Edit achievement</summary><form action={updateAchievementAction} className="admin-inline-form"><input type="hidden" name="id" value={achievement.id} /><AchievementFields achievement={achievement} {...props} /><button className="admin-primary" type="submit">Save achievement</button></form></details><form action={deleteAchievementAction} className="admin-list-actions"><input type="hidden" name="id" value={achievement.id} /><button className="danger" type="submit">Delete</button></form></>; }
-
+export function AchievementCreateForm(props: { events: Event[]; members: Member[]; projects: Project[] }) { return <MutationForm action={createAchievementAction} className="admin-inline-form"><AchievementFields {...props} /><button className="admin-primary" type="submit">Add achievement</button></MutationForm>; }
+export function AchievementEditForm({ achievement, ...props }: { achievement: Achievement; events: Event[]; members: Member[]; projects: Project[] }) { return <><details className="admin-edit-details"><summary>Edit achievement</summary><MutationForm action={updateAchievementAction} className="admin-inline-form"><input type="hidden" name="id" value={achievement.id} /><AchievementFields achievement={achievement} {...props} /><button className="admin-primary" type="submit">Save achievement</button></MutationForm></details><MutationForm action={deleteAchievementAction} className="admin-list-actions"><input type="hidden" name="id" value={achievement.id} /><button className="danger" type="submit">Delete</button></MutationForm></>; }

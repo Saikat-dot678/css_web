@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 
 import { AchievementTimeline } from "@/components/home/AchievementTimeline";
@@ -20,7 +22,7 @@ import { V4SectionHeader } from "@/components/home/V4SectionHeader";
 import { PublicShell } from "@/components/public/PublicShell";
 import { getAchievements } from "@/lib/repositories/achievements";
 import { getAnnouncements, getSiteContent } from "@/lib/repositories/content";
-import { getEvents } from "@/lib/repositories/events";
+import { getPublicEvents as getEvents } from "@/lib/repositories/events";
 import { getFaculty, getMembers } from "@/lib/repositories/members";
 import { getProjects } from "@/lib/repositories/projects";
 import { getResources } from "@/lib/repositories/resources";

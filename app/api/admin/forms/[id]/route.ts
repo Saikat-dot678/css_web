@@ -1,3 +1,5 @@
+import { isSameOriginMutation } from "@/lib/request-security";
+import { adminErrorMessage } from "@/lib/admin-errors";
 import { NextResponse } from "next/server";
 import { isAdminAuthenticated } from "@/lib/auth";
 import { getEventById, updateEvent } from "@/lib/repositories/events";
@@ -5,6 +7,7 @@ import { countFormResponses, deleteForm, getFormByEventId, getFormById, updateFo
 import { formUpdateSchema } from "@/lib/validation/forms";
 
 export async function PUT(request: Request, context: { params: Promise<{ id: string }> }) {
+  if (!isSameOriginMutation(request)) return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   if (!(await isAdminAuthenticated())) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
     const { id } = await context.params;
@@ -55,11 +58,12 @@ export async function PUT(request: Request, context: { params: Promise<{ id: str
     if (targetEvent && targetEvent.registrationFormId !== id) await updateEvent(targetEvent.id, { registrationFormId: id });
     return NextResponse.json({ form: updated });
   } catch (error) {
-    return NextResponse.json({ message: error instanceof Error ? error.message : "Invalid form." }, { status: 422 });
+    return NextResponse.json({ message: adminErrorMessage(error, "Invalid form.") }, { status: 422 });
   }
 }
 
-export async function DELETE(_request: Request, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+  if (!isSameOriginMutation(request)) return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   if (!(await isAdminAuthenticated())) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   try {
     const { id } = await context.params;
@@ -72,6 +76,6 @@ export async function DELETE(_request: Request, context: { params: Promise<{ id:
     }
     return NextResponse.json({ ok: true });
   } catch (error) {
-    return NextResponse.json({ message: error instanceof Error ? error.message : "Could not delete form." }, { status: 409 });
+    return NextResponse.json({ message: adminErrorMessage(error, "Could not delete form.") }, { status: 409 });
   }
 }

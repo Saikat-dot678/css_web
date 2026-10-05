@@ -12,6 +12,8 @@
     "test:db": "tsx scripts/test-json-db.ts",
     "test:forms": "tsx scripts/test-forms.ts",
     "test:validation": "tsx scripts/test-validation.ts",
+    "test:security": "node --conditions=react-server --import tsx scripts/test-security.ts",
+    "test:production": "node --import tsx scripts/test-production.ts",
     "test:content": "node scripts/content-qa.mjs",
     "test:routes": "node scripts/route-smoke-qa.mjs",
     "test:runtime": "node scripts/runtime-qa.mjs"
@@ -21,9 +23,10 @@
     "lenis": "latest",
     "lucide-react": "latest",
     "mongodb": "latest",
-    "next": "16.3.3",
+    "next": "16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "server-only": "0.0.1",
     "zod": "latest"
   },
   "devDependencies": {
@@ -31,7 +34,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "eslint": "latest",
-    "eslint-config-next": "16.3.3",
+    "eslint-config-next": "16.3.8",
     "tsx": "latest",
     "typescript": "latest"
   }

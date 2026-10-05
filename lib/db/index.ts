@@ -13,6 +13,9 @@ export function getDatabase(): DatabaseAdapter {
   if (globalThis.cssDatabase) return globalThis.cssDatabase;
 
   const mongoUrl = process.env.MONGO_URL?.trim();
+  if (!mongoUrl && process.env.VERCEL === "1") {
+    throw new Error("MONGO_URL is required on Vercel. The local JSON database is not durable on serverless deployments.");
+  }
   globalThis.cssDatabase = mongoUrl ? new MongoDatabase(mongoUrl) : new JsonDatabase();
 
   if (!mongoUrl && process.env.NODE_ENV === "development" && !globalThis.cssJsonFallbackLogged) {

@@ -3,6 +3,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { revalidatePath } from "next/cache";
+import { runAdminMutation } from "@/lib/admin-mutation";
 import { requireAdmin } from "@/lib/auth";
 import { createFaculty, deleteFaculty, getFacultyById, updateFaculty } from "@/lib/repositories/members";
 
@@ -52,21 +53,27 @@ function revalidateFacultySurfaces() {
 
 export async function createFacultyAction(data: FormData) {
   await requireAdmin();
+  return runAdminMutation(async () => {
   await createFaculty(await facultyValues(data));
   revalidateFacultySurfaces();
+  });
 }
 
 export async function updateFacultyAction(data: FormData) {
   await requireAdmin();
+  return runAdminMutation(async () => {
   const id = value(data, "id");
   const current = await getFacultyById(id);
   if (!current) throw new Error("Faculty member not found.");
   await updateFaculty(id, await facultyValues(data, current.photo));
   revalidateFacultySurfaces();
+  });
 }
 
 export async function deleteFacultyAction(data: FormData) {
   await requireAdmin();
+  return runAdminMutation(async () => {
   await deleteFaculty(value(data, "id"));
   revalidateFacultySurfaces();
+  });
 }
